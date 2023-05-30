@@ -10,11 +10,33 @@ import FormHelperText from '@mui/material/FormHelperText';
 import LoginIcon from '@mui/icons-material/Login';
 import Typography from '@mui/material/Typography';
 import { themeRegisterButton } from './../services/styleMui';
+import { GlobalContext } from "@/pages/contex/GlobalContext";
+import { useContext } from "react";
 
 export default function MaxWidthDialog() {
   const [open, setOpen] = React.useState(false);
   const [fullWidth, setFullWidth] = React.useState(true);
   const [maxWidth, setMaxWidth] = React.useState<DialogProps["maxWidth"]>("sm");
+
+const { adminLogin } = useContext(GlobalContext)
+const [admins ,setAdmins]=React.useState({
+  username:"",
+  password:""
+})
+const onChangeHandler=(e:any)=>{
+// e.preventDefault()
+setAdmins({...admins , [e.target.name]:e.target.value})
+}
+const login =(e:any)=>{
+  e.preventDefault()
+  const data={
+    username:admins.username,
+    password:admins.password
+  }
+  adminLogin(data)
+}
+
+
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -40,14 +62,16 @@ export default function MaxWidthDialog() {
         <DialogActions sx={{display:"flex" , justifyContent: 'center'}}>
           <Button className ="bg-[#28a745]" sx={themeRegisterButton} type="submit" onClick={handleClose}>عضویت در سایت </Button>
         </DialogActions>
-    <Box component="form" noValidate autoComplete="off" className="flex flex-col items-center gap-3 my-5" dir="rtl">
+
+
+    <Box component="form" noValidate autoComplete="off" className="flex flex-col items-center gap-3 my-5" dir="rtl" onSubmit={login}>
       <FormControl sx={{ width: '25ch' }}>
-        <OutlinedInput placeholder="نام کاربری، ایمیل ویا شماره موبایل" />
+        <OutlinedInput placeholder="نام کاربری، ایمیل ویا شماره موبایل" name="username" onChange={onChangeHandler}  value={admins.username}/>
         {/* <MyFormHelperText /> */}
       </FormControl>
 
       <FormControl sx={{ width: '25ch' }}>
-        <OutlinedInput placeholder="کلمه عبور "/>
+        <OutlinedInput placeholder="کلمه عبور " name="password" onChange={onChangeHandler} value={admins.password}/>
       </FormControl>
       
         <DialogActions>
@@ -55,6 +79,9 @@ export default function MaxWidthDialog() {
           <Button className="bg-[#f8f9fa] text-black mr-2" onClick={handleClose}>لغو</Button>
         </DialogActions>
     </Box>
+
+
+
       </Dialog>
       </>
   )

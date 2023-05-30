@@ -26,6 +26,8 @@ import Inventory2OutlinedIcon from '@mui/icons-material/Inventory2Outlined';
 import {useRouter } from "next/router"
 import Link from 'next/link';
 import  { useState } from 'react'
+import { GlobalProvider } from '@/pages/contex/GlobalContext';
+
 const drawerWidth = 240;
 
 const openedMixin = (theme: Theme): CSSObject => ({
@@ -112,7 +114,7 @@ export default function MiniDrawer({children}:any) {
 
  const handleRoute = (index:number)=>{
 //  console.log(e.target.innerText  )
- if( index=== 0 ){
+ if( index === 0 ){
   router.push("/")
  }else if(index === 1){
   router.push("/Dashboard")
