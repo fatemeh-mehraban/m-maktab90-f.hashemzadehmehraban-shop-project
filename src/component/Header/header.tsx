@@ -147,7 +147,7 @@ export default function Header() {
       </Menu>
     );
   return (
-    <header className="">
+    <header className="fixed top-0 w-full z-50">
 
 <Box className="hidden md:block" sx={{ flexGrow: 1 ,marginX:"10px"}}>
       <AppBar sx={{ backgroundColor:"white",boxShadow: 0,padding:"10px"}} position="static">
