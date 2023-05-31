@@ -4,15 +4,15 @@ import { GlobalContext } from "./contex/GlobalContext"
 
 export function Inventory() {
   const [products , setProducts] = useState([])
-  const { InventoryProduct } = useContext(GlobalContext)
+  const { getProduct } = useContext(GlobalContext)
 
   useEffect(()=>{
-    InventoryProduct().then((res:any)=>{
+    getProduct().then((res:any)=>{
       setProducts(res.data.data.products)  
       console.log(products)      
      })
 
-},[InventoryProduct])
+},[getProduct])
   // addproduct()
     return (
       <MiniDrawer>

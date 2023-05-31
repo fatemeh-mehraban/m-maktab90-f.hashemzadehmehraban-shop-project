@@ -1,4 +1,4 @@
-import * as React from "react";
+// import * as React from "react";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Dialog, { DialogProps } from "@mui/material/Dialog";
@@ -11,15 +11,15 @@ import LoginIcon from '@mui/icons-material/Login';
 import Typography from '@mui/material/Typography';
 import { themeRegisterButton } from './../services/styleMui';
 import { GlobalContext } from "@/pages/contex/GlobalContext";
-import { useContext } from "react";
+import { useContext,useState } from "react";
 
 export default function MaxWidthDialog() {
-  const [open, setOpen] = React.useState(false);
-  const [fullWidth, setFullWidth] = React.useState(true);
-  const [maxWidth, setMaxWidth] = React.useState<DialogProps["maxWidth"]>("sm");
+  const [open, setOpen] = useState(false);
+  const [fullWidth, setFullWidth] = useState(true);
+  const [maxWidth, setMaxWidth] = useState<DialogProps["maxWidth"]>("sm");
 
 const { adminLogin } = useContext(GlobalContext)
-const [admins ,setAdmins]=React.useState({
+const [admins ,setAdmins]=useState({
   username:"",
   password:""
 })
@@ -34,6 +34,7 @@ const login =(e:any)=>{
     password:admins.password
   }
   adminLogin(data)
+  
 }
 
 
