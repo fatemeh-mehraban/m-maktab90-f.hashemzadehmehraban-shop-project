@@ -15,20 +15,24 @@ export default function InventoryTable() {
   
     useEffect(()=>{
         
-        const res = axios.get(`http://localhost:8000/api/products?page=${page}&limit=3&fields=-rating,-createdAt,-updatedAt,-__v&sort=price&quantity[gte]=8`)
+        const res = axios.get(`http://localhost:8000/api/products?page=${page}&limit=4&fields=-rating,-createdAt,-updatedAt,-__v&sort=price&quantity[gte]=8`)
         .then((res:any)=>{
         setProducts(res.data.data.products)  
-        console.log(products)      
        })
   
   },[(page)])
 
 const nextpage=()=>{
-    setPage(page + 1)
+    if( products.length>3  ){        
+        setPage(page + 1)
+    }
+    
 }
 
 const beforpage =()=>{
+    if( page > 1 ){
     setPage(page - 1)
+}
 }
 
   return(
@@ -48,7 +52,7 @@ const beforpage =()=>{
             <tbody>
                 {
         products.map((item:any)=>{
-            console.log(item)      
+            // console.log(item)      
 
         return (
 
