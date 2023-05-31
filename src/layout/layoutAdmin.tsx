@@ -8,8 +8,8 @@ import MuiAppBar, { AppBarProps as MuiAppBarProps } from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
 import List from '@mui/material/List';
 import CssBaseline from '@mui/material/CssBaseline';
-import Typography from '@mui/material/Typography';
 import Divider from '@mui/material/Divider';
+import Typography from '@mui/material/Typography';
 import IconButton from '@mui/material/IconButton';
 import MenuIcon from '@mui/icons-material/Menu';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
@@ -26,12 +26,13 @@ import Inventory2OutlinedIcon from '@mui/icons-material/Inventory2Outlined';
 import {useRouter } from "next/router"
 import Link from 'next/link';
 import  { useState } from 'react'
-import { GlobalProvider } from '@/pages/contex/GlobalContext';
-
+// import {Typography} from "@material-ui/core";
 const drawerWidth = 240;
 
 const openedMixin = (theme: Theme): CSSObject => ({
+
   width: drawerWidth,
+
   transition: theme.transitions.create('width', {
     easing: theme.transitions.easing.sharp,
     duration: theme.transitions.duration.enteringScreen,
@@ -149,6 +150,7 @@ const handleRouteAdmin = (index:any)=>{
 {/* <ButtonAppBar handleDrawerOpen={handleDrawerOpen}/> */}
 
   return (
+    // <ThemeProvider theme={theme}>
     <Box sx={{ display: 'flex' }}>
       <CssBaseline />
       <AppBar className="bg-gray-200 text-gray-900" position="fixed" open={open} >
@@ -183,17 +185,16 @@ const handleRouteAdmin = (index:any)=>{
           </IconButton>
         </DrawerHeader>
         <Divider />
-        <List className="bg-gray-100 text-gray-900">
+        <List className="bg-gray-100 text-gray-900 font-sans" >
           {['مشاهده سایت', 'میز کار'].map((text, index) => (
-            <ListItem key={text} disablePadding sx={{ display: 'block' }}  onClick={()=>{handleRoute(index)}}>
+            <ListItem key={text} disablePadding sx={{ display: 'block' }}  onClick={()=>{handleRoute(index)}}  className="font-sans">
               <ListItemButton
                 sx={{
                   minHeight: 48,
                   justifyContent: open ? 'initial' : 'center',
                   px: 2.5,
                 }}
-                className="bg-red-200"
-                
+                className="font-sans"
               >
                 <ListItemIcon
                   sx={{
@@ -201,6 +202,7 @@ const handleRouteAdmin = (index:any)=>{
                     mr: open ? 3 : 'auto',
                     justifyContent: 'center',
                   }}
+                  className="font-sans"
                   // id={index} 
                 >
                   {index % 2 === 0 ? <HomeOutlinedIcon /> : <PersonalVideoIcon />}
@@ -211,9 +213,9 @@ const handleRouteAdmin = (index:any)=>{
           ))}
         </List>
         <Divider />
-        <List className="bg-gray-100 text-gray-900 h-full">
+        <List className="bg-gray-100 text-gray-900 h-full font-sans">
           {['کالاها', 'سفارش ها', 'موجودی کالا'].map((text, index) => (
-            <ListItem key={text} disablePadding sx={{ display: 'block' }} onClick={()=>handleRouteAdmin(index)}>
+            <ListItem key={text} disablePadding sx={{ display: 'block' }}  onClick={()=>handleRouteAdmin(index)} className="font-sans">
               {/* <Link href="/"> */}
               <ListItemButton
                 sx={{
@@ -222,6 +224,7 @@ const handleRouteAdmin = (index:any)=>{
                   px: 2.5,
                   
                 }}
+                className="font-sans"
                 // onClick={handleRouteAdmin(index)}             
                  >
                 <ListItemIcon
@@ -230,8 +233,9 @@ const handleRouteAdmin = (index:any)=>{
                     mr: open ? 3 : 'auto',
                     justifyContent: 'center',
                   }}
+                  className="font-sans"
                 >
-                  {index === 0 && <HorizontalSplitOutlinedIcon /> || index === 1 && <ShoppingCartOutlinedIcon /> || index === 2 && <Inventory2OutlinedIcon />}
+                  {index === 0 && <HorizontalSplitOutlinedIcon/> || index === 1 && <ShoppingCartOutlinedIcon /> || index === 2 && <Inventory2OutlinedIcon />}
                 </ListItemIcon>
                 <ListItemText primary={text} sx={{ opacity: open ? 1 : 0 }} />
               </ListItemButton>
@@ -242,5 +246,6 @@ const handleRouteAdmin = (index:any)=>{
       </Drawer>
       {children}
     </Box>
+    // </ThemeProvider>
   );
 }

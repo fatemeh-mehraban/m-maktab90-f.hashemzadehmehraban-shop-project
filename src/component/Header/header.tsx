@@ -132,11 +132,11 @@ export default function Header() {
         onClose={handleMobileMenuClose}
       >
         <MenuItem>
-          <p>درباره ما</p>
+          <p  className="font-sans">درباره ما</p>
         </MenuItem>
         <MenuItem>
 
-          <p>تماس با ما</p>
+          <p  className="font-sans">تماس با ما</p>
         </MenuItem>
        
       </Menu>
@@ -158,7 +158,7 @@ export default function Header() {
               sx={{textAlign:"center", marginRight: "10%"}}
             />
           </Search>
-          <Typography sx={{width:"30%",color:"gray" , textAlign:"left"}}> تیم پشیبانی  09199069952</Typography>
+          <Typography sx={{width:"30%",color:"gray" , textAlign:"left"}}  className="font-sans"> تیم پشیبانی  09199069952</Typography>
 
         </Toolbar>
       </AppBar>
@@ -187,9 +187,9 @@ export default function Header() {
         <Toolbar sx={{justifyContent: 'space-between', paddingTop:"30px", pb:{xs: 2, md: 0}}}>
 
           <Box sx={{ display: { xs: 'none', md: 'flex',gap:20 } }}>
-          <Typography className="bg-[#120051] p-3 px-10 rounded-t-xl text-white"><MenuIcon sx={{ml:1}}/>دسته بندی محصولات</Typography>
-          <Typography sx={{marginY:1}}>درباره ما</Typography>
-          <Typography sx={{marginY:1}}>تماس با ما</Typography>
+          <Typography className="bg-[#120051] p-3 px-10 rounded-t-xl text-white font-sans"><MenuIcon sx={{ml:1}}/>دسته بندی محصولات</Typography>
+          <Typography sx={{marginY:1}}  className="font-sans">درباره ما</Typography>
+          <Typography sx={{marginY:1}}  className="font-sans">تماس با ما</Typography>
           </Box>
 
           <Search className="w-auto" sx={{flexGrow: 1, display: { xs:'flex' , md:'none' },'&:hover':{bgcolor: "grey.200"}, border: 1 , borderColor: 'grey.300', backgroundColor:"grey.200" , borderRadius:5, color:"grey.800",}}>
@@ -200,6 +200,7 @@ export default function Header() {
               placeholder="جست و جوی محصول، برند…"
               inputProps={{ 'aria-label': 'search' }}
               sx={{textAlign:"center", marginRight: "14%"}}
+              className="font-sans"
             />
           </Search>
 

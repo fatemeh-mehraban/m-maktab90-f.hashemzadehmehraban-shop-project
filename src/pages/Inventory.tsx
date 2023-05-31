@@ -1,27 +1,14 @@
 import MiniDrawer from "@/layout/layoutAdmin"
-import { useContext,useState,useEffect } from "react"
-import { GlobalContext } from "./contex/GlobalContext"
+import InventoryTable from "@/component/tabel/InventoryTable"
 
 export function Inventory() {
-  const [products , setProducts] = useState([])
-  const { getProduct } = useContext(GlobalContext)
-
-  useEffect(()=>{
-    getProduct().then((res:any)=>{
-      setProducts(res.data.data.products)  
-      console.log(products)      
-     })
-
-},[getProduct])
+ 
   // addproduct()
     return (
       <MiniDrawer>
-      <div className="bg-pink-700 text-white py-40 mt-20  w-full h-screen"> 
-      {
-        products.map((item:any)=>{
-        return  <p key={item._id}>{item.name}</p>
-        })
-      }       
+      <div className="py-40 mt-20  w-full h-screen flex justify-center items-center px-5"> 
+      
+      <InventoryTable/>
       </div>
       </MiniDrawer>
     )
