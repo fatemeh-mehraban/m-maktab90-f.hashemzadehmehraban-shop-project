@@ -187,7 +187,7 @@ export default function Header() {
         <Toolbar sx={{justifyContent: 'space-between', paddingTop:"30px", pb:{xs: 2, md: 0}}}>
 
           <Box sx={{ display: { xs: 'none', md: 'flex',gap:20 } }}>
-          <Typography className="bg-[#120051] p-3 px-10 rounded-t-xl text-white font-sans"><MenuIcon sx={{ml:1}}/>دسته بندی محصولات</Typography>
+          <Typography className="bg-[#120051] font-sans" sx={{ borderRadius:"10px 10px 0 0" ,p:1.5 ,px:4 , color:"white"}}><MenuIcon sx={{ml:1}}/>دسته بندی محصولات</Typography>
           <Typography sx={{marginY:1}}  className="font-sans">درباره ما</Typography>
           <Typography sx={{marginY:1}}  className="font-sans">تماس با ما</Typography>
           </Box>

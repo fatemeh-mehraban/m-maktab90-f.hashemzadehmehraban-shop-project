@@ -30,11 +30,7 @@ import { ThemeProvider } from '@emotion/react';
 
 // import {Typography} from "@material-ui/core";
 const drawerWidth = 240;
-const THEME = createTheme({
-  typography: {
-   fontFamily: "iransans"
-  }
-})
+
 const openedMixin = (theme: Theme): CSSObject => ({
 
   width: drawerWidth,
@@ -156,7 +152,6 @@ const handleRouteAdmin = (index:any)=>{
 {/* <ButtonAppBar handleDrawerOpen={handleDrawerOpen}/> */}
 
   return (
-    <ThemeProvider theme={THEME}>
     <Box sx={{ display: 'flex' }}>
       <CssBaseline />
       <AppBar className="bg-gray-200 text-gray-900" position="fixed" open={open} >
@@ -252,6 +247,5 @@ const handleRouteAdmin = (index:any)=>{
       </Drawer>
       {children}
     </Box>
-     </ThemeProvider>
   );
 }
