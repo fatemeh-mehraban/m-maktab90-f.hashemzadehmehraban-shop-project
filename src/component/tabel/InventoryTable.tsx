@@ -10,9 +10,9 @@ import { Suspense } from 'react';
 import LinearBuffer from "../loading";
 
 
-export default function InventoryTable(limit:number) {
+export default function InventoryTable() {
     const [products , setProducts] = useState([])
-    limit=4
+    const limit=4
     let counter = products.length
     // const { getProduct } = useContext(GlobalContext)
     const [page,setPage] = useState(1)
@@ -27,7 +27,7 @@ export default function InventoryTable(limit:number) {
   },[(page)])
 
 const nextpage=()=>{
-    if( counter>=limit  ){        
+    if( counter>= +limit  ){        
         setPage(page + 1)
     }
     

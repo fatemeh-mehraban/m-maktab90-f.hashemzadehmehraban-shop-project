@@ -132,7 +132,7 @@ const handleRouteAdmin = (index:any)=>{
 
 
   if( index=== 0 ){
-    router.push("/product")
+    router.push("/products")
     
    }else if(index=== 1){
     router.push("/Dashboard/order")
