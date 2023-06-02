@@ -1,12 +1,16 @@
 
-import MiniDrawer from '@/component/sidbar/sidbar';
-import  ButtonAppBar from './../component/Header/headerDashboard';
+
+import MiniDrawer from '@/layout/layoutAdmin';
+
+
+
 export default function Dashboard() {
     return (
-    <main >
-            {/* <ButtonAppBar/> */}
-            <MiniDrawer/>
-    </main>
+      
+                <MiniDrawer>
+                <main className='bg-red-500 w-full h-screen '>
+                </main>
+                 </MiniDrawer>
   
     )
   }

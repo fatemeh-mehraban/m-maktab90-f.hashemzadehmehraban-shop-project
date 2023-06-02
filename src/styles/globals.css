@@ -3,3 +3,14 @@
 @tailwind utilities;
 
 
+@font-face{
+    font-family:"iransans";
+    src:url("/IRANSans-web.woff")
+}
+body{
+    font-family: 'iransans';
+}
+table,button,li,ul{
+    font-family:"iransans";
+}
+
