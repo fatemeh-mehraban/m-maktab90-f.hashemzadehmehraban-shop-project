@@ -10,21 +10,24 @@ import { Suspense } from 'react';
 import LinearBuffer from "../loading";
 
 
-export default function InventoryTable() {
+export default function InventoryTable(limit:number) {
     const [products , setProducts] = useState([])
+    limit=4
+    let counter = products.length
     // const { getProduct } = useContext(GlobalContext)
     const [page,setPage] = useState(1)
-  
+    
     useEffect(()=>{    
-        const res = axios.get(`http://localhost:8000/api/products?page=${page}&limit=4&fields=-rating,-createdAt,-updatedAt,-__v&sort=price&quantity[gte]=8`)
+        const res = axios.get(`http://localhost:8000/api/products?page=${page}&limit=${limit}&fields=-rating,-createdAt,-updatedAt,-__v&sort=price&quantity[gte]=8`)
         .then((res:any)=>{
-        setProducts(res.data.data.products)
+            setProducts(res.data.data.products)
+            counter = res.data.data.products.length
        })
   
   },[(page)])
 
 const nextpage=()=>{
-    if( products.length>3  ){        
+    if( counter>=limit  ){        
         setPage(page + 1)
     }
     
