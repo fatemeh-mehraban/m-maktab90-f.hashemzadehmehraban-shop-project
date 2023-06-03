@@ -146,16 +146,16 @@ export default function Header() {
 
 <Box className="hidden md:block" sx={{ flexGrow: 1 ,marginX:"10px"}}>
       <AppBar sx={{ backgroundColor:"white",boxShadow: 0,padding:"10px"}} position="static">
-        <Toolbar>
+        <Toolbar  sx={{width:1,display:"flex" ,justifyContent: 'space-between' }}>
           <Box><Image src="/barishow-fa-header.png"  alt='logo' width="100" height={500} /></Box>
-          <Search  sx={{ display: { xs:'none' , md:'flex' },'&:hover':{bgcolor: "grey.200"},width:{sm:"75%" , md:'60%', border: 1 }, border: 1 , borderColor: 'grey.300', backgroundColor:"grey.200" , borderRadius:5, color:"grey.800",marginTop:"10px"}}>
+          <Search  sx={{ display: { xs:'none' , md:'flex' },'&:hover':{bgcolor: "grey.200"},width:{sm:"75%" , md:'30%', border: 1 }, border: 1 , borderColor: 'grey.300', backgroundColor:"grey.200" , borderRadius:5, color:"grey.800",marginTop:"10px"}}>
             <SearchIconWrapper >
               <SearchIcon />
             </SearchIconWrapper>
             <StyledInputBase
-              placeholder="جست و جوی محصول، دسته، برند…"
+              placeholder="جست و جوی محصول، دسته، برند… "
               inputProps={{ 'aria-label': 'search' }}
-              sx={{textAlign:"center", marginRight: "10%"}}
+              sx={{textAlign:"center", marginRight: "10%",width:1}}
             />
           </Search>
           <Typography sx={{width:"30%",color:"gray" , textAlign:"left"}}  className="font-sans"> تیم پشیبانی  09199069952</Typography>
@@ -164,7 +164,7 @@ export default function Header() {
       </AppBar>
     </Box>
       {/* ************************************* */}
- <Box className="md:hidden" sx={{ flexGrow: 1  ,  borderBottom: 1 , borderColor: 'grey.300',marginX:"10px"}}>
+ <Box className="md:hidden" sx={{ flexGrow: 1  ,  borderBottom: 1 , borderColor: 'grey.300'}}>
       <AppBar  sx={{ backgroundColor:"white",boxShadow: 0}} position="static">
         <Toolbar>
           <IconButton
@@ -192,7 +192,7 @@ export default function Header() {
           <Typography sx={{marginY:1}}  className="font-sans">تماس با ما</Typography>
           </Box>
 
-          <Search className="w-auto" sx={{flexGrow: 1, display: { xs:'flex' , md:'none' },'&:hover':{bgcolor: "grey.200"}, border: 1 , borderColor: 'grey.300', backgroundColor:"grey.200" , borderRadius:5, color:"grey.800",}}>
+          <Search className="w-auto" sx={{flexGrow: 1, display: { xs:'flex' , md:'none' },'&:hover':{bgcolor: "grey.200"}, border: 1 , borderColor: 'grey.300', backgroundColor:"grey.200" , borderRadius:5, color:"grey.800"}}>
             <SearchIconWrapper >
               <SearchIcon />
             </SearchIconWrapper>
@@ -204,7 +204,7 @@ export default function Header() {
             />
           </Search>
 
-        <Box>
+        <Box sx={{display:"flex"}} className="">
             
           <IconButton
               size="large"
