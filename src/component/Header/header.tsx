@@ -18,6 +18,7 @@ import { useState } from 'react';
 
 
 import MaxWidthDialog  from "../Form/formAdmin"
+import MegaMenu from './menu';
 
 const Search = styled('div')(({ theme }) => ({
   position: 'relative',
@@ -93,27 +94,7 @@ export default function Header() {
     };
   
     const menuId = 'primary-search-account-menu';
-    const renderMenu = (
-      <Menu
-        anchorEl={anchorEl}
-        anchorOrigin={{
-          vertical: 'top',
-          horizontal: 'right',
-        }}
-        id={menuId}
-        keepMounted
-        transformOrigin={{
-          vertical: 'top',
-          horizontal: 'right',
-        }}
-        open={isMenuOpen}
-        onClose={handleMenuClose}
-      >
-        <MenuItem onClick={handleMenuClose}>Profile</MenuItem>
-        <MenuItem onClick={handleMenuClose}>My account</MenuItem>
-      </Menu>
-    );
-  
+    
     const mobileMenuId = 'primary-search-account-menu-mobile';
     const renderMobileMenu = (
       <Menu
@@ -130,6 +111,7 @@ export default function Header() {
         }}
         open={isMobileMenuOpen}
         onClose={handleMobileMenuClose}
+        sx={{ borderRadius: '16px' }}
       >
         <MenuItem>
           <p  className="font-sans">درباره ما</p>
@@ -137,6 +119,11 @@ export default function Header() {
         <MenuItem>
 
           <p  className="font-sans">تماس با ما</p>
+        </MenuItem>
+
+        <MenuItem>
+
+          <p  className="font-sans">  دسته بندی</p>
         </MenuItem>
        
       </Menu>
@@ -158,7 +145,7 @@ export default function Header() {
               sx={{textAlign:"center", marginRight: "10%",width:1}}
             />
           </Search>
-          <Typography sx={{width:"30%",color:"gray" , textAlign:"left"}}  className="font-sans"> تیم پشیبانی  09199069952</Typography>
+          <Typography sx={{color:"gray" , textAlign:"left"}}  className="font-sans"> تیم پشیبانی  09199069952</Typography>
 
         </Toolbar>
       </AppBar>
@@ -237,8 +224,10 @@ export default function Header() {
         </Box>
         </Toolbar>
       </AppBar>
+
+      <MegaMenu />
       {renderMobileMenu}
-      {renderMenu}
+      {/* {renderMenu} */}
     </Box>
     </header>
   )
