@@ -32,6 +32,9 @@ axios.post('http://localhost:8000/api/auth/login',{username,password}).then((res
         alert(res.data.message)
     }
 })}
+
+
+
  
 return(
     <GlobalContext.Provider value={{adminToken,adminLogin,getProduct}}>
