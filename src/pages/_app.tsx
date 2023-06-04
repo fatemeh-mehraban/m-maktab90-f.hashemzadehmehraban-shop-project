@@ -20,11 +20,9 @@ export default function App({ Component, pageProps }: AppProps) {
   return(
   <>  
 
-   <GlobalProvider>
   <ThemeProvider theme={THEME}>
     <Component {...pageProps} />
     </ThemeProvider>
-    </GlobalProvider>
     </> 
     ) 
   

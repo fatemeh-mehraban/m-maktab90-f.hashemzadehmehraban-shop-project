@@ -20,7 +20,7 @@ export default function MaxWidthDialog() {
   const [fullWidth, setFullWidth] = useState(true);
   const [maxWidth, setMaxWidth] = useState<DialogProps["maxWidth"]>("sm");
 
-const { adminLogin } = useContext(GlobalContext)
+// const { adminLogin } = useContext(GlobalContext)
 const [admins ,setAdmins]=useState({
   username:"",
   password:""
@@ -35,7 +35,7 @@ const login =(e:any)=>{
     username:admins.username,
     password:admins.password
   }
-  adminLogin(data)
+  // adminLogin(data)
   
 }
 
