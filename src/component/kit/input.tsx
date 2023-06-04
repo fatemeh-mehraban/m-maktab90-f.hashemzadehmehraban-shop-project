@@ -1,8 +1,9 @@
+import { ReactNode } from 'react';
 import { useForm, Controller } from 'react-hook-form';
 interface Props {
     label?:string,
     type:string,
-    placeholder:string
+    placeholder?:string
     onChange?:(x:string,y:string)=>void
     value?:string
     name:"name"|"email"|"lastName",
