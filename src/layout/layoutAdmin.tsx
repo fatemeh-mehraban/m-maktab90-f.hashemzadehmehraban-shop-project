@@ -1,7 +1,6 @@
 
-
 import * as React from 'react';
-import { styled, useTheme, Theme, CSSObject } from '@mui/material/styles';
+import { styled, useTheme, Theme, CSSObject, createTheme } from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import MuiDrawer from '@mui/material/Drawer';
 import MuiAppBar, { AppBarProps as MuiAppBarProps } from '@mui/material/AppBar';
@@ -26,6 +25,9 @@ import Inventory2OutlinedIcon from '@mui/icons-material/Inventory2Outlined';
 import {useRouter } from "next/router"
 import Link from 'next/link';
 import  { useState } from 'react'
+import { ThemeProvider } from '@emotion/react';
+
+
 // import {Typography} from "@material-ui/core";
 const drawerWidth = 240;
 
@@ -126,13 +128,13 @@ const handleRouteAdmin = (index:any)=>{
 
 
   if( index=== 0 ){
-    router.push("/product")
+    router.push("/products")
     
    }else if(index=== 1){
-    router.push("/order")
+    router.push("/Dashboard/order")
 
    }else if(index=== 2){
-    router.push("/Inventory")
+    router.push("/Dashboard/Inventory")
 
    }
 
@@ -150,7 +152,6 @@ const handleRouteAdmin = (index:any)=>{
 {/* <ButtonAppBar handleDrawerOpen={handleDrawerOpen}/> */}
 
   return (
-    // <ThemeProvider theme={theme}>
     <Box sx={{ display: 'flex' }}>
       <CssBaseline />
       <AppBar className="bg-gray-200 text-gray-900" position="fixed" open={open} >
@@ -246,6 +247,5 @@ const handleRouteAdmin = (index:any)=>{
       </Drawer>
       {children}
     </Box>
-    // </ThemeProvider>
   );
 }

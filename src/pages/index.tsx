@@ -5,8 +5,7 @@ import Layout from '@/layout/layout'
 export default function Home() {
   return (
     <Layout>
-      <main className="">
-      {/* <MaxWidthDialog/> */}
+      <main className="h-screen w-full">
     </main>
     </Layout>
 

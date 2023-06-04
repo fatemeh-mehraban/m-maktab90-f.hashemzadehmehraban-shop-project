@@ -6,29 +6,37 @@ import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
 import Button from "../kit/button"
 import { IconButton } from "@mui/material";
 import  axios  from 'axios';
+import { Suspense } from 'react';
+import LinearBuffer from "../loading";
 
 
 export default function InventoryTable() {
     const [products , setProducts] = useState([])
+    const limit=4
+    let counter = products.length
     // const { getProduct } = useContext(GlobalContext)
     const [page,setPage] = useState(1)
-  
-    useEffect(()=>{
-        
-        const res = axios.get(`http://localhost:8000/api/products?page=${page}&limit=3&fields=-rating,-createdAt,-updatedAt,-__v&sort=price&quantity[gte]=8`)
+    
+    useEffect(()=>{    
+        const res = axios.get(`http://localhost:8000/api/products?page=${page}&limit=${limit}&fields=-rating,-createdAt,-updatedAt,-__v&sort=price&quantity[gte]=8`)
         .then((res:any)=>{
-        setProducts(res.data.data.products)  
-        console.log(products)      
+            setProducts(res.data.data.products)
+            counter = res.data.data.products.length
        })
   
   },[(page)])
 
 const nextpage=()=>{
-    setPage(page + 1)
+    if( counter>= +limit  ){        
+        setPage(page + 1)
+    }
+    
 }
 
 const beforpage =()=>{
+    if( page > 1 ){
     setPage(page - 1)
+}
 }
 
   return(
@@ -45,28 +53,32 @@ const beforpage =()=>{
                 </tr>
 
             </thead>
+            {/* <Suspense fallback={<div> Lodiiiiiiiiiiiiiiiiiiiiiiiiiiing ............</div>}> */}
             <tbody>
                 {
         products.map((item:any)=>{
-            console.log(item)      
+            // console.log(item)      
 
         return (
 
             <>
+             
             <tr className="border-b hover:bg-gray-100 hover:border-red-500 hover:border">
-                <th className="p-5"><img src={`products/images/ + ${item.images[0]}`} alt="" /></th>
-                <th className="p-5">{item.name}</th>
-                <th className="p-5">{item.price}</th>
-                <th className="p-5">{item.quantity}</th>
-                <th className="p-5">5</th>
+                <th className=" w-32 p-2"><img src={`http://localhost:8000/images/products/images/${item.images[0]}`} alt="" /></th>
+                <th className="">{item.name}</th>
+                <th className="">{item.price}</th>
+                <th className="">{item.quantity}</th>
+                <th className="">5</th>
 
             </tr>
+            
             </>
         )
         })
       }       
 
             </tbody>
+            {/* </Suspense> */}
         </table>
 
         <div className="text-center p-5">
