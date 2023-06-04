@@ -1,5 +1,5 @@
 // جدول موجودی های کالا
-import { GlobalContext } from "@/pages/contex/GlobalContext"
+import { GlobalContext } from "@/context/GlobalContext"
 import { useContext,useState,useEffect } from "react"
 import KeyboardArrowLeftIcon from '@mui/icons-material/KeyboardArrowLeft';
 import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
@@ -10,9 +10,9 @@ import { Suspense } from 'react';
 import LinearBuffer from "../loading";
 
 
-export default function InventoryTable() {
+export default function InventoryTable(limit:number) {
     const [products , setProducts] = useState([])
-    const limit=4
+    
     let counter = products.length
     // const { getProduct } = useContext(GlobalContext)
     const [page,setPage] = useState(1)

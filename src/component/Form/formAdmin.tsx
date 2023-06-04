@@ -9,9 +9,11 @@ import OutlinedInput from '@mui/material/OutlinedInput';
 import FormHelperText from '@mui/material/FormHelperText';
 import LoginIcon from '@mui/icons-material/Login';
 import Typography from '@mui/material/Typography';
-import { themeRegisterButton } from './../services/styleMui';
-import { GlobalContext } from "@/pages/contex/GlobalContext";
+// import { themeRegisterButton } from '../../services/styleMui';
+// import { GlobalContext } from "@/pages/context/GlobalContext";
 import { useContext,useState } from "react";
+import { GlobalContext } from "@/context/GlobalContext";
+import { themeRegisterButton } from "@/lib/services/styleMui";
 
 export default function MaxWidthDialog() {
   const [open, setOpen] = useState(false);

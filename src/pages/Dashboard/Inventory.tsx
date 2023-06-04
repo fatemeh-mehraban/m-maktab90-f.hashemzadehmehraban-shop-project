@@ -8,7 +8,7 @@ export function Inventory() {
       <MiniDrawer>
       <div className="py-40 mt-20  w-full h-screen flex justify-center items-center px-5"> 
       
-      <InventoryTable />
+      <InventoryTable limit={4}/>
       </div>
       </MiniDrawer>
     )

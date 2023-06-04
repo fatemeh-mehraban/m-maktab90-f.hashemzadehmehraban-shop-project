@@ -20,6 +20,7 @@ export const GlobalProvider=({children}:any)=>{
  const adminLogin = (data:any)=>{
 const {username , password} = data;
 
+
 axios.post('http://localhost:8000/api/auth/login',{username,password}).then((res:any)=>{
     const cookies = new Cookies();
     // console.log(res.data);
@@ -33,11 +34,21 @@ axios.post('http://localhost:8000/api/auth/login',{username,password}).then((res
     }
 })}
 
+// *********************************categpry**************************
+const getCategory = ()=>{
+  const res = axios.get('http://localhost:8000/api/categories')
+return res
+}
+const getSubCategory = ()=>{
+  const res = axios.get('http://localhost:8000/api/subcategories')
+return res
+}
+// *****************************************************
 
 
  
 return(
-    <GlobalContext.Provider value={{adminToken,adminLogin,getProduct}}>
+    <GlobalContext.Provider value={{adminToken,adminLogin,getProduct,getCategory,getSubCategory}}>
             {children}
     </GlobalContext.Provider>
 
