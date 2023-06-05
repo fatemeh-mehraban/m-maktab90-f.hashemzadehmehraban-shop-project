@@ -4,39 +4,33 @@ import Button from "@mui/material/Button";
 import Dialog, { DialogProps } from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import AccountCircle from "@mui/icons-material/AccountCircle";
-import FormControl, { useFormControl } from '@mui/material/FormControl';
+import FormControl from '@mui/material/FormControl';
 import OutlinedInput from '@mui/material/OutlinedInput';
-import FormHelperText from '@mui/material/FormHelperText';
 import LoginIcon from '@mui/icons-material/Login';
 import Typography from '@mui/material/Typography';
-// import { themeRegisterButton } from '../../services/styleMui';
-// import { GlobalContext } from "@/pages/context/GlobalContext";
-import { useContext,useState } from "react";
-import { GlobalContext } from "@/context/GlobalContext";
+import { useState } from "react";
 import { themeRegisterButton } from "@/lib/services/styleMui";
+import { useRouter } from "next/router";
+import Cookies from "universal-cookie";
+import usestore from "@/store";
+import axios from "axios";
 
 export default function MaxWidthDialog() {
+  const router = useRouter()
   const [open, setOpen] = useState(false);
   const [fullWidth, setFullWidth] = useState(true);
   const [maxWidth, setMaxWidth] = useState<DialogProps["maxWidth"]>("sm");
 
-// const { adminLogin } = useContext(GlobalContext)
+
+const setToken = usestore(state=>state.setToken)
+
+
 const [admins ,setAdmins]=useState({
   username:"",
   password:""
 })
 const onChangeHandler=(e:any)=>{
-// e.preventDefault()
 setAdmins({...admins , [e.target.name]:e.target.value})
-}
-const login =(e:any)=>{
-  e.preventDefault()
-  const data={
-    username:admins.username,
-    password:admins.password
-  }
-  // adminLogin(data)
-  
 }
 
 
@@ -44,11 +38,50 @@ const login =(e:any)=>{
   const handleClickOpen = () => {
     setOpen(true);
   }
+  const handleadminpanel = () => {
+  }
+
 
   const handleClose = () => {
     setOpen(false)
   }
 
+  // *******************************
+
+ 
+const adminLogin = ({username,password}:any)=>{
+  // const {username , password} = data;
+  
+  
+  const cookies = new Cookies();
+  axios.post('http://localhost:8000/api/auth/login',{username,password}).then((res:any)=>{
+      // console.log(res.data);
+      if(res.data.status === "success"){     
+          localStorage.setItem("adminToken","eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0NzJmY2ZlMTY0YjE3YTE1OTg4ZWQzZiIsImlhdCI6MTY4NTQzNTg2MiwiZXhwIjoxNjg1NDM2NzYyfQ.d0uajm04ykbi6_UPo9Okir1lwZxcEzgds1XMoiOYd0M")
+          cookies.set("adminToken","eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0NzJmY2ZlMTY0YjE3YTE1OTg4ZWQzZiIsImlhdCI6MTY4NTUxOTQ1MCwiZXhwIjoxNjg1NTIwMzUwfQ.IOg2EujMb9YEiNkmuAh0jnacNrWOJ-aRNpSXK3zoGTw")
+          router.push("/Dashboard")
+            
+
+      }else{
+          alert(res.data.message)
+      }
+    })
+    const toket= cookies.get("adminToken")
+   
+    // setToken(token)
+}
+// **********************************
+const login =(e:any)=>{
+  e.preventDefault()
+   const username=admins.username
+   const password=admins.password
+   adminLogin({username,password})
+
+  //  
+  // adminLogin({username,password})
+  // console.log(adminLogin({username,password}).data)
+
+}
   return (
     <>
       <AccountCircle onClick={handleClickOpen} />
@@ -78,7 +111,7 @@ const login =(e:any)=>{
       </FormControl>
       
         <DialogActions>
-          <Button className="bg-[#28a745] text-white hover:bg-[#28a745]" type="submit" onClick={handleClose}><LoginIcon className="ml-1"/> ورود</Button>
+          <Button className="bg-[#28a745] text-white hover:bg-[#28a745]" type="submit" onClick={handleadminpanel}><LoginIcon className="ml-1"/> ورود</Button>
           <Button className="bg-[#f8f9fa] text-black mr-2" onClick={handleClose}>لغو</Button>
         </DialogActions>
     </Box>
