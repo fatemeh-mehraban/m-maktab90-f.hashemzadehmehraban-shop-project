@@ -5,6 +5,7 @@ import { NextRequest, NextResponse } from "next/server";
 export function middleware(request: NextRequest) {
   const token = request.cookies.get("adminToken")?.value;
   if (!token) return NextResponse.redirect(new URL("/", request.url));
+  // return NextResponse.redirect(new URL("/Dashboard", request.url))
   NextResponse.next();
 }
 
