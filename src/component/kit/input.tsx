@@ -6,7 +6,7 @@ interface Props {
     placeholder?:string
     onChange?:(x:string,y:string)=>void
     value?:string
-    name:"name"|"email"|"lastName",
+    name?:"name"|"email"|"lastName",
     errors:any,
   register:any,
   // helperText:any,

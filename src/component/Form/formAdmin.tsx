@@ -54,8 +54,9 @@ const adminLogin = ({username,password}:any)=>{
   const cookies = new Cookies();
   axios.post('http://localhost:8000/api/auth/login',{username,password}).then((res:any)=>{
       if(res.data.status === "success"){     
-          localStorage.setItem("adminToken","eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0NzJmY2ZlMTY0YjE3YTE1OTg4ZWQzZiIsImlhdCI6MTY4NTQzNTg2MiwiZXhwIjoxNjg1NDM2NzYyfQ.d0uajm04ykbi6_UPo9Okir1lwZxcEzgds1XMoiOYd0M")
-          cookies.set("adminToken","eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0NzJmY2ZlMTY0YjE3YTE1OTg4ZWQzZiIsImlhdCI6MTY4NTUxOTQ1MCwiZXhwIjoxNjg1NTIwMzUwfQ.IOg2EujMb9YEiNkmuAh0jnacNrWOJ-aRNpSXK3zoGTw")
+          localStorage.setItem("accessToken","JWT_ACCESS_TOKEN_SECRET=c44715faa99ebc0970a03f15da0300da7936ddf09ebe7d9aa980bd4f5d5f6fcf ")
+          cookies.set("accessToken",res.data.token.accessToken)
+          cookies.set("refreshToken",res.data.token.accessToken)
           router.push("/Dashboard")
             
 
@@ -63,7 +64,7 @@ const adminLogin = ({username,password}:any)=>{
           alert(res.data.message)
       }
     })
-    const toket= cookies.get("adminToken")
+    const toket= cookies.get("accessToken")
 }
 // **********************************
 const login =(e:any)=>{
