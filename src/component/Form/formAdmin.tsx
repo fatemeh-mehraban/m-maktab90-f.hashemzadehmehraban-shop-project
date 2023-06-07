@@ -14,13 +14,25 @@ import { useRouter } from "next/router";
 import Cookies from "universal-cookie";
 import usestore from "@/store";
 import axios from "axios";
+import { TextField } from "@mui/material";
 
 export default function MaxWidthDialog() {
   const router = useRouter()
   const [open, setOpen] = useState(false);
   const [fullWidth, setFullWidth] = useState(true);
   const [maxWidth, setMaxWidth] = useState<DialogProps["maxWidth"]>("sm");
-
+  const [formValues, setFormValues] = useState({
+    username:{
+      value:'',
+      error:false,
+      errorMessage:'*نام کاربری خود را وارد کنید'
+    },
+    password:{
+      value:"",
+      error:false,
+      errorMessage:'رمز عبور خود را وارد کنید*'
+    }
+  })
 
 const setToken = usestore(state=>state.setToken)
 
@@ -93,14 +105,13 @@ const login =(e:any)=>{
 
 
     <Box component="form" noValidate autoComplete="off" className="flex flex-col items-center gap-3 my-5" dir="rtl" onSubmit={login}>
-      <FormControl sx={{ width: '25ch' }}>
-        <OutlinedInput placeholder="نام کاربری، ایمیل ویا شماره موبایل" name="username" onChange={onChangeHandler}  value={admins.username}/>
-        {/* <MyFormHelperText /> */}
-      </FormControl>
+      {/* <FormControl sx={{ width: '25ch' }}> */}
+        <TextField placeholder="نام کاربری، ایمیل ویا شماره موبایل" name="username" onChange={onChangeHandler} value={admins.username}/>
+      {/* </FormControl> */}
 
-      <FormControl sx={{ width: '25ch' }}>
-        <OutlinedInput placeholder="کلمه عبور " name="password" onChange={onChangeHandler} value={admins.password}/>
-      </FormControl>
+      {/* <FormControl sx={{ width: '25ch' }}> */}
+        <TextField  placeholder="کلمه عبور " name="password" onChange={onChangeHandler} value={admins.password}/>
+      {/* </FormControl> */}
       
         <DialogActions>
           <Button className="bg-[#28a745] text-white hover:bg-[#28a745]" type="submit" onClick={handleadminpanel}><LoginIcon className="ml-1"/> ورود</Button>

@@ -5,10 +5,10 @@ import Cookies from 'universal-cookie';
 export const request = axios.create({baseURL:"http://localhost:8000/api"})
 const cookie = new Cookies();
 request.interceptors.request.use((config) => {
-  if (config.url !== '/auth/token') {
+  // if (config.url !== '/auth/token') {
     const accessToken = cookie.get('accessToken');
-    config.headers.Authorization = 'Bearer ' + accessToken;
-  }
+    accessToken && (config.headers.Authorization = 'Bearer ' + accessToken)
+  // }
   return config;
 });
 
@@ -47,7 +47,7 @@ request.interceptors.response.use(
           } else if (config.url == '/auth/token') {
             cookie.remove('accessToken');
             cookie.remove('refreshToken');
-            // location.href = '/admins';
+            location.href = '/';
           }
         }
       }
@@ -55,3 +55,8 @@ request.interceptors.response.use(
 )
 
 
+    //     useEffect(()=>{
+    //     const data = axios.get(`http://localhost:8000/api/products`).then((res:any)=>{return res.data.data.products})
+
+    // },[])
+    // console.log(data)

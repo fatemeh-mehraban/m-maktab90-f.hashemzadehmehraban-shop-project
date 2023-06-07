@@ -15,16 +15,17 @@ import { IconButton } from '@mui/material';
 import KeyboardArrowLeftIcon from '@mui/icons-material/KeyboardArrowLeft';
 import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
 import Cookies from 'universal-cookie';
+import { request } from '@/util/request';
 
-function createData(
-  name: string,
-  calories: number,
-  fat: number,
-  carbs: number,
-  protein: number,
-) {
-  return { name, calories, fat, carbs, protein };
-}
+// function createData(
+//   name: string,
+//   calories: number,
+//   fat: number,
+//   carbs: number,
+//   protein: number,
+// ) {
+//   return { name, calories, fat, carbs, protein };
+// }
 
 
 export default function BasicTable({limit ,search}:{limit:number,search:string}) {
@@ -57,27 +58,24 @@ export default function BasicTable({limit ,search}:{limit:number,search:string})
       const handelSort =()=>{
         setDate(!date)
       }
-// console.log(rows)
-useEffect(() => {
-  const cookie = new Cookies();
+      useEffect(() => {
+        const cookie = new Cookies(); 
+        const getUser = request.get(`/users`).then(res=>setUserName(res.data.data.users))   
+      }, [])
+      const nextpage=()=>{
+        if( counter >= limit ){        
+          setPage(page + 1)
+        }  
+      }
+      
+      const beforpage =()=>{
+        if( page > 1 ){
+          setPage(page - 1)
+        }
+      }
+      // console.log(rows)
 
-  const accessToken = cookie.get('accessToken');
-  accessToken && axios.get(`http://localhost:8000/api/users`)
-  .then((res: any) => console.log(res.data))
-// setUserName(newUser) 
-}, [])
-// console.log(userName)
-const nextpage=()=>{
-  if( counter >= limit ){        
-      setPage(page + 1)
-  }  
-}
 
-const beforpage =()=>{
-  if( page > 1 ){
-  setPage(page - 1)
-}
-}
   return (
     <TableContainer component={Paper} sx={{ direction:"rtl"} }>
       <Table sx={{ minWidth: 650 ,border: 1,borderBottom: 0, borderColor: 'grey.300'}} aria-label="simple table" >
@@ -96,7 +94,13 @@ const beforpage =()=>{
               sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
             >
               <TableCell component="th" scope="row" align="right">
-                {row.user}
+                {
+                 userName.map(item=>{
+                  // console.log(item)
+                  return item._id === row.user && <span>{item.username}</span>
+
+                })
+                }
               </TableCell>
               <TableCell align="right" className="py-7">{row.totalPrice}</TableCell>
               <TableCell align="right">{row.createdAt}</TableCell>

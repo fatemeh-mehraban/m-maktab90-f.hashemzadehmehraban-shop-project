@@ -1,11 +1,12 @@
 import MiniDrawer from "@/layout/layoutAdmin"
+import ProductTable from "@/component/tabel/productTable"
 
-export function Product() {
+function Product() {
     return (
       <MiniDrawer>
 
-      <div className="bg-pink-700 text-white py-40  w-full h-screen">        
-        Product
+      <div className=" mt-20 w-full h-screen flex flex-col justify-center items-start px-5">
+        <ProductTable/>        
       </div>
       </MiniDrawer>
 

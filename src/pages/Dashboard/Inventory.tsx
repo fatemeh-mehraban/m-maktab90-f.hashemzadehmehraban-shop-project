@@ -7,7 +7,7 @@ import {useState,useEffect } from "react"
 
 export function Inventory() {
   const [search , setsearch] = useState("")
-  const searchfunction = (e)=>{
+  const searchfunction = (e:any)=>{
     setsearch(e.target.value)
   }
 
