@@ -17,16 +17,6 @@ import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
 import Cookies from 'universal-cookie';
 import { request } from '@/util/request';
 
-// function createData(
-//   name: string,
-//   calories: number,
-//   fat: number,
-//   carbs: number,
-//   protein: number,
-// ) {
-//   return { name, calories, fat, carbs, protein };
-// }
-
 
 export default function BasicTable({limit ,search}:{limit:number,search:string}) {
   
@@ -35,23 +25,13 @@ export default function BasicTable({limit ,search}:{limit:number,search:string})
   const [userName , setUserName] = useState([])
   const [date , setDate] = useState(false)
   const [page,setPage] = useState(1)
-  // const [searchTxt,setSearchTxt] = useState("")
   let counter = rows.length
   
     useEffect(() => {
         const res = axios.get(`http://localhost:8000/api/orders?page=${page}&limit=${limit}`)
         .then((res: any) => {
           counter = res.data.data.orders.length
-
-            // console.log(res.data.data.orders.length)
           setRows(res.data.data.orders) 
-
-      // const newUser = res.data.data.orders.map(item=>{
-      //   return {
-      //       item
-      //     }
-    // })
-    
     })
 }, [page,limit])
 
@@ -73,7 +53,6 @@ export default function BasicTable({limit ,search}:{limit:number,search:string})
           setPage(page - 1)
         }
       }
-      // console.log(rows)
 
 
   return (
