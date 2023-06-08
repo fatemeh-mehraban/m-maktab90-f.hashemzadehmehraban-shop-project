@@ -20,6 +20,7 @@ import { useState } from 'react';
 import MaxWidthDialog  from "../Form/formAdmin"
 import MegaMenu from './menu';
 import usestore from '@/store';
+import  Link  from 'next/link';
 
 const Search = styled('div')(({ theme }) => ({
   position: 'relative',
@@ -86,9 +87,9 @@ export default function Header() {
 
       console.log(isCategories)
     }
-    const handleProfileMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
-      console.log("1")
-    };
+    // const handleProfileMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
+    //   // console.log("1")
+    // };
   
     const handleMobileMenuClose = () => {
       setMobileMoreAnchorEl(null);
@@ -145,7 +146,8 @@ export default function Header() {
 <Box className="hidden md:block" sx={{ flexGrow: 1 ,marginX:"10px"}}>
       <AppBar sx={{ backgroundColor:"white",boxShadow: 0,padding:"10px"}} position="static">
         <Toolbar  sx={{width:1,display:"flex" ,justifyContent: 'space-between' }}>
-          <Box><Image src="/barishow-fa-header.png"  alt='logo' width="100" height={500} /></Box>
+          <Link href="/"> <Box><Image src="/barishow-fa-header.png"  alt='logo' width="100" height={500} /></Box></Link>
+         
           <Search  sx={{ display: { xs:'none' , md:'flex' },'&:hover':{bgcolor: "grey.200"},width:{sm:"75%" , md:'30%', border: 1 }, border: 1 , borderColor: 'grey.300', backgroundColor:"grey.200" , borderRadius:5, color:"grey.800",marginTop:"10px"}}>
             <SearchIconWrapper >
               <SearchIcon />
@@ -210,7 +212,7 @@ export default function Header() {
               aria-label="account of current user"
               aria-controls={menuId}
               aria-haspopup="true"
-              onClick={handleProfileMenuOpen}
+              // onClick={handleProfileMenuOpen}
               color="inherit"
               sx={{mr:2}}
             >
@@ -226,7 +228,7 @@ export default function Header() {
               aria-label="account of current user"
               aria-controls={menuId}
               aria-haspopup="true"
-              onClick={handleProfileMenuOpen}
+              // onClick={handleProfileMenuOpen}
               color="inherit"
             >
               <MaxWidthDialog/>

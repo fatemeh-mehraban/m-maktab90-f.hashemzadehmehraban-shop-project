@@ -16,7 +16,7 @@ import usestore from "@/store";
 import axios from "axios";
 import { TextField } from "@mui/material";
 import { useForm } from "react-hook-form";
-import { z, zod } from "Zod";
+import { z } from "Zod";
 // import { zodResolver } from "@hookform/resolvers/zod";
 import { zodResolver } from '@hookform/resolvers/zod';
 
@@ -26,7 +26,7 @@ export default function MaxWidthDialog() {
 
  const personSchema = z.object({
   username: z.string().min(3, { message: "نام وارد شده صحیح نیست" }),
-  passwprd: z.string().min(4, { message: "پسورد وارد شده صحیح نیست" })
+  password: z.string().min(4, { message: "پسورد وارد شده صحیح نیست" })
 })
 // +++++++++++++++
   const router = useRouter()
@@ -36,7 +36,7 @@ export default function MaxWidthDialog() {
   const [maxWidth, setMaxWidth] = useState<DialogProps["maxWidth"]>("sm");
 
   // +++++++++++++ validation ++++++++++++++++++++++
-  const req = register("username",{required:"نام کاربری را وارد کنید"})
+  // const req = register("username",{required:"نام کاربری را وارد کنید"})
 
   // ++++++++++++++++++++
 
@@ -54,8 +54,7 @@ setAdmins({...admins , [e.target.name]:e.target.value})
   const handleClickOpen = () => {
     setOpen(true);
   }
-  const handleadminpanel = () => {
-  }
+
 
 
   const handleClose = () => {
@@ -80,17 +79,19 @@ const adminLogin = ({username,password}:any)=>{
           alert(res.data.message)
       }
     })
-    .catch(
-      console.log("error")
-    )
+    .catch(error=>{
+   
+        console.log(error)
+    })
     const toket= cookies.get("accessToken")
 }
 // **********************************
 const login =(e:any)=>{
-  e.preventDefault()
+  // e.preventDefault()
    const username=admins.username
    const password=admins.password
    adminLogin({username,password})
+   console.log(e)
 }
 
 
@@ -115,17 +116,20 @@ const login =(e:any)=>{
         </DialogActions>
 
 
-    <Box component="form" noValidate autoComplete="off" className="flex flex-col items-center gap-3 my-5" dir="rtl" onSubmit={(e)=>handleSubmit(login(e))}>
+    <Box component="form" noValidate autoComplete="off" className="flex flex-col items-center gap-3 my-5" dir="rtl" onSubmit={handleSubmit(login)}>
         
-        <TextField placeholder="نام کاربری و یا ایمیل "  value={admins.username}  {...req}  onChange={onChangeHandler} error={!!errors?.userName} />
-        {errors.userName && <p>اشتباه</p>}
+        <TextField placeholder="نام کاربری و یا ایمیل "  id="username" inputProps={{...register("username",{required:"نام کاربری را وارد کنید"})}}  error={!!errors?.username} onChange={onChangeHandler}  value={admins.username}/>
+        {errors.username && <p className="text-red-500 text-xs pb-5">نام کاربری را به درستی وارد کنید!</p>}
 
-        <TextField  placeholder="کلمه عبور " name="password" onChange={onChangeHandler} value={admins.password}/>
-      
+        <TextField  placeholder="کلمه عبور " id="password" inputProps={{...register("password",{required:"نام کاربری را وارد کنید"})}} error={!!errors?.password} onChange={onChangeHandler} value={admins.password}/>
+        {errors.password && <p className="text-red-500 text-xs pb-5">رمز عبو را به درستی وارد کنید!</p>}
+
+
         <DialogActions>
-          <Button className="bg-[#28a745] text-white hover:bg-[#28a745]" type="submit" onClick={handleadminpanel}><LoginIcon className="ml-1"/> ورود</Button>
+          <Button className="bg-[#28a745] text-white hover:bg-[#28a745]" type="submit"><LoginIcon className="ml-1"/> ورود</Button>
           <Button className="bg-[#f8f9fa] text-black mr-2" onClick={handleClose}>لغو</Button>
         </DialogActions>
+        {/* <input type="submit" value={"submit"}/> */}
     </Box>
 
 

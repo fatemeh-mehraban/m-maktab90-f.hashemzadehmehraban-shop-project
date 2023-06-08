@@ -60,6 +60,11 @@ export default function BasicTable({limit ,search}:{limit:number,search:string})
         }
       }
 
+      const formatDate = (dateString: string) => {
+        const date = new Date(dateString);
+        const formattedDate = date.toLocaleDateString('en-US');
+        return formattedDate;
+        };
 
   return (
     <TableContainer Align="LEFT" component={Paper} sx={{ direction:"rtl"} } >
@@ -84,6 +89,7 @@ export default function BasicTable({limit ,search}:{limit:number,search:string})
         </TableHead>
         <TableBody>
           {rows.map((row) => (
+
             <TableRow
               key={row.name}
               sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
@@ -98,7 +104,7 @@ export default function BasicTable({limit ,search}:{limit:number,search:string})
                 }
               </TableCell>
               <TableCell align="right" className="py-7">{row.totalPrice}</TableCell>
-              <TableCell align="right">{row.createdAt}</TableCell>
+              <TableCell align="right">{formatDate(row.createdAt)}</TableCell>
               <TableCell align="right">بررسی سفارش</TableCell>
             </TableRow>
           ))}
