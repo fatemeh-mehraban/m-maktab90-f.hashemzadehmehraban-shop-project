@@ -8,7 +8,7 @@ export default function Home() {
 
       <QueryClientProvider client={queryClient}>
     <Layout>
-      <main className="h-screen w-full">
+      <main className="h-screen w-full overflow-x-hidden">
     </main>
     </Layout>
     </QueryClientProvider>

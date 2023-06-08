@@ -9,6 +9,7 @@
 }
 body{
     font-family: 'iransans';
+    overflow-x: hidden;
 }
 table,button,li,ul{
     font-family:"iransans";
