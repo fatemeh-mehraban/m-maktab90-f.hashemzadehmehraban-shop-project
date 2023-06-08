@@ -53,10 +53,3 @@ request.interceptors.response.use(
       }
 
 )
-
-
-    //     useEffect(()=>{
-    //     const data = axios.get(`http://localhost:8000/api/products`).then((res:any)=>{return res.data.data.products})
-
-    // },[])
-    // console.log(data)

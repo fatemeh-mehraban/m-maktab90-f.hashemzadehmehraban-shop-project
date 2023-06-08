@@ -66,7 +66,7 @@ useEffect(() => {
 //   setPage(page + 1)
 // }
 function handlePageChange() {
-  console.log("525");
+  // console.log("525");
   
   setPage(page + 1);
 }

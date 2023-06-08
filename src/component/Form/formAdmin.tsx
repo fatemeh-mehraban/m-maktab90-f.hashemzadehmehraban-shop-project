@@ -15,26 +15,30 @@ import Cookies from "universal-cookie";
 import usestore from "@/store";
 import axios from "axios";
 import { TextField } from "@mui/material";
+import { useForm } from "react-hook-form";
+import { z, zod } from "Zod";
+// import { zodResolver } from "@hookform/resolvers/zod";
+import { zodResolver } from '@hookform/resolvers/zod';
+
+
 
 export default function MaxWidthDialog() {
+
+ const personSchema = z.object({
+  username: z.string().min(3, { message: "نام وارد شده صحیح نیست" }),
+  passwprd: z.string().min(4, { message: "پسورد وارد شده صحیح نیست" })
+})
+// +++++++++++++++
   const router = useRouter()
+  const { register , handleSubmit , formState:{errors} } = useForm( {resolver: zodResolver(personSchema)});
   const [open, setOpen] = useState(false);
   const [fullWidth, setFullWidth] = useState(true);
   const [maxWidth, setMaxWidth] = useState<DialogProps["maxWidth"]>("sm");
-  const [formValues, setFormValues] = useState({
-    username:{
-      value:'',
-      error:false,
-      errorMessage:'*نام کاربری خود را وارد کنید'
-    },
-    password:{
-      value:"",
-      error:false,
-      errorMessage:'رمز عبور خود را وارد کنید*'
-    }
-  })
 
-const setToken = usestore(state=>state.setToken)
+  // +++++++++++++ validation ++++++++++++++++++++++
+  const req = register("username",{required:"نام کاربری را وارد کنید"})
+
+  // ++++++++++++++++++++
 
 
 const [admins ,setAdmins]=useState({
@@ -64,18 +68,21 @@ setAdmins({...admins , [e.target.name]:e.target.value})
 const adminLogin = ({username,password}:any)=>{ 
   
   const cookies = new Cookies();
-  axios.post('http://localhost:8000/api/auth/login',{username,password}).then((res:any)=>{
+  axios.post('http://localhost:8000/api/auth/login',{username,password})
+  .then((res:any)=>{
       if(res.data.status === "success"){     
           localStorage.setItem("accessToken","JWT_ACCESS_TOKEN_SECRET=c44715faa99ebc0970a03f15da0300da7936ddf09ebe7d9aa980bd4f5d5f6fcf ")
           cookies.set("accessToken",res.data.token.accessToken)
           cookies.set("refreshToken",res.data.token.accessToken)
           router.push("/Dashboard")
             
-
       }else{
           alert(res.data.message)
       }
     })
+    .catch(
+      console.log("error")
+    )
     const toket= cookies.get("accessToken")
 }
 // **********************************
@@ -84,8 +91,12 @@ const login =(e:any)=>{
    const username=admins.username
    const password=admins.password
    adminLogin({username,password})
-
 }
+
+
+
+
+
   return (
     <>
       <AccountCircle onClick={handleClickOpen} />
@@ -104,14 +115,12 @@ const login =(e:any)=>{
         </DialogActions>
 
 
-    <Box component="form" noValidate autoComplete="off" className="flex flex-col items-center gap-3 my-5" dir="rtl" onSubmit={login}>
-      {/* <FormControl sx={{ width: '25ch' }}> */}
-        <TextField placeholder="نام کاربری، ایمیل ویا شماره موبایل" name="username" onChange={onChangeHandler} value={admins.username}/>
-      {/* </FormControl> */}
+    <Box component="form" noValidate autoComplete="off" className="flex flex-col items-center gap-3 my-5" dir="rtl" onSubmit={(e)=>handleSubmit(login(e))}>
+        
+        <TextField placeholder="نام کاربری و یا ایمیل "  value={admins.username}  {...req}  onChange={onChangeHandler} error={!!errors?.userName} />
+        {errors.userName && <p>اشتباه</p>}
 
-      {/* <FormControl sx={{ width: '25ch' }}> */}
         <TextField  placeholder="کلمه عبور " name="password" onChange={onChangeHandler} value={admins.password}/>
-      {/* </FormControl> */}
       
         <DialogActions>
           <Button className="bg-[#28a745] text-white hover:bg-[#28a745]" type="submit" onClick={handleadminpanel}><LoginIcon className="ml-1"/> ورود</Button>

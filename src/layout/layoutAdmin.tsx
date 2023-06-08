@@ -26,6 +26,7 @@ import {useRouter } from "next/router"
 import Link from 'next/link';
 import  { useState } from 'react'
 import { ThemeProvider } from '@emotion/react';
+import { grey } from '@mui/material/colors';
 
 
 // import {Typography} from "@material-ui/core";
@@ -180,13 +181,13 @@ const handleRouteAdmin = (index:any)=>{
       </AppBar>
 
       <Drawer variant="permanent" open={open}>
-        <DrawerHeader className="bg-gray-100 text-gray-900">
+        <DrawerHeader className="bg-gray-900 text-gray-100">
           <IconButton onClick={handleDrawerClose}>
-            {theme.direction === 'rtl' ? <ChevronRightIcon /> : <ChevronLeftIcon />}
+            {theme.direction === 'rtl' ? <ChevronRightIcon sx={{color:grey[300]}}/> : <ChevronLeftIcon sx={{color:grey[300]}}/>}
           </IconButton>
         </DrawerHeader>
         <Divider />
-        <List className="bg-gray-100 text-gray-900 font-sans" >
+        <List className="bg-gray-900 text-gray-100 font-sans" >
           {['مشاهده سایت', 'میز کار'].map((text, index) => (
             <ListItem key={text} disablePadding sx={{ display: 'block' }}  onClick={()=>{handleRoute(index)}}  className="font-sans">
               <ListItemButton
@@ -202,6 +203,7 @@ const handleRouteAdmin = (index:any)=>{
                     minWidth: 0,
                     mr: open ? 3 : 'auto',
                     justifyContent: 'center',
+                    color:grey[300]
                   }}
                   className="font-sans"
                   // id={index} 
@@ -214,7 +216,7 @@ const handleRouteAdmin = (index:any)=>{
           ))}
         </List>
         <Divider />
-        <List className="bg-gray-100 text-gray-900 h-full font-sans">
+        <List className="bg-gray-900 text-gray-100 h-full font-sans">
           {['کالاها', 'سفارش ها', 'موجودی کالا'].map((text, index) => (
             <ListItem key={text} disablePadding sx={{ display: 'block' }}  onClick={()=>handleRouteAdmin(index)} className="font-sans">
               {/* <Link href="/"> */}
@@ -233,6 +235,7 @@ const handleRouteAdmin = (index:any)=>{
                     minWidth: 0,
                     mr: open ? 3 : 'auto',
                     justifyContent: 'center',
+                    color:grey[300]
                   }}
                   className="font-sans"
                 >

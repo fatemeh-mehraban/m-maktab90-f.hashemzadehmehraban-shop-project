@@ -16,6 +16,9 @@ import KeyboardArrowLeftIcon from '@mui/icons-material/KeyboardArrowLeft';
 import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
 import Cookies from 'universal-cookie';
 import { request } from '@/util/request';
+import  DialogSelect from "@/component/kit/selectOption"
+import YoutubeSearchedForIcon from '@mui/icons-material/YoutubeSearchedFor';
+import usestore from "../../store"
 
 
 export default function BasicTable({limit ,search}:{limit:number,search:string}) {
@@ -25,21 +28,24 @@ export default function BasicTable({limit ,search}:{limit:number,search:string})
   const [userName , setUserName] = useState([])
   const [date , setDate] = useState(false)
   const [page,setPage] = useState(1)
+  const isPay = usestore((state) => state.isPay)
+
+
+
   let counter = rows.length
-  
+  console.log(isPay)
     useEffect(() => {
-        const res = axios.get(`http://localhost:8000/api/orders?page=${page}&limit=${limit}`)
+        const res = axios.get(`http://localhost:8000/api/orders?page=${page}&limit=${limit}&${isPay==="no" ?"deliveryStatus=false":isPay==="ok" ? "deliveryStatus=true":"" }`)
         .then((res: any) => {
           counter = res.data.data.orders.length
           setRows(res.data.data.orders) 
     })
-}, [page,limit])
-
+}, [page,limit,isPay])
+// isPay && console.log("yes")
       const handelSort =()=>{
         setDate(!date)
       }
       useEffect(() => {
-        const cookie = new Cookies(); 
         const getUser = request.get(`/users`).then(res=>setUserName(res.data.data.users))   
       }, [])
       const nextpage=()=>{
@@ -56,7 +62,17 @@ export default function BasicTable({limit ,search}:{limit:number,search:string})
 
 
   return (
-    <TableContainer component={Paper} sx={{ direction:"rtl"} }>
+    <TableContainer Align="LEFT" component={Paper} sx={{ direction:"rtl"} } >
+
+
+      <div className='border border-green-400 rounded-md mb-5 w-1/4 flex'>
+            {/* <YoutubeSearchedForIcon className="bg-green-400 h-full text-6xl px-4 py-2"/> */}
+            <div className="bg-green-400"> <DialogSelect/> </div>
+            <input type="text" placeholder="جستجو ..." dir="rtl" className="p-2 outline-none" onChange={(e)=>console.log(1)}/>
+        </div>
+        
+
+
       <Table sx={{ minWidth: 650 ,border: 1,borderBottom: 0, borderColor: 'grey.300'}} aria-label="simple table" >
         <TableHead>
           <TableRow >
