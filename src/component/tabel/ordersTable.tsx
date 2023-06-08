@@ -111,15 +111,17 @@ export default function BasicTable({limit ,search}:{limit:number,search:string})
         </TableBody>
       </Table>
 
-      <div className="text-center p-5">
+      <div className="flex justify-center p-5 border">
+            <div className='border border-green-500 w-40 flex justify-between items-center rounded-md'>
             <IconButton aria-label="Example"  onClick={beforpage} >
                 
-                <KeyboardArrowRightIcon/>
+                <KeyboardArrowRightIcon className='text-green-600'/>
             </IconButton> 
-            <span> {page} </span>
+            <span className='border border-t-0 border-green-500 border-b-0 h-full px-7 py-2 text-green-600'> {page} </span>
             <IconButton aria-label="Example" onClick={nextpage}>
-            <KeyboardArrowLeftIcon/>
+            <KeyboardArrowLeftIcon className='text-green-600'/>
             </IconButton>    
+            </div>
        
     
             </div>
