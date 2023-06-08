@@ -19,6 +19,8 @@ import { useState } from 'react';
 
 import MaxWidthDialog  from "../Form/formAdmin"
 import MegaMenu from './menu';
+import usestore from '@/store';
+import  Link  from 'next/link';
 
 const Search = styled('div')(({ theme }) => ({
   position: 'relative',
@@ -69,6 +71,10 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 
 
 export default function Header() {
+  const setIsCategories = usestore((state) => state.setIsCategories)
+  const isCategories = usestore((state) => state.isCategories)
+
+
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
     const [mobileMoreAnchorEl, setMobileMoreAnchorEl] =
       useState<null | HTMLElement>(null);
@@ -76,12 +82,18 @@ export default function Header() {
     const isMenuOpen = Boolean(anchorEl);
     const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
   
-    const handleProfileMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
-      console.log("1")
-    };
+    const handleCategory = ()=>{
+      setIsCategories(!isCategories)
+
+      console.log(isCategories)
+    }
+    // const handleProfileMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
+    //   // console.log("1")
+    // };
   
     const handleMobileMenuClose = () => {
       setMobileMoreAnchorEl(null);
+      setIsCategories(false)
     };
   
     const handleMenuClose = () => {
@@ -121,7 +133,7 @@ export default function Header() {
           <p  className="font-sans">تماس با ما</p>
         </MenuItem>
 
-        <MenuItem>
+        <MenuItem onClick={handleCategory}>
 
           <p  className="font-sans">  دسته بندی</p>
         </MenuItem>
@@ -134,7 +146,8 @@ export default function Header() {
 <Box className="hidden md:block" sx={{ flexGrow: 1 ,marginX:"10px"}}>
       <AppBar sx={{ backgroundColor:"white",boxShadow: 0,padding:"10px"}} position="static">
         <Toolbar  sx={{width:1,display:"flex" ,justifyContent: 'space-between' }}>
-          <Box><Image src="/barishow-fa-header.png"  alt='logo' width="100" height={500} /></Box>
+          <Link href="/"> <Box><Image src="/barishow-fa-header.png"  alt='logo' width="100" height={500} /></Box></Link>
+         
           <Search  sx={{ display: { xs:'none' , md:'flex' },'&:hover':{bgcolor: "grey.200"},width:{sm:"75%" , md:'30%', border: 1 }, border: 1 , borderColor: 'grey.300', backgroundColor:"grey.200" , borderRadius:5, color:"grey.800",marginTop:"10px"}}>
             <SearchIconWrapper >
               <SearchIcon />
@@ -173,7 +186,7 @@ export default function Header() {
       <AppBar position="static" sx={{ backgroundColor:"white" , color:"gray",boxShadow:"rgba(33, 35, 38, 0.1) 0px 10px 10px -10px"}}>
         <Toolbar sx={{justifyContent: 'space-between', paddingTop:"30px", pb:{xs: 2, md: 0}}}>
 
-          <Box sx={{ display: { xs: 'none', md: 'flex',gap:20 } }}>
+          <Box sx={{ display: { xs: 'none', md: 'flex',gap:20 } }} onClick={handleCategory}>
           <Typography className="bg-[#120051] font-sans" sx={{ borderRadius:"10px 10px 0 0" ,p:1.5 ,px:4 , color:"white"}}><MenuIcon sx={{ml:1}}/>دسته بندی محصولات</Typography>
           <Typography sx={{marginY:1}}  className="font-sans">درباره ما</Typography>
           <Typography sx={{marginY:1}}  className="font-sans">تماس با ما</Typography>
@@ -199,7 +212,7 @@ export default function Header() {
               aria-label="account of current user"
               aria-controls={menuId}
               aria-haspopup="true"
-              onClick={handleProfileMenuOpen}
+              // onClick={handleProfileMenuOpen}
               color="inherit"
               sx={{mr:2}}
             >
@@ -215,7 +228,7 @@ export default function Header() {
               aria-label="account of current user"
               aria-controls={menuId}
               aria-haspopup="true"
-              onClick={handleProfileMenuOpen}
+              // onClick={handleProfileMenuOpen}
               color="inherit"
             >
               <MaxWidthDialog/>
@@ -225,7 +238,7 @@ export default function Header() {
         </Toolbar>
       </AppBar>
 
-      <MegaMenu />
+      {isCategories && <MegaMenu />}
       {renderMobileMenu}
       {/* {renderMenu} */}
     </Box>
