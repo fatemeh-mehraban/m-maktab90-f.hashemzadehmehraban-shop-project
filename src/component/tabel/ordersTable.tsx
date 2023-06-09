@@ -35,12 +35,12 @@ export default function BasicTable({limit ,search}:{limit:number,search:string})
   let counter = rows.length
   console.log(isPay)
     useEffect(() => {
-        const res = axios.get(`http://localhost:8000/api/orders?page=${page}&limit=${limit}&${isPay==="no" ?"deliveryStatus=false":isPay==="ok" ? "deliveryStatus=true":"" }`)
+        const res = axios.get(`http://localhost:8000/api/orders?page=${page}&limit=${limit}&${date?"sort=createdAt":"sort=-createdAt"}&${isPay==="no" ?"deliveryStatus=false":isPay==="ok" ? "deliveryStatus=true":"" }`)
         .then((res: any) => {
           counter = res.data.data.orders.length
           setRows(res.data.data.orders) 
     })
-}, [page,limit,isPay])
+}, [page,limit,isPay,date])
 // isPay && console.log("yes")
       const handelSort =()=>{
         setDate(!date)
@@ -67,7 +67,7 @@ export default function BasicTable({limit ,search}:{limit:number,search:string})
         };
 
   return (
-    <TableContainer Align="LEFT" component={Paper} sx={{ direction:"rtl"} } >
+    <TableContainer Align="RIGHT" component={Paper} sx={{ direction:"rtl"} } >
 
 
       <div className='border border-green-400 rounded-md mb-5 w-1/4 flex'>

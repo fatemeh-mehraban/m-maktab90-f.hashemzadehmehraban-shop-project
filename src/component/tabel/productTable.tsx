@@ -83,7 +83,7 @@ console.log(data)
             >
 
 
-              <TableCell component="th" scope="row" align="right" width="150px"><Image src={`http://localhost:8000/images/products/images/${row.images[0]}`} alt="" /></TableCell>
+              <TableCell component="th" scope="row" align="right" width="150px"><img src={`http://localhost:8000/images/products/images/${row.images[0]}`} alt="" /></TableCell>
               <TableCell align="center"  width="300px">{row.name}</TableCell>
               <TableCell align="center" className="py-7">  
                 {
