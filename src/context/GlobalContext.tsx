@@ -12,10 +12,7 @@ export const GlobalProvider=({children}:any)=>{
       ? localStorage.getItem('adminToken') || false
       : ''
   );
-  const getProduct = (page:number)=>{
-    const res = axios.get(`http://localhost:8000/api/products?page=${page}&limit=3&fields=-rating,-createdAt,-updatedAt,-__v&sort=price&quantity[gte]=8`)
-  return res
- }
+  
   const router =useRouter()
  const adminLogin = (data:any)=>{
 const {username , password} = data;
@@ -34,21 +31,12 @@ axios.post('http://localhost:8000/api/auth/login',{username,password}).then((res
     }
 })}
 
-// *********************************categpry**************************
-const getCategory = ()=>{
-  const res = axios.get('http://localhost:8000/api/categories')
-return res
-}
-const getSubCategory = ()=>{
-  const res = axios.get('http://localhost:8000/api/subcategories')
-return res
-}
-// *****************************************************
+
 
 
  
 return(
-    <GlobalContext.Provider value={{adminToken,adminLogin,getProduct,getCategory,getSubCategory}}>
+    <GlobalContext.Provider value={{adminToken,adminLogin}}>
             {children}
     </GlobalContext.Provider>
 
