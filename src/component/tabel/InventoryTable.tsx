@@ -133,7 +133,7 @@ const sortQuantity =()=>{
             </IconButton> 
             <span className='border border-t-0 border-green-500 border-b-0 h-full px-7 py-2 text-green-600'> {page} </span>
             <IconButton aria-label="Example" onClick={nextpage}>
-            <KeyboardArrowLeftIcon KeyboardArrowRightIcon className='text-green-600'/>
+            <KeyboardArrowLeftIcon className='text-green-600'/>
             </IconButton>    
             </div>
        

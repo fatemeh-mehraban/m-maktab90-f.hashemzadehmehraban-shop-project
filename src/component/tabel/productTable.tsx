@@ -20,6 +20,7 @@ import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
 import ContentCopyOutlinedIcon from '@mui/icons-material/ContentCopyOutlined';
 import AddIcon from '@mui/icons-material/Add';
+import Image from 'next/image';
 
 const ProductTable = ({limit}:{limit:number}) => {
   const [data , setData] = useState([])
@@ -82,13 +83,13 @@ console.log(data)
             >
 
 
-              <TableCell component="th" scope="row" align="right" width="150px"><img src={`http://localhost:8000/images/products/images/${row.images[0]}`} alt="" /></TableCell>
+              <TableCell component="th" scope="row" align="right" width="150px"><Image src={`http://localhost:8000/images/products/images/${row.images[0]}`} alt="" /></TableCell>
               <TableCell align="center"  width="300px">{row.name}</TableCell>
               <TableCell align="center" className="py-7">  
                 {
-                 category.map(item=>{
+                 category.map((item) =>{
                   // console.log(item)
-                  return item._id === row.category && <span>{item.name}</span>
+                  return item._id === row.category && <span key={item.id}>{item.name}</span>
 
                 })
                 }
