@@ -5,7 +5,7 @@ import Typography from '@mui/material/Typography';
 import IconButton from '@mui/material/IconButton';
 import MenuIcon from '@mui/icons-material/Menu';
 import Image from 'next/image';
-
+import LogoutIcon from '@mui/icons-material/Logout';
 
 import { styled, alpha } from '@mui/material/styles';
 import InputBase from '@mui/material/InputBase';
@@ -21,6 +21,7 @@ import MaxWidthDialog  from "../Form/formAdmin"
 import MegaMenu from './menu';
 import usestore from '@/store';
 import  Link  from 'next/link';
+import Cookies from "universal-cookie";
 
 const Search = styled('div')(({ theme }) => ({
   position: 'relative',
@@ -62,8 +63,8 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
   },
 }));
 
-
-
+const cookie = new Cookies();
+const token =   cookie.get("accessToken")
 
 
 
@@ -104,6 +105,10 @@ export default function Header() {
     const handleMobileMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
       setMobileMoreAnchorEl(event.currentTarget);
     };
+    const handleLogout =()=>{
+      cookie.remove('accessToken');
+      cookie.remove('refreshToken');
+    }
   
     const menuId = 'primary-search-account-menu';
     
@@ -219,22 +224,21 @@ export default function Header() {
               </Badge>
             </IconButton>
 
-            <IconButton
-              size="large"
-              edge="end"
-              aria-label="account of current user"
-              aria-controls={menuId}
-              aria-haspopup="true"
-              // onClick={handleProfileMenuOpen}
-              color="inherit"
-            >
-              <MaxWidthDialog/>
+            {token ? (<> 
+ 
+ <MenuItem onClick={handleLogout}> 
 
-            </IconButton>
+   <LogoutIcon  /> 
+
+   <p className="font-sans">خروج</p> 
+ </MenuItem> 
+</>) : (<> 
+ <MaxWidthDialog /> 
+</>)} 
         </Box>
         </Toolbar>
       </AppBar>
-
+   
       {isCategories && <MegaMenu />}
       {renderMobileMenu}
       {/* {renderMenu} */}
