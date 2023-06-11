@@ -9,6 +9,8 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@ckeditor/ckeditor5-build-classic": "^38.0.1",
+    "@ckeditor/ckeditor5-react": "^6.0.0",
     "@emotion/react": "^11.11.0",
     "@emotion/styled": "^11.11.0",
     "@hookform/resolvers": "^3.1.0",
@@ -20,9 +22,11 @@
     "@types/react-dom": "18.2.4",
     "autoprefixer": "10.4.14",
     "axios": "^1.4.0",
+    "babel-polyfill": "^6.26.0",
+    "ckbox": "^1.5.1",
     "eslint": "8.41.0",
     "eslint-config-next": "13.4.3",
-    "mongoose": "^7.2.1",
+    "install": "^0.13.0",
     "next": "13.4.3",
     "postcss": "8.4.23",
     "react": "18.2.0",

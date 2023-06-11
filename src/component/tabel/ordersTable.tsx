@@ -19,6 +19,7 @@ import { request } from '@/util/request';
 import  DialogSelect from "@/component/kit/selectOption"
 import YoutubeSearchedForIcon from '@mui/icons-material/YoutubeSearchedFor';
 import usestore from "../../store"
+import FormDialog from '../modal/orderModal';
 
 
 export default function BasicTable({limit ,search}:{limit:number,search:string}) {
@@ -33,7 +34,7 @@ export default function BasicTable({limit ,search}:{limit:number,search:string})
 
 
   let counter = rows.length
-  console.log(isPay)
+  // console.log(isPay)
     useEffect(() => {
         const res = axios.get(`http://localhost:8000/api/orders?page=${page}&limit=${limit}&${isPay==="no" ?"deliveryStatus=false":isPay==="ok" ? "deliveryStatus=true":"" }`)
         .then((res: any) => {
@@ -41,7 +42,11 @@ export default function BasicTable({limit ,search}:{limit:number,search:string})
           setRows(res.data.data.orders) 
     })
 }, [page,limit,isPay])
-// isPay && console.log("yes")
+
+// console.log(rows)
+
+
+
       const handelSort =()=>{
         setDate(!date)
       }
@@ -62,7 +67,7 @@ export default function BasicTable({limit ,search}:{limit:number,search:string})
 
       const formatDate = (dateString: string) => {
         const date = new Date(dateString);
-        const formattedDate = date.toLocaleDateString('en-US');
+        const formattedDate = date.toLocaleDateString('fa-IR');
         return formattedDate;
         };
 
@@ -88,7 +93,7 @@ export default function BasicTable({limit ,search}:{limit:number,search:string})
           </TableRow>
         </TableHead>
         <TableBody>
-          {rows.map((row) => (
+          {rows.map((row:any) => (
 
             <TableRow
               key={row.name}
@@ -105,7 +110,7 @@ export default function BasicTable({limit ,search}:{limit:number,search:string})
               </TableCell>
               <TableCell align="right" className="py-7">{row.totalPrice}</TableCell>
               <TableCell align="right">{formatDate(row.createdAt)}</TableCell>
-              <TableCell align="right">بررسی سفارش</TableCell>
+              <TableCell align="right"> <FormDialog row={row} userName={userName}/></TableCell>
             </TableRow>
           ))}
         </TableBody>

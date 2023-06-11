@@ -88,7 +88,6 @@ const sortQuantity =()=>{
                     <th className="p-5">عنوان</th>
                     <th className="p-5 curser-pointer" onClick={sortPrice}>قیمت {price ?<ArrowDropUpIcon />:<ArrowDropDownIcon/> }</th>
                     <th className="p-5" onClick={sortQuantity}>موجودی {quantity?<ArrowDropUpIcon/>:<ArrowDropDownIcon/> }</th>
-                    <th className="p-5 w-100">امکانات</th>
 
                 </tr>
 
@@ -106,13 +105,6 @@ const sortQuantity =()=>{
                 <th className="">{item.name}</th>
                 <th className="">{item.price}</th>
                 <th className="">{item.quantity}</th>
-                <th className="md:w-32 px-5">
-                        <div className='rounded-md border border-1 border-green-400 w-100 flex justify-center items-center'>
-                                <EditOutlinedIcon sx={{color:"green", ml:1  }} />
-                                <ContentCopyOutlinedIcon sx={{color:"green",pr:1 , pl:1 , borderRight: 1, borderLeft: 1, fontSize:'40px',borderColor:'green'}}/>
-                                <DeleteOutlineIcon sx={{color:"green", mr:1}} />
-                         </div>
-                </th>
 
             </tr>
             

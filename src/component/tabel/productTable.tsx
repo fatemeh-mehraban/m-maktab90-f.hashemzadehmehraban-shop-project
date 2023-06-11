@@ -20,6 +20,7 @@ import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
 import ContentCopyOutlinedIcon from '@mui/icons-material/ContentCopyOutlined';
 import AddIcon from '@mui/icons-material/Add';
+import FormDialog from "../modal/addProdact"
 
 const ProductTable = ({limit}:{limit:number}) => {
   const [data , setData] = useState([])
@@ -41,7 +42,7 @@ const ProductTable = ({limit}:{limit:number}) => {
     axios.get(`http://localhost:8000/api/categories?sort=name`)
       .then((response) => setCategory(response.data.data.categories))
   }, [])
-console.log(data)
+// console.log(data)
       const nextpage=()=>{
         if( counter >= limit ){        
           setPage(page + 1)
@@ -59,12 +60,7 @@ console.log(data)
 
   return (
     <TableContainer component={Paper} sx={{ direction:"rtl"} }>
-      <Box>
-          <Button sx={{bgcolor: 'success.main', color:"gray",paddingY:"20px"}}>
-            <AddIcon className='text-green-600'/>
-            اضافه کردن محصول
-          </Button>   
-      </Box>
+      <FormDialog/>
       <Table sx={{ minWidth: 650 ,border: 1,borderBottom: 0, borderColor: 'grey.300'}} aria-label="simple table" >
         <TableHead>
           <TableRow >
@@ -77,7 +73,7 @@ console.log(data)
         <TableBody>
           {data.map((row) => (
             <TableRow
-              key={row.name}
+              key={row._id}
               sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
             >
 
@@ -88,7 +84,7 @@ console.log(data)
                 {
                  category.map(item=>{
                   // console.log(item)
-                  return item._id === row.category && <span>{item.name}</span>
+                  return item._id === row.category && <span key={item._id}>{item.name}</span>
 
                 })
                 }
