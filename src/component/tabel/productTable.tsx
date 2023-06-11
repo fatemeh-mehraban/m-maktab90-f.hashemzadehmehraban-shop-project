@@ -57,6 +57,10 @@ const ProductTable = ({limit}:{limit:number}) => {
       const handelSort =()=>{
         setIsCategory(!isCategory)
       }
+      const handledelete =()=>{
+        console.log("delete");
+        
+      }
 
   return (
     <TableContainer component={Paper} sx={{ direction:"rtl"} }>
@@ -94,7 +98,7 @@ const ProductTable = ({limit}:{limit:number}) => {
                 <div className='rounded-md border border-1 border-green-400 w-100 flex justify-center items-center'>
                     <EditOutlinedIcon sx={{color:"green", ml:1  }} />
                     <ContentCopyOutlinedIcon sx={{color:"green",pr:1 , pl:1 , borderRight: 1, borderLeft: 1, fontSize:'40px',borderColor:'green'}}/>
-                    <DeleteOutlineIcon sx={{color:"green", mr:1}} />
+                    <DeleteOutlineIcon sx={{color:"green", mr:1}} onClick={handledelete}/>
                 </div>
                 
                </TableCell>
