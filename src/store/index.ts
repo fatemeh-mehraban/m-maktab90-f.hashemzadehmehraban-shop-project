@@ -7,6 +7,9 @@ interface Iusestore {
     setIsPay:(x:any)=>void
     deletfilter:boolean
     setDeletfilter:(x:any)=>void
+    reload:boolean
+    setReload:(x:any)=>void
+
 }
     
 
@@ -18,6 +21,9 @@ export const usestore = create<Iusestore>((set,get)=>({
     setIsPay:(x) => set((state) => ({ isPay: x })),
 
     deletfilter:true,
-    setDeletfilter:() => set((state) => ({ deletfilter: !state.deletfilter }))
+    setDeletfilter:() => set((state) => ({ deletfilter: !state.deletfilter })),
+
+    reload:true,
+    setReload:() => set((state) => ({ reload: !state.reload}))
 }))
 export default usestore

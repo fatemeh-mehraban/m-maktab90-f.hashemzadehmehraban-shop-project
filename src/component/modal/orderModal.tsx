@@ -26,6 +26,7 @@ const formatDate = (dateString: string) => {
   const formattedDate = date.toLocaleDateString('fa-IR');
   return formattedDate;
   };
+// console.log(row.row.products[0].product)
   return (
     <div >
       <Button variant="outlined" onClick={handleClickOpen} sx={{borderColor:"green" , color:"green" }}>

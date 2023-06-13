@@ -17,50 +17,65 @@ import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
 import Cookies from 'universal-cookie';
 import { request } from '@/util/request';
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
-import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
 import ContentCopyOutlinedIcon from '@mui/icons-material/ContentCopyOutlined';
 import AddIcon from '@mui/icons-material/Add';
 import FormDialog from "../modal/addProdact"
-
+import FormDialogEdit from "../modal/EditModal"
+import AlertDialogDelete from "../modal/delete"
+import usestore from "../../store"
 const ProductTable = ({limit}:{limit:number}) => {
   const [data , setData] = useState([])
   const [page , setPage] = useState(1)
   const [category , setCategory] = useState([])
   const [isCategory , setIsCategory] = useState(true)
+  const [counter , setCounter] = useState(0)
+  const [copyData , setCopyData] = useState(data)
+  const [pageData , setPageData] = useState([])
+const reload = usestore((state) => state.reload)
+const setReload = usestore((state) => state.setReload)
+  useEffect(() => {
+    axios.get(`http://localhost:8000/api/products`)
+      .then((response) => {
+        setCounter(response.data.data.products.length)
+            // console.log(response.data.data.products.length)
 
-  let counter = data.length
-
+    })
+  }, [])
+  // console.log(counter)
   useEffect(() => {
     axios.get(`http://localhost:8000/api/products?page=${page}&limit=${limit}`)
       .then((response) => {
             setData(response.data.data.products)
-            counter = response.data.data.products.length
+            setCopyData(data)
     })
-  }, [limit,page])
+  }, [limit,page,reload])
 
-  useEffect(() => {
-    axios.get(`http://localhost:8000/api/categories?sort=name`)
-      .then((response) => setCategory(response.data.data.categories))
-  }, [])
-// console.log(data)
+
+  // useEffect(() => {
+  //   axios.get(`http://localhost:8000/api/categories?sort=name`)
+  //     .then((response) => setCategory(response.data.data.categories))
+  // }, [])
+  
+  
+
+  // console.log(data)
       const nextpage=()=>{
-        if( counter >= limit ){        
+        if( counter > limit ){        
           setPage(page + 1)
         }  
       }
       
       const beforpage =()=>{
-        if( page > 1 ){
+        if( page > 1){
           setPage(page - 1)
         }
       }
       const handelSort =()=>{
         setIsCategory(!isCategory)
       }
-      const handledelete =()=>{
-        console.log("delete");
-        
-      }
+
+
+  
 
   return (
     <TableContainer component={Paper} sx={{ direction:"rtl"} }>
@@ -75,7 +90,7 @@ const ProductTable = ({limit}:{limit:number}) => {
           </TableRow>
         </TableHead>
         <TableBody>
-          {data.map((row) => (
+          {data.map((row:any) => (
             <TableRow
               key={row._id}
               sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
@@ -84,21 +99,13 @@ const ProductTable = ({limit}:{limit:number}) => {
 
               <TableCell component="th" scope="row" align="right" width="150px"><img src={`http://localhost:8000/images/products/images/${row.images[0]}`} alt="" /></TableCell>
               <TableCell align="center"  width="300px">{row.name}</TableCell>
-              <TableCell align="center" className="py-7">  
-                {
-                 category.map(item=>{
-                  // console.log(item)
-                  return item._id === row.category && <span key={item._id}>{item.name}</span>
-
-                })
-                }
-                
-                </TableCell>
+              <TableCell align="center" className="py-7">{row.category.name}</TableCell>
               <TableCell align="right" width="100px">
                 <div className='rounded-md border border-1 border-green-400 w-100 flex justify-center items-center'>
-                    <EditOutlinedIcon sx={{color:"green", ml:1  }} />
+                    <FormDialogEdit data={row}/>          
                     <ContentCopyOutlinedIcon sx={{color:"green",pr:1 , pl:1 , borderRight: 1, borderLeft: 1, fontSize:'40px',borderColor:'green'}}/>
-                    <DeleteOutlineIcon sx={{color:"green", mr:1}} onClick={handledelete}/>
+                    <AlertDialogDelete row={row} setPage={setPage} setCounter={setCounter} counter={counter} data={data}/>
+                    {/* <DeleteOutlineIcon sx={{color:"green", mr:1}} onClick={(e)=>handledelete(row._id)}/> */}
                 </div>
                 
                </TableCell>

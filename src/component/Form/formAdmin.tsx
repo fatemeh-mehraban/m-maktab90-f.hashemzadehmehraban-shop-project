@@ -83,7 +83,7 @@ const adminLogin = ({username,password}:any)=>{
    
         console.log(error)
     })
-    const toket= cookies.get("accessToken")
+    // const token= cookies.get("accessToken")
 }
 // **********************************
 const login =(e:any)=>{

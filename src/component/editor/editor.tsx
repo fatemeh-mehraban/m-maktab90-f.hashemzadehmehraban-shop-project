@@ -1,11 +1,14 @@
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 import { CKEditor } from "@ckeditor/ckeditor5-react";
-import React from "react";
 
+interface EditorType{
+  value:any,
+  onChange:any
+}
 const Editor = ({
   value,
-  onChange,
-}) => {
+  onChange
+}:EditorType) => {
   return (
     <CKEditor
       editor={ClassicEditor}
@@ -14,10 +17,6 @@ const Editor = ({
         const data = editor.getData();
         onChange(data);
       }}
-    //   config.width = 850; 
-    //   config={
-        // { width:'500px' }
-    // } 
     />
   );
 };

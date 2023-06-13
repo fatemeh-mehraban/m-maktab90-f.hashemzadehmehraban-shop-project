@@ -55,7 +55,7 @@ export default function FormDialog(row:any , userName:any) {
         <Box className="reletive w-full mt-10">
         <Editor            
         value={"توضیحات"}
-        onChange={(v) => console.log(v)}
+        onChange={(v:any) => console.log(v)}
 
      />
         </Box>
