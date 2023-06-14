@@ -41,10 +41,11 @@ export default function FormDialogEdit(data) {
   let newdata = new FormData();
   const reload = usestore((state) => state.reload)
   const setReload = usestore((state) => state.setReload)
-  const [currentThumbnail, setCurrentThumbnail] = useState(data.data?["http://localhost:8000/images/products/thumbnails/" +  data.data.images[0]]:"");
+  const [currentThumbnail, setCurrentThumbnail] = useState(data.data?"http://localhost:8000/images/products/thumbnails/" +  data.data.thumbnail:"");
   const [currentImages, setCurrentImages] = useState(data.data?["http://localhost:8000/images/products/images/" +  data.data.images[0]]:"");
   // *****************************************************************
-  const fileInputRef2 = useRef(null);
+  const fileInputRef = useRef(null);
+
   const handleImageChange = (e) => {
     const files = e.target.files;
     const newImages = [...currentImages];
@@ -65,33 +66,30 @@ export default function FormDialogEdit(data) {
   const imageName2 = e.currentTarget.files;
   const entries=Object.entries(imageName2); 
   const Array=entries.map(item=>item[1]) 
-  setCurrentThumbnailName(Array);
+  setImgName(Array);
   }
   // ***********************************************************************
-
-  const fileInputRef = useRef(null);
+  const fileInputRef2 = useRef(null);
 
   const handleThumbnailChange = (e) => {
-    const files = e.target.files;
-    const newImages = [...currentThumbnail];
+    const file = e.target.files[0];
 
-    for (let i = 0; i < files.length; i++) {
-      const file = files[i];
+    // for (let i = 0; i < files.length; i++) {
+    //   const file = files[i];
+    //   console.log(file)
 
       const reader = new FileReader();
+      reader.readAsDataURL(file)
       reader.onload = () => {
-        newImages.push(reader.result);
-        if (newImages.length === files.length) {
-          setCurrentThumbnail([...currentThumbnail, ...newImages]);
-        }
+          setCurrentThumbnail(reader.result);
       };
-      reader.readAsDataURL(files[i]);
-    }
-
+      reader.onerror=()=>{
+        consol.log(reader.error)
+      }
   const imageName2 = e.currentTarget.files;
   const entries=Object.entries(imageName2); 
   const Array=entries.map(item=>item[1]) 
-  setImgName(Array);
+   setCurrentThumbnailName(Array[0]);
   }
 
   // ****************************************************************
@@ -152,7 +150,7 @@ const handleNameChange = (e) => {
     newdata.append('price', price)
     newdata.append('quantity', quantity)
     newdata.append('description', Desc)
-    
+    newdata.append('thumbnail', currentThumbnailName)
     imgName.map(item=>newdata.append('images', item))
     setReload(!reload)
     setOpen(false)
@@ -162,7 +160,7 @@ const handleNameChange = (e) => {
     axios.patch(`http://localhost:8000/api/products/${id}`, newdata)
   };
 
-
+// console.log(data)
   return (
     <div >
        <Box >
@@ -194,14 +192,11 @@ const handleNameChange = (e) => {
 
 <div className="flex flex-col gap-5">
     <div className="flex gap-10">
-    {currentImages && currentImages.map((image, index) => (
-      <div key={index}>
-        <img src={image} alt="" onChange={(e)=>handleInputChange(e)}/>
-        <Button onClick={() => handleImageDelete(index)}>Delete</Button>
+      <div>
+        <img src={currentThumbnail} alt=""/>
       </div>
-    ))}
     </div>
-    <input type="file" ref={fileInputRef2} onChange={handleThumbnailChange } onClick={() => fileInputRef.current.click()} multiple />
+    <input type="file" ref={fileInputRef2} onChange={handleThumbnailChange } onClick={() => fileInputRef2.current.click()} />
   </div>
 
 {/* ***************************************** */}
@@ -261,7 +256,7 @@ const handleNameChange = (e) => {
         <Box className="reletive w-full mt-10">
         <Editor            
         value={Desc} 
-        onChange={(value)=>handleDescChange(value)}
+        onChange={(value:string)=>handleDescChange(value)}
      />
         </Box>
 
