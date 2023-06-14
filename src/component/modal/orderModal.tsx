@@ -10,7 +10,7 @@ import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import { Box } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
-export default function FormDialog(row:any , userName:any) {
+export default function FormDialogOrdaer(row:any , userName:any) {
   const [open, setOpen] = React.useState(false);
 
   const handleClickOpen = () => {
@@ -26,7 +26,7 @@ const formatDate = (dateString: string) => {
   const formattedDate = date.toLocaleDateString('fa-IR');
   return formattedDate;
   };
-// console.log(row.row.products[0].product)
+console.log(row.row)
   return (
     <div >
       <Button variant="outlined" onClick={handleClickOpen} sx={{borderColor:"green" , color:"green" }}>
@@ -41,13 +41,13 @@ const formatDate = (dateString: string) => {
         </Box>
         <DialogContent sx={{display:"flex" , flexDirection: 'column', gap:4}}>
           <DialogContentText>
-                نام کاربری : {row.row.user === row.userName[0]._id && row.userName[0].lastname}
+                نام کاربری : {row.userName.length > 0 && row.row.user === row.userName[0]._id && row.userName[0].lastname}
           </DialogContentText>
           <DialogContentText>
-                 آدرس : {row.row.user === row.userName[0]._id && row.userName[0].address}
+                 آدرس : {row.userName.length > 0 && row.row.user === row.userName[0]._id && row.userName[0].address}
           </DialogContentText>
           <DialogContentText>
-                 تلفن : {row.row.user === row.userName[0]._id && row.userName[0].phoneNumber}
+                 تلفن : {row.userName.length > 0 && row.row.user === row.userName[0]._id && row.userName[0].phoneNumber}
           </DialogContentText>
           <DialogContentText>
                  زمان سفارش : { formatDate(row.row.createdAt)}
@@ -63,7 +63,7 @@ const formatDate = (dateString: string) => {
             </thead>
             <tbody>
             <tr className="border-b hover:bg-gray-100 hover:border-red-500 hover:border">
-                <th className=" w-32 p-2">{row.row.products[0].product.name}</th>
+                <th className=" w-32 p-2">{row.row.products[0].length > 0 && row.row.products[0].product.name}</th>
                 <th className="">{row.row.totalPrice}</th>
                 <th className="">{row.row.products[0].count}</th>
             </tr>

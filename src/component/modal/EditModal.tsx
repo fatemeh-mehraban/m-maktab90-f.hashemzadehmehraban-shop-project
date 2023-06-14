@@ -194,7 +194,7 @@ const handleNameChange = (e) => {
 
 <div className="flex flex-col gap-5">
     <div className="flex gap-10">
-    {currentImages && currentImages.map((image, index) => (
+    {currentThumbnail && currentThumbnail.map((image, index) => (
       <div key={index}>
         <img src={image} alt="" onChange={(e)=>handleInputChange(e)}/>
         <Button onClick={() => handleImageDelete(index)}>Delete</Button>
