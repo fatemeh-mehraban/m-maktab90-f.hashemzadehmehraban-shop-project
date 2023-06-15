@@ -22,6 +22,8 @@ import Select, { SelectChangeEvent } from '@mui/material/Select';
 import { getCategory ,getSubCategory} from '@/lib/services/axios'
 import FormControl from '@mui/material/FormControl'
 import InputLabel from '@mui/material/InputLabel';
+import usestore from "../../store"
+import axios from 'axios';
 
 export default function FormDialog(row:any , userName:any) {
   const [open, setOpen] = React.useState(false);
@@ -36,6 +38,15 @@ export default function FormDialog(row:any , userName:any) {
   const [img , setImg] = useState("")
   const [imgName , setImgName] = useState([])
   const [currentThumbnailName , setCurrentThumbnailName] = useState([])
+
+  const [Name, setName] = useState("")
+  const [price, setPrice] = useState("")
+  const [quantity, setQuantity] = useState("")
+  const [Desc, setDesc] = useState("")
+
+  let newdata = new FormData();
+  const reload = usestore((state) => state.reload)
+  const setReload = usestore((state) => state.setReload)
   // *****************************************************************
   const fileInputRef = useRef(null);
 
@@ -92,9 +103,26 @@ export default function FormDialog(row:any , userName:any) {
   const handleClose = () => {
     setOpen(false);
   };
+
+
   const handleChange = (e) => {
-    console.log(e.target.value)
+    setName(e.target.value)
   };
+
+  const handlePriceChange = (e) => {
+    setPrice(e.target.value)
+  };
+  
+  const handleDescChange = (value) => {
+    setDesc(value)
+  };
+  const handlequantityChange = (e) => {
+    setQuantity(e.target.value)
+  };
+
+
+
+
 console.log(row)
 
   useEffect(() => {
@@ -114,10 +142,34 @@ console.log(row)
 
   const handleChangesub = (event: SelectChangeEvent) => {
     setSubCategoryValue(event.target.value as string);
+
+
   };
   const handleChangeCategory = (event: SelectChangeEvent) => {
-    setCategoryValue(event.target.value as string);
+    setCategoryValue(event.target.value);
+    console.log(categoryValue)
+
+
   };
+
+
+  const handleSubmit = (id:string) => {
+    newdata.append('name', Name);
+    newdata.append('price', price)
+    newdata.append('quantity', quantity)
+    newdata.append('category', categoryValue)
+    newdata.append('subcategory', subcategoryValue)
+    newdata.append('description', Desc)
+    newdata.append('brand', 'apple');
+    imgName.map(item=>newdata.append('images', item))
+    axios.post(`http://localhost:8000/api/products`, newdata)
+    setReload(!reload)
+    setOpen(false)
+
+
+
+  };
+
   return (
     <div >
        <Box >
@@ -195,22 +247,22 @@ console.log(row)
         </Select>
         </FormControl> 
 {/* ************************************************************* */}
-        <TextField name="quantity"  label="موجودی" sx={{width:1}}/>
-        <TextField name="price"  label="قیمت" sx={{width:1}}/>
+        <TextField name="quantity"  label="موجودی" sx={{width:1}} onChange={(value)=>handlePriceChange(value)}
+/>
+        <TextField name="price"  label="قیمت" sx={{width:1}} onChange={(e)=>handlequantityChange(e)}/>
 
 
         <Box className="reletive w-full mt-10">
         <Editor            
         value={"توضیحات"}
-        onChange={(v:any) => console.log(v)}
-
+        onChange={(value)=>handleDescChange(value)}
      />
         </Box>
-
+    
 
         <DialogActions>
           <Button onClick={handleClose}>لغو</Button>
-          <Button onClick={handleClose}>ذخیره</Button>
+          <Button onClick={handleSubmit}>ذخیره</Button>
         </DialogActions>
     </Box>
 
