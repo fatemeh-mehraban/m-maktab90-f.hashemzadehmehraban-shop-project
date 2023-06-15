@@ -37,7 +37,6 @@ export default function FormDialogEdit(data) {
   const [currentThumbnailName , setCurrentThumbnailName] = useState([])
   const Editor = dynamic(() => import("../editor/editor"), { ssr: false });
 
-  console.log(data)
   let newdata = new FormData();
   const reload = usestore((state) => state.reload)
   const setReload = usestore((state) => state.setReload)
