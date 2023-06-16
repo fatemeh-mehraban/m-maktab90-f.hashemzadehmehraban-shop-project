@@ -19,6 +19,7 @@ import { request } from '@/util/request';
 import  DialogSelect from "@/component/kit/selectOption"
 import YoutubeSearchedForIcon from '@mui/icons-material/YoutubeSearchedFor';
 import usestore from "../../store"
+import FormDialogOrdaer from '../modal/orderModal';
 
 
 export default function BasicTable({limit ,search}:{limit:number,search:string}) {
@@ -33,13 +34,14 @@ export default function BasicTable({limit ,search}:{limit:number,search:string})
 
 
   let counter = rows.length
-  console.log(isPay)
+  // console.log(isPay)
     useEffect(() => {
         const res = axios.get(`http://localhost:8000/api/orders?page=${page}&limit=${limit}&${date?"sort=createdAt":"sort=-createdAt"}&${isPay==="no" ?"deliveryStatus=false":isPay==="ok" ? "deliveryStatus=true":"" }`)
         .then((res: any) => {
           counter = res.data.data.orders.length
           setRows(res.data.data.orders) 
     })
+
 }, [page,limit,isPay,date])
 // isPay && console.log("yes")
       const handelSort =()=>{
@@ -62,7 +64,7 @@ export default function BasicTable({limit ,search}:{limit:number,search:string})
 
       const formatDate = (dateString: string) => {
         const date = new Date(dateString);
-        const formattedDate = date.toLocaleDateString('en-US');
+        const formattedDate = date.toLocaleDateString('fa-IR');
         return formattedDate;
         };
 
@@ -72,13 +74,14 @@ export default function BasicTable({limit ,search}:{limit:number,search:string})
 
       <div className='border border-green-400 rounded-md mb-5 w-1/4 flex'>
             {/* <YoutubeSearchedForIcon className="bg-green-400 h-full text-6xl px-4 py-2"/> */}
-            <div className="bg-green-400"> <DialogSelect/> </div>
+            {/* <div className="bg-green-400"> <DialogSelect/> </div> */}
             <input type="text" placeholder="جستجو ..." dir="rtl" className="p-2 outline-none" onChange={(e)=>console.log(1)}/>
         </div>
         
 
 
       <Table sx={{ minWidth: 650 ,border: 1,borderBottom: 0, borderColor: 'grey.300'}} aria-label="simple table" >
+        
         <TableHead>
           <TableRow >
             <TableCell align="right">نام کاربر</TableCell>
@@ -88,7 +91,7 @@ export default function BasicTable({limit ,search}:{limit:number,search:string})
           </TableRow>
         </TableHead>
         <TableBody>
-          {rows.map((row) => (
+          {rows.map((row:any) => (
 
             <TableRow
               key={row.name}
@@ -105,7 +108,7 @@ export default function BasicTable({limit ,search}:{limit:number,search:string})
               </TableCell>
               <TableCell align="right" className="py-7">{row.totalPrice}</TableCell>
               <TableCell align="right">{formatDate(row.createdAt)}</TableCell>
-              <TableCell align="right">بررسی سفارش</TableCell>
+              <TableCell align="right"> <FormDialogOrdaer row={row} userName={userName}/></TableCell>
             </TableRow>
           ))}
         </TableBody>

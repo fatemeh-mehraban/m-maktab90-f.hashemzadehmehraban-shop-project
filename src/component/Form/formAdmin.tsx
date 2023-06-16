@@ -83,7 +83,7 @@ const adminLogin = ({username,password}:any)=>{
    
         alert("اطلاعات شما با اطلاعات کاربر مغایرت دارد!")
     })
-    const toket= cookies.get("accessToken")
+    // const token= cookies.get("accessToken")
 }
 // **********************************
 const login =(e:any)=>{
