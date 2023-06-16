@@ -23,6 +23,7 @@ import FormDialog from "../modal/addProdact"
 import FormDialogEdit from "../modal/EditModal"
 import AlertDialogDelete from "../modal/delete"
 import usestore from "../../store"
+import Image from 'next/image'
 
 const ProductTable = ({limit}:{limit:number}) => {
   const [data , setData] = useState([])
@@ -98,7 +99,7 @@ const setReload = usestore((state) => state.setReload)
             >
 
 
-              <TableCell component="th" scope="row" align="right" width="150px"><Image src={`http://localhost:8000/images/products/images/${row.images[0]}`} alt="Picture of product" width={150} height={150}/></TableCell>
+              <TableCell component="th" scope="row" align="right" width="150px"><img src={`http://localhost:8000/images/products/images/${row.images[0]}`} alt="Picture of product" width={150} height={150}/></TableCell>
               <TableCell align="center"  width="300px">{row.name}</TableCell>
 
              
