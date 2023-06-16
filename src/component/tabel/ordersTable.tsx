@@ -36,17 +36,14 @@ export default function BasicTable({limit ,search}:{limit:number,search:string})
   let counter = rows.length
   // console.log(isPay)
     useEffect(() => {
-        const res = axios.get(`http://localhost:8000/api/orders?page=${page}&limit=${limit}&${isPay==="no" ?"deliveryStatus=false":isPay==="ok" ? "deliveryStatus=true":"" }`)
+        const res = axios.get(`http://localhost:8000/api/orders?page=${page}&limit=${limit}&${date?"sort=createdAt":"sort=-createdAt"}&${isPay==="no" ?"deliveryStatus=false":isPay==="ok" ? "deliveryStatus=true":"" }`)
         .then((res: any) => {
           counter = res.data.data.orders.length
           setRows(res.data.data.orders) 
     })
-}, [page,limit,isPay])
 
-// console.log(rows)
-
-
-
+}, [page,limit,isPay,date])
+// isPay && console.log("yes")
       const handelSort =()=>{
         setDate(!date)
       }
@@ -72,7 +69,7 @@ export default function BasicTable({limit ,search}:{limit:number,search:string})
         };
 
   return (
-    <TableContainer Align="LEFT" component={Paper} sx={{ direction:"rtl"} } >
+    <TableContainer Align="RIGHT" component={Paper} sx={{ direction:"rtl"} } >
 
 
       <div className='border border-green-400 rounded-md mb-5 w-1/4 flex'>
@@ -117,15 +114,17 @@ export default function BasicTable({limit ,search}:{limit:number,search:string})
         </TableBody>
       </Table>
 
-      <div className="text-center p-5">
+      <div className="flex justify-center p-5 border">
+            <div className='border border-green-500 w-40 flex justify-between items-center rounded-md'>
             <IconButton aria-label="Example"  onClick={beforpage} >
                 
-                <KeyboardArrowRightIcon/>
+                <KeyboardArrowRightIcon className='text-green-600'/>
             </IconButton> 
-            <span> {page} </span>
+            <span className='border border-t-0 border-green-500 border-b-0 h-full px-7 py-2 text-green-600'> {page} </span>
             <IconButton aria-label="Example" onClick={nextpage}>
-            <KeyboardArrowLeftIcon/>
+            <KeyboardArrowLeftIcon className='text-green-600'/>
             </IconButton>    
+            </div>
        
     
             </div>

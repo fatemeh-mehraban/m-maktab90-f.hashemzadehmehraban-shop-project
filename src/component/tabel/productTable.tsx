@@ -23,6 +23,7 @@ import FormDialog from "../modal/addProdact"
 import FormDialogEdit from "../modal/EditModal"
 import AlertDialogDelete from "../modal/delete"
 import usestore from "../../store"
+
 const ProductTable = ({limit}:{limit:number}) => {
   const [data , setData] = useState([])
   const [page , setPage] = useState(1)
@@ -99,7 +100,20 @@ const setReload = usestore((state) => state.setReload)
 
               <TableCell component="th" scope="row" align="right" width="150px"><img src={`http://localhost:8000/images/products/images/${row.images[0]}`} alt="" /></TableCell>
               <TableCell align="center"  width="300px">{row.name}</TableCell>
-              <TableCell align="center" className="py-7">{row.category.name}</TableCell>
+
+             
+        <TableCell align="center" className="py-7">{row.category.name}</TableCell>
+              <TableCell align="center" className="py-7">  
+                {
+                 category.map((item) =>{
+                  // console.log(item)
+                  return item._id === row.category && <span key={item.id}>{item.name}</span>
+
+                })
+                }
+                
+                </TableCell>
+
               <TableCell align="right" width="100px">
                 <div className='rounded-md border border-1 border-green-400 w-100 flex justify-center items-center'>
                     <FormDialogEdit data={row}/>          
