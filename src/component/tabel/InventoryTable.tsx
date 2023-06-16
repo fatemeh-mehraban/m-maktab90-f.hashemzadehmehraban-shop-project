@@ -24,7 +24,7 @@ export default function InventoryTable({limit ,search}:{limit:number,search:stri
     const [searchTxt,setSearchTxt] = useState("")
     
     useEffect(()=>{    
-        const res = axios.get(`http://localhost:8000/api/products?page=${page}&limit=${limit}&fields=-rating,-createdAt,-updatedAt,-__v&sort=${price ? "price":"-price"}&${quantity ? `quantity[gte]=8`:`quantity[lt]=8`}`)
+        const res = axios.get(`http://localhost:8000/api/products?page=${page}&limit=${limit}&fields=-rating,-createdAt,-updatedAt,-__v&sort=${price ? "price":"-price"}}`)
         .then((res:any)=>{
             // newsearch=res.data.data.products.name.includes(search)
             // const c= res.data.data.products
@@ -134,7 +134,7 @@ console.log(products)
                      onKeyPress={(e)=>handleEsc(e)}
                 />
                 </th>
-                <th className="w-1/4 text-right px-5">
+                <th className="text-right px-5">
                 <EasyEdit
                      type="text"
                      value={item.quantity}

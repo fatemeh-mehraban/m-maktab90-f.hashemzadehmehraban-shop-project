@@ -63,11 +63,7 @@ console.log(row.row)
             </thead>
             <tbody>
             <tr className="border-b hover:bg-gray-100 hover:border-red-500 hover:border">
-<<<<<<< HEAD
-                <th className=" w-32 p-2">{row.row.products[0].length > 0 && row.row.products[0].product.name}</th>
-=======
                 <th className=" w-32 p-2">{row.row.products.length >0 && row.row.products[0].product && row.row.products[0].product.name}</th>
->>>>>>> Feature-Edit
                 <th className="">{row.row.totalPrice}</th>
                 <th className="">{row.row.products.length >0 && row.row.products[0].count}</th>
             </tr>

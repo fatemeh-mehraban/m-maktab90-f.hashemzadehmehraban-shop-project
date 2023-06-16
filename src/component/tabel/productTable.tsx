@@ -43,7 +43,7 @@ const setReload = usestore((state) => state.setReload)
   }, [])
   // console.log(counter)
   useEffect(() => {
-    axios.get(`http://localhost:8000/api/products?page=${page}&limit=${limit}`)
+    axios.get(`http://localhost:8000/api/products?page=${page}&limit=${limit}&sort=-createdAt`)
       .then((response) => {
             setData(response.data.data.products)
             setCopyData(data)
