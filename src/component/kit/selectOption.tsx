@@ -27,7 +27,7 @@ import usestore from "../../store"
     //  pay === "ok" ? setIsPay("true") : pay === "no"? setIsPay("false"): pay === "All" && setIsPay("All")
   };
   setIsPay(pay)
-    console.log(isPay)
+    // console.log(isPay)
 
   const handleClickOpen = () => {
     setOpen(true);
