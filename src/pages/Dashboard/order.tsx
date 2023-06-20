@@ -10,7 +10,7 @@ export function Order() {
   }
     return (
       <MiniDrawer>
-      <div className="text-white py-40 px-5 w-full h-screen flex items-start justify-center flex-col">   
+      <div className="text-white py-40 px-5 w-full h-screen flex items-center justify-center flex-col">   
        <BasicTable limit={4} search={search}/>
       </div>
       </MiniDrawer>

@@ -176,11 +176,11 @@ const handleNameChange = (e) => {
         <DialogContent sx={{display:"flex" , flexDirection: 'column', gap:4}}>
         <Box component="form" noValidate autoComplete="off" className="flex flex-col items-center gap-3 my-5" dir="rtl">
 
-  <div className="flex flex-col gap-5">
+  <div className="flex flex-col gap-5 w-full ">
     <div className="flex gap-10">
     {currentImages && currentImages.map((image, index) => (
       <div key={index}>
-        <img src={image} alt="" onChange={(e)=>handleInputChange(e)}/>
+        <Image src={image} alt="" onChange={(e)=>handleInputChange(e)} width={150} height={150}/>
         <Button onClick={() => handleImageDelete(index)}>Delete</Button>
       </div>
     ))}
@@ -236,7 +236,7 @@ const handleNameChange = (e) => {
           onChange={handleChangesub}
         >
           {subcategory.map(item=>  (
-    <MenuItem key={item.id} defaultValue={item.name} value={item._id} sx={{paddingX:"50px"}} dir="rtl">{item.name}</MenuItem> 
+        <MenuItem key={item.id} defaultValue={item.name} value={item._id} sx={{paddingX:"50px"}} dir="rtl">{item.name}</MenuItem> 
     
           ))
         }
