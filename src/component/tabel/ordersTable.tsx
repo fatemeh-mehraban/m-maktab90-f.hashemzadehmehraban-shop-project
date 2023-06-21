@@ -69,7 +69,9 @@ export default function BasicTable({limit ,search}:{limit:number,search:string})
         };
 
   return (
-    <TableContainer Align="RIGHT" component={Paper} sx={{ direction:"rtl"} } >
+    <TableContainer Align="LEFT" component={Paper} sx={{ direction:"rtl" , width:"65%"} } >
+
+  
 
 
       <div className='border border-green-400 rounded-md mb-5 w-1/4 flex'>

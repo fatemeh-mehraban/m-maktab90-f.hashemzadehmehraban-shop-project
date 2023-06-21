@@ -5,3 +5,4 @@ export const themeRegisterButton =({
     width:'28ch'
 
      } )
+    

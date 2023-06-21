@@ -16,6 +16,8 @@ export function Inventory() {
     return (
 
 
+
+
       <PersistentDrawerRight>
       <div className="py-40 mt-20  w-full flex flex-col justify-center items-end px-5"> 
 

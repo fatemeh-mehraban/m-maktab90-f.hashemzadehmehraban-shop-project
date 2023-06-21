@@ -15,6 +15,8 @@ import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
 import ContentCopyOutlinedIcon from '@mui/icons-material/ContentCopyOutlined';
 import  { Component } from 'react';
 import EasyEdit from 'react-easy-edit';
+import { searchInput } from './../../component/kit/searchInput';
+import YoutubeSearchedForIcon from '@mui/icons-material/YoutubeSearchedFor';
 export default function InventoryTable({limit ,search}:{limit:number,search:string}) {
     const [products , setProducts] = useState([])
     let counter = products.length
@@ -22,7 +24,8 @@ export default function InventoryTable({limit ,search}:{limit:number,search:stri
     const [price,setPrice] = useState(true)
     const [quantity,setQuantity] = useState(true)
     const [searchTxt,setSearchTxt] = useState("")
-    
+    // const [search , setsearch] = useState("")
+
     useEffect(()=>{    
         const res = axios.get(`http://localhost:8000/api/products?page=${page}&limit=${limit}&fields=-rating,-createdAt,-updatedAt,-__v&sort=${price ? "price":"-price"}}`)
         .then((res:any)=>{
@@ -35,10 +38,10 @@ export default function InventoryTable({limit ,search}:{limit:number,search:stri
 
             
             // })
-            // // console.log("d",d )
             // setProducts(d)
-
-       })
+            
+            // console.log(res.data.data.products)
+        })
   
   },[page,limit,price,quantity])
     
@@ -97,10 +100,20 @@ const save = (value,fieldName,item) => {
 
 }
 const cancel = () => {alert("Cancelled")}
-console.log(products)
+
+    const searchfunction = (e:any)=>{
+        setSearchTxt(e.target.value)
+    }
+    
   return(
-    <div className="w-full">
-        <table className="w-full border overflow-x-scroll" dir="rtl">
+        <div className="py-40 mt-20  w-full flex flex-col justify-center items-center px-5"> 
+        <div className="flex justify-left w-[65%]">
+        <div className='border border-green-400 rounded-md mb-5 w-auto'>
+        <YoutubeSearchedForIcon className="bg-green-400 h-full pb-4 text-6xl px-4 py-2"/>
+        <input type="text" placeholder="جستجو ..." dir="rtl" className="p-2 outline-none" onChange={(e)=>searchfunction(e)}/>
+      </div>
+        </div>
+        <table className="w-[65%] border overflow-x-scroll" dir="rtl">
             <thead>
                 <tr className="border-b">
                     <th className="p-5">تصویر</th>
