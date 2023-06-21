@@ -13,7 +13,7 @@ const THEME = createTheme({
   typography: {
    fontFamily: "iransans"
   },
-  direction: 'rtl',
+  // direction: 'rtl',
 })
 
 export default function App({ Component, pageProps }: AppProps) {

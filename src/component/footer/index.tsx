@@ -6,7 +6,7 @@ import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { Input } from 'postcss';
 export default function Footer() {
   return (
-    <div  className="bg-[rgb(42,20,83)] rounded-t-[8%] md:rounded-none reletive w-full before:content-[''] before:border-8 before:border-[#eea37a] before:border-b-0 before:rounded-t-full before:w-[102%] md:before:w-[102%] before:h-32 before:absolute before:-bottom-20 md:before:-bottom-5 md:before:-left-4 before:-left-1 before:bg-[rgb(42,20,83)]">
+    <div  className="bg-[rgb(42,20,83)] rounded-t-[8%] md:rounded-none reletive w-full ">
        <div className=' flex flex-col justify-around text-white p-20 w-full md:flex-row gap-5 md:items-center'>
        <div className='flex flex-col gap-10'>
             <img src="/barishow-footer (1).png" alt="logo"  className="w-40"/>
