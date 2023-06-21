@@ -170,17 +170,20 @@ const cancel = () => {alert("Cancelled")}
             </tbody>
         </table>
 
-        <div className="text-center p-5">
-        <IconButton aria-label="Example" onClick={nextpage}>
-            <KeyboardArrowLeftIcon/>
-        </IconButton> 
-        <span> {page} </span>
-        <IconButton aria-label="Example" onClick={beforpage}>
-            <KeyboardArrowRightIcon/>
-        </IconButton>    
-   
 
-        </div>
+        <div className="flex justify-center p-5 border" dir="rtl">
+            <div className='border border-green-500 w-40 flex justify-between items-center rounded-md'>
+            <IconButton aria-label="Example"  onClick={beforpage} >
+                
+                <KeyboardArrowRightIcon className='text-green-600'/>
+            </IconButton> 
+            <span className='border border-t-0 border-green-500 border-b-0 h-full px-7 py-2 text-green-600'> {page} </span>
+            <IconButton aria-label="Example" onClick={nextpage}>
+            <KeyboardArrowLeftIcon className='text-green-600'/>
+            </IconButton>    
+            </div>
+       
+    
+            </div>
     </div>
-
 )}

@@ -104,6 +104,7 @@ const setReload = usestore((state) => state.setReload)
              
         <TableCell align="center" className="py-7">{row.category.name}</TableCell>
               {/* <TableCell align="center" className="py-7">  
+
                 {
                  category.map((item) =>{
                   // console.log(item)
@@ -112,10 +113,13 @@ const setReload = usestore((state) => state.setReload)
                 })
                 }
                 
+
                 </TableCell> */}
 
               <TableCell Align="center" width={1}>
                 <div className='rounded-md border border-1 border-green-400 w-32 flex justify-center items-center'>
+
+
                     <FormDialogEdit data={row}/>          
                     <ContentCopyOutlinedIcon sx={{color:"green",pr:1 , pl:1 , borderRight: 1, borderLeft: 1, fontSize:'40px',borderColor:'green'}}/>
                     <AlertDialogDelete row={row} setPage={setPage} setCounter={setCounter} counter={counter} data={data}/>

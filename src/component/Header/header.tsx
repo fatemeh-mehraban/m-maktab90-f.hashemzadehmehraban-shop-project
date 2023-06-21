@@ -148,16 +148,13 @@ export default function Header() {
         <Toolbar  sx={{width:1,display:"flex" ,justifyContent: 'space-between' }}>
           <Link href="/"> <Box><Image src="/barishow-fa-header.png"  alt='logo' width="100" height={500} /></Box></Link>
          
-          <Search  sx={{ display: { xs:'none' , md:'flex' },'&:hover':{bgcolor: "grey.200"},width:{sm:"75%" , md:'30%', border: 1 }, border: 1 , borderColor: 'grey.300', backgroundColor:"grey.200" , borderRadius:5, color:"grey.800",marginTop:"10px"}}>
-            <SearchIconWrapper >
+          <div  className="hidden md:flex w-[40%] py-2 rounded-full p-5 bg-gray-100 text-gray-500">
               <SearchIcon />
-            </SearchIconWrapper>
-            <StyledInputBase
+            <input
               placeholder="جست و جوی محصول، دسته، برند… "
-              inputProps={{ 'aria-label': 'search' }}
-              sx={{textAlign:"center", marginRight: "10%",width:1}}
+              className="w-full pr-5 outline-none bg-gray-100 "
             />
-          </Search>
+          </div>
           <Typography sx={{color:"gray" , textAlign:"left"}}  className="font-sans"> تیم پشیبانی  09199069952</Typography>
 
         </Toolbar>
@@ -187,9 +184,9 @@ export default function Header() {
         <Toolbar sx={{justifyContent: 'space-between', paddingTop:"30px", pb:{xs: 2, md: 0}}}>
 
           <Box sx={{ display: { xs: 'none', md: 'flex',gap:20 } }} onClick={handleCategory}>
-          <Typography className="bg-[#120051] font-sans" sx={{ borderRadius:"10px 10px 0 0" ,p:1.5 ,px:4 , color:"white"}}><MenuIcon sx={{ml:1}}/>دسته بندی محصولات</Typography>
-          <Typography sx={{marginY:1}}  className="font-sans">درباره ما</Typography>
-          <Typography sx={{marginY:1}}  className="font-sans">تماس با ما</Typography>
+          <Typography className="bg-[#120051] font-sans" sx={{ borderRadius:"10px 10px 0 0" ,p:1.5 ,px:4 , color:"white", cursor:"pointer"}}><MenuIcon sx={{ml:1}}/>دسته بندی محصولات</Typography>
+          <Typography sx={{marginY:1 , cursor:"pointer"}}  className="font-sans">درباره ما</Typography>
+          <Typography sx={{marginY:1, cursor:"pointer"}}  className="font-sans">تماس با ما</Typography>
           </Box>
 
           <Search className="w-auto" sx={{flexGrow: 1, display: { xs:'flex' , md:'none' },'&:hover':{bgcolor: "grey.200"}, border: 1 , borderColor: 'grey.300', backgroundColor:"grey.200" , borderRadius:5, color:"grey.800"}}>
