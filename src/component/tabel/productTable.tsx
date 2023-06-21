@@ -54,7 +54,7 @@ const setReload = usestore((state) => state.setReload)
 
   // useEffect(() => {
   //   axios.get(`http://localhost:8000/api/categories?sort=name`)
-  //     .then((response) => setCategory(response.data.data.categories))
+  //     .then((response) => console.log(response.data.data.categories))
   // }, [])
   
   
@@ -79,7 +79,7 @@ const setReload = usestore((state) => state.setReload)
   
 
   return (
-    <TableContainer component={Paper} sx={{ direction:"rtl"} }>
+    <TableContainer component={Paper} sx={{ direction:"rtl" , width:"65%"} }>
       <FormDialog/>
       <Table sx={{ minWidth: 650 ,border: 1,borderBottom: 0, borderColor: 'grey.300'}} aria-label="simple table" >
         <TableHead>
@@ -103,7 +103,8 @@ const setReload = usestore((state) => state.setReload)
 
              
         <TableCell align="center" className="py-7">{row.category.name}</TableCell>
-              <TableCell align="center" className="py-7">  
+              {/* <TableCell align="center" className="py-7">  
+
                 {
                  category.map((item) =>{
                   // console.log(item)
@@ -112,10 +113,13 @@ const setReload = usestore((state) => state.setReload)
                 })
                 }
                 
-                </TableCell>
 
-              <TableCell align="right" width="100px">
-                <div className='rounded-md border border-1 border-green-400 w-100 flex justify-center items-center'>
+                </TableCell> */}
+
+              <TableCell Align="center" width={1}>
+                <div className='rounded-md border border-1 border-green-400 w-32 flex justify-center items-center'>
+
+
                     <FormDialogEdit data={row}/>          
                     <ContentCopyOutlinedIcon sx={{color:"green",pr:1 , pl:1 , borderRight: 1, borderLeft: 1, fontSize:'40px',borderColor:'green'}}/>
                     <AlertDialogDelete row={row} setPage={setPage} setCounter={setCounter} counter={counter} data={data}/>

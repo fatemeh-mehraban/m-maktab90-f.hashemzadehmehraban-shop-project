@@ -10,8 +10,10 @@ export function Order() {
     setsearch(e.target.value)
   }
     return (
+
       <PersistentDrawerRight>
       <div className="text-white px-5 w-full flex items-end justify-center flex-col">   
+
        <BasicTable limit={4} search={search}/>
       </div>
       </PersistentDrawerRight>
