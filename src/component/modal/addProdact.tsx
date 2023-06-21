@@ -24,7 +24,8 @@ import FormControl from '@mui/material/FormControl'
 import InputLabel from '@mui/material/InputLabel';
 import usestore from "../../store"
 import axios from 'axios';
-
+import CKEditor from "@ckeditor/ckeditor5-react";
+import Editor from "@juniyadi/ckeditor5-custom-build";
 export default function FormDialog(row:any , userName:any) {
   const [open, setOpen] = React.useState(false);
   const Editor = dynamic(() => import("../editor/editor"), { ssr: false });
@@ -255,7 +256,8 @@ console.log(row)
         <Box className="reletive w-full mt-10">
         <Editor            
         value={"توضیحات"}
-        onChange={(value)=>handleDescChange(value)}
+        // onChange={(value)=>handleDescChange(value)}
+        
      />
         </Box>
     
