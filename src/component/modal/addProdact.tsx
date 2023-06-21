@@ -24,8 +24,10 @@ import FormControl from '@mui/material/FormControl'
 import InputLabel from '@mui/material/InputLabel';
 import usestore from "../../store"
 import axios from 'axios';
-import CKEditor from "@ckeditor/ckeditor5-react";
-import Editor from "@juniyadi/ckeditor5-custom-build";
+// import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
+// import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
+// import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
+// import { CKEditor } from "@ckeditor/ckeditor5-react";
 export default function FormDialog(row:any , userName:any) {
   const [open, setOpen] = React.useState(false);
   const Editor = dynamic(() => import("../editor/editor"), { ssr: false });
@@ -113,9 +115,10 @@ export default function FormDialog(row:any , userName:any) {
   const handlePriceChange = (e) => {
     setPrice(e.target.value)
   };
-  
-  const handleDescChange = (value) => {
-    setDesc(value)
+  const refTextEditor= useRef(null)
+  const handleDescChange = (e) => {
+    console.log(e)
+    // setDesc(e)
   };
   const handlequantityChange = (e) => {
     setQuantity(e.target.value)
@@ -160,7 +163,7 @@ console.log(row)
     newdata.append('quantity', quantity)
     newdata.append('category', categoryValue)
     newdata.append('subcategory', subcategoryValue)
-    newdata.append('description', Desc)
+    newdata.append('description', refTextEditor)
     newdata.append('brand', 'apple');
     imgName.map(item=>newdata.append('images', item))
     axios.post(`http://localhost:8000/api/products`, newdata)
@@ -170,6 +173,11 @@ console.log(row)
 
 
   };
+
+
+
+
+
 
   return (
     <div >
@@ -255,10 +263,13 @@ console.log(row)
 
         <Box className="reletive w-full mt-10">
         <Editor            
-        value={"توضیحات"}
-        // onChange={(value)=>handleDescChange(value)}
-        
+        value="" 
+        onChange={(e)=>handleDescChange(e)}
+        refTextEditor = {refTextEditor}
      />
+
+
+
         </Box>
     
 
