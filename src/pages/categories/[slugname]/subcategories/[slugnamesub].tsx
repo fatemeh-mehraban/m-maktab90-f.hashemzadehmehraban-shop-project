@@ -5,6 +5,7 @@ import { getCategory , getSubCategory } from "@/lib/services/axios"
 import { useEffect, useState } from "react"// catgory/[category]/subcategory/[subcategory].tsx
 import axios from "axios"
 import usestore from "@/store"
+import Layout from '@/layout/layout'
 
 const SubcategoryDynamicPage = () => {
   const router = useRouter();
@@ -49,7 +50,7 @@ useEffect(()=>{
     console.log(value)
    
 });
-  axios.get("http://localhost:8000/api/products").then(res=>{
+  axios.get("http://localhost:8000/api/products?limit=1000").then(res=>{
     const newProduct= res.data.data.products.filter(item=>subCategory && item.subcategory._id === subCategory._id )
       setProducts(newProduct)
     })
@@ -59,9 +60,11 @@ useEffect(()=>{
 
 
 
-console.log(AllsubCategory)
+console.log(products)
 // console.log(subCategory)
   return (    
+    <Layout>
+
       <div className="flex min-w-full	">
       <div className="py-20 px-10 w-full">
    {     category && <h1 className="text-right text-2xl pb-10">{category.name}</h1>}
@@ -78,6 +81,8 @@ console.log(AllsubCategory)
     <SidbarCategoryPage AllsubCategory={AllsubCategory}/>
 
       </div>
+      </Layout>
+
   )
 }
 export default SubcategoryDynamicPage;

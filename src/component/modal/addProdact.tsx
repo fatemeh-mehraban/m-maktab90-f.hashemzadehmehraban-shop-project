@@ -24,6 +24,7 @@ import FormControl from '@mui/material/FormControl'
 import InputLabel from '@mui/material/InputLabel';
 import usestore from "../../store"
 import axios from 'axios';
+import UploadImages from '../UploadImages'
 
 export default function FormDialog(row:any , userName:any) {
   const [open, setOpen] = React.useState(false);
@@ -38,7 +39,8 @@ export default function FormDialog(row:any , userName:any) {
   const [img , setImg] = useState("")
   const [imgName , setImgName] = useState([])
   const [currentThumbnailName , setCurrentThumbnailName] = useState([])
-
+  const [thumbnailSrc, setThumbnailSrc] = useState<unknown | string>('');
+  const [imgsSrc, setImgsSrc] = useState<unknown[] | never[]>([]);
   const [Name, setName] = useState("")
   const [price, setPrice] = useState("")
   const [quantity, setQuantity] = useState("")
@@ -120,7 +122,11 @@ export default function FormDialog(row:any , userName:any) {
     setQuantity(e.target.value)
   };
 
-
+  const handleImageDelete = (index) => {
+    const imagesCopy = [...currentImages];
+    imagesCopy.splice(index, 1);
+    setCurrentImages(imagesCopy);
+  };
 
 
 console.log(row)
@@ -161,7 +167,10 @@ console.log(row)
     newdata.append('subcategory', subcategoryValue)
     newdata.append('description', Desc)
     newdata.append('brand', 'apple');
-    imgName.map(item=>newdata.append('images', item))
+    newdata.append('thumbnail', thumbnailSrc);
+    imgsSrc.map((item: any) => {
+    newdata.append('images', item);
+    })
     axios.post(`http://localhost:8000/api/products`, newdata)
     setReload(!reload)
     setOpen(false)
@@ -184,27 +193,12 @@ console.log(row)
         <Box component="form" noValidate autoComplete="off" className="flex flex-col items-center gap-3 my-5" dir="rtl">
 
 
-        <div className="flex flex-col gap-5 w-full">
-    <div className="flex gap-10">
-    {currentImages && currentImages.map((image, index) => (
-      <div key={index}>
-        <Image src={image} alt="" onChange={(e)=>handleInputChange(e)} width={150} height={150}/>
-        <Button onClick={() => handleImageDelete(index)}>Delete</Button>
-      </div>
-    ))}
-    </div>
-    <input type="file" ref={fileInputRef} onChange={handleImageChange } onClick={() => fileInputRef.current.click()} multiple />
-  </div>
-{/* ***************************************** */}
+        <UploadImages
+  setImgsSrc={setImgsSrc}
+  setThumbnailSrc={setThumbnailSrc}
+/>
 
-<div className="flex flex-col gap-5 w-full">
-    <div className="flex gap-10">
-      <div>
-        <Image src={currentThumbnail} alt="" width={150} height={150}/>
-      </div>
-    </div>
-    <input type="file" ref={fileInputRef2} onChange={handleThumbnailChange } onClick={() => fileInputRef2.current.click()} />
-  </div>
+
 
 {/* ***************************************** */}
 

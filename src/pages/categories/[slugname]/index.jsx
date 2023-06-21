@@ -3,6 +3,7 @@ import axios from "axios"
 import CardCategoryPage from "@/component/card/cardCategoryPage"
 import SidbarCategoryPage from "@/component/sidbar/sidbarCategory"
 import FourOhFour from "@/component/404"
+import Layout from '@/layout/layout'
 
 import { useRouter } from "next/router"
 import { useEffect, useState } from "react"
@@ -24,16 +25,17 @@ export default function Categorypage(){
             const value = res.data.data.subcategories.filter(subcat => category && subcat.category === category._id)
             setSubCategory(value)
         });
-        axios.get("http://localhost:8000/api/products").then(res =>setProducts(res.data.data.products));
+        axios.get("http://localhost:8000/api/products?limit=1000").then(res =>setProducts(res.data.data.products));
       
         
     }, [slugname,category]);
     // console.log(subCategory)
     // // console.log(category)
     return(
-       
+        <Layout>
+
         <div className="flex">
-        <div className="py-20 px-10">
+        <div className="py-20 px-10 w-full">
      {     category && <h1 className="text-right text-2xl pb-10">{category.name}</h1>}
 
         <div className="grid grid-cols-3 gap-10">
@@ -45,10 +47,11 @@ export default function Categorypage(){
         </div>
         </div>
  
-      <SidbarCategoryPage category={category} subCategory={subCategory}/>
+      <SidbarCategoryPage AllsubCategory={subCategory}/>
 
         </div>
-    
+        </Layout>
+
 )
     
 }

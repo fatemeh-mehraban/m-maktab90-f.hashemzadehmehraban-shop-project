@@ -1,7 +1,7 @@
 import BoxCategory from '@/component/card/boxCard'
+import Slideshow from '@/component/slider'
 import Layout from '@/layout/layout'
-import TinySlider from "tiny-slider-react";
-import 'tiny-slider/dist/tiny-slider.css';
+
 // import MaxWidthDialog  from "../component/Form/formAdmin"
 import {QueryClientProvider, QueryClient}from "react-query"
 const settings = {
@@ -16,19 +16,7 @@ export default function Home() {
       <QueryClientProvider client={queryClient}>
     <Layout>
       <main className="h-screen w-full overflow-x-hidden">
-      {/* <TinySlider settings={settings}>
-    {imgs.map((el, index) => (
-      <div key={index} style={{ position: "relative" }}>
-        <img
-          className={`tns-lazy-img`}
-          src={loadingImage}
-          data-src={el}
-          alt=""
-          style={imgStyles}
-        />
-      </div>
-    ))}
-</TinySlider> */}
+      <Slideshow/>
       <BoxCategory/>
     </main>
     </Layout>

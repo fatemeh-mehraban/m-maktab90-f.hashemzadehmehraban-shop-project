@@ -21,18 +21,16 @@ const {slugnamesub,slugname} = router.query;
 const hanlesubcategory = (name)=>{
   const value= AllsubCategory.find(item =>item.name === name)
   setSubCategory(value)
-  const catvalue = subCategory.name === value
-  console.log(category)
-  router.push(`/categories/${category.slugname}/subcategories/${subCategory.slugname}`)
+  // const catvalue = subCategory.name === value
+  router.push(`/categories/${category.slugname}/subcategories/${value.slugname}`)
 }
-const hanlecategory = (name)=>{
-  getCategory().then(res=>{
-
-    const value= res.data.data.categories.find(item =>item.name === name)
-    setCategory(value)
-  })
+const hanlecategory = async (name)=>{
   
-  router.push(`/categories/${category.slugname}/subcategories/${subCategory.slugname}`)
+  const category= await getCategory()
+  const value = category.data.data.categories.find(item =>item.name === name)
+
+  setCategory(value)
+  router.push(`/categories/${value.slugname}`)
 }
 
 useEffect(() => {

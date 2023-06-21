@@ -14,15 +14,20 @@ export default function BoxCategory() {
     getCategory().then(res => setCategoryHome(res.data.data.categories));
 
     const res = axios
-      .get(`http://localhost:8000/api/products?sort=createdAt`)
+      .get(`http://localhost:8000/api/products?limit=all`)
       .then(res => {
         setProducts(res.data.data.products);
       });
   }, []);
+
+
+  const handlecategoryClick = (productId) => {
+    router.push(`/categories/${productId}`);
+  };
 console.log(products)
   return categoryHome.slice(0, 4).map(category => (
-    <div key={category._id} className="w-full py-7">
-      <h3 className="px-10 text-xl">{category.name}</h3>
+    <div key={category._id} className="w-full flex flex-col justify-center py-7">
+      <h3 className="px-10 text-xl" onClick={()=>handlecategoryClick(category.slugname)}>{category.name}</h3>
       <div className="flex gap-7 w-full px-40 mt-10">
         {products
           .filter(product => product.category._id === category._id)

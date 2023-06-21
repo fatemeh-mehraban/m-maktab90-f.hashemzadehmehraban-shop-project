@@ -11,7 +11,7 @@ const ProductPage = () => {
 
     const {productId} = router.query;
 useEffect(()=>{
-    axios.get("http://localhost:8000/api/products").then(res=>{
+    axios.get("http://localhost:8000/api/products?limit=1000").then(res=>{
         const newProduct= res.data.data.products.find(item=> item._id === productId )
         setProducts(newProduct)
         })
@@ -23,16 +23,16 @@ useEffect(()=>{
         <div className=" mt-10 mb-10">
         <div className="flex p-4 mt-10">
           <div className="ml-5">
-            <Image
+{          products&& <Image
               src={`http://localhost:8000/images/products/images/${products.images}`}
               width={150}
               height={200}
               alt="images"
-            />
+            />}
           </div>
           <div className="w-[40rem]">
             <div className="flex items-center gap-4 mb-6 text-gray-500">
-           { products.category && <span>{products.category.name}</span>}
+           {products &&  products.category && <span>{products.category.name}</span>}
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 height="1em"
@@ -41,32 +41,32 @@ useEffect(()=>{
               >
                 <path d="M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 246.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z" />
               </svg>
-              {products.subcategory && <span>{products.subcategory.name}</span>}
+              {products && products.subcategory &&  <span>{products.subcategory.name}</span>}
             </div>
-            <h1 className="font-semibold text-gray-700 text-xl mb-6">
+{             products &&  <h1 className="font-semibold text-gray-700 text-xl mb-6">
               {products.name}
-            </h1>
+            </h1>}
 
             <div className="mb-6">
               <span className="font-semibold text-gray-700 ">قیمت :</span>
-              <span>{products.price} تومان</span>
+            { products &&  <span>{products.price} تومان</span>}
             </div>
             <div className="mb-6">
               <span className="font-semibold text-gray-700">
                 درباره ی محصول:
               </span>
-              <span className="mb-6"> {products.description}</span>
+             { products && <span className="mb-6"> {products.description}</span>}
             </div>
           </div>
         </div>
         <div className="p-4   flex  mr-52 gap-4">
           <input
             type="number"
-            className="w-24 border"
-            // value={quantity}
+            className="w-24 border px-2 text center"
+            min="1"
+            max={products.quantity}
             onChange={(e) => {
               const value = parseInt(e.target.value);
-            //   setQuantity(value >= 1 ? value : 1);
             }}
           />
           <button
