@@ -27,7 +27,8 @@ import Link from 'next/link';
 import  { useState } from 'react'
 import { ThemeProvider } from '@emotion/react';
 import { grey } from '@mui/material/colors';
-
+import ExitToAppIcon from '@mui/icons-material/ExitToApp';
+import Cookies from 'universal-cookie';
 
 // import {Typography} from "@material-ui/core";
 const drawerWidth = 240;
@@ -114,7 +115,7 @@ export default function MiniDrawer({children}:any) {
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
   const router = useRouter()
-
+  const cookie = new Cookies();
 
  const handleRoute = (index:number)=>{
 //  console.log(e.target.innerText  )
@@ -149,6 +150,13 @@ const handleRouteAdmin = (index:any)=>{
   const handleDrawerClose = () => {
     setOpen(false);
   };
+
+  const hanleExit = () => {
+    cookie.remove('accessToken');
+    cookie.remove('refreshToken');
+    router.push("/")
+  };
+
 //   onClick={handleDrawerOpen}
 {/* <ButtonAppBar handleDrawerOpen={handleDrawerOpen}/> */}
 
@@ -188,7 +196,7 @@ const handleRouteAdmin = (index:any)=>{
         </DrawerHeader>
         <Divider />
         <List className="bg-gray-900 text-gray-100 font-sans" >
-          {['مشاهده سایت', 'میز کار'].map((text, index) => (
+          {['مشاهده سایت', 'خروج'].map((text, index) => (
             <ListItem key={text} disablePadding sx={{ display: 'block' }}  onClick={()=>{handleRoute(index)}}  className="font-sans">
               <ListItemButton
                 sx={{
@@ -208,7 +216,7 @@ const handleRouteAdmin = (index:any)=>{
                   className="font-sans"
                   // id={index} 
                 >
-                  {index % 2 === 0 ? <HomeOutlinedIcon /> : <PersonalVideoIcon />}
+                  {index % 2 === 0 ? <HomeOutlinedIcon /> : <ExitToAppIcon  onClick={hanleExit}/>}
                 </ListItemIcon>
                 <ListItemText primary={text} sx={{ opacity: open ? 1 : 0 }} />
               </ListItemButton>

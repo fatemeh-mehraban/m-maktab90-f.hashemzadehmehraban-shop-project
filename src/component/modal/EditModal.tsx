@@ -8,7 +8,7 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import { Box } from '@mui/material';
-import { useRef } from 'react';
+import { useRef,useCallback } from 'react';
 import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
 import dynamic from "next/dynamic";
 import { useState, useEffect } from 'react';
@@ -20,6 +20,10 @@ import FormControl from '@mui/material/FormControl';
 import InputLabel from '@mui/material/InputLabel';
 import usestore from "../../store"
 import Image from 'next/image'
+import UploadImages from '../UploadImages'
+
+// import {useDropzone}  from 'react-dropzone'
+// import Dropzone from 'react-dropzone'
 
 export default function FormDialogEdit(data) {
 
@@ -41,6 +45,9 @@ export default function FormDialogEdit(data) {
   const reload = usestore((state) => state.reload)
   const setReload = usestore((state) => state.setReload)
   const [currentThumbnail, setCurrentThumbnail] = useState(data.data ? ["http://localhost:8000/images/products/thumbnails/" + data.data.images[0]] : "");
+  const [thumbnailSrc, setThumbnailSrc] = useState<unknown | string>('');
+  const [imgsSrc, setImgsSrc] = useState<unknown[] | never[]>([]);
+
   const [currentImages, setCurrentImages] = useState(data.data ? ["http://localhost:8000/images/products/images/" + data.data.images[0]] : "");
   // *****************************************************************
   const fileInputRef2 = useRef(null);
@@ -64,68 +71,45 @@ export default function FormDialogEdit(data) {
     const imageName2 = e.currentTarget.files;
     const entries = Object.entries(imageName2);
     const Array = entries.map(item => item[1])
-    setCurrentThumbnailName(Array);
+    setCurrentImages(Array);
   }
   // ***********************************************************************
 
-  const fileInputRef = useRef(null);
 
-  const handleThumbnailChange = (e) => {
-    const files = e.target.files;
-    const newImages = [...currentThumbnail];
-
-    for (let i = 0; i < files.length; i++) {
-      const file = files[i];
-
-      const reader = new FileReader();
-      reader.onload = () => {
-        newImages.push(reader.result);
-        if (newImages.length === files.length) {
-          setCurrentThumbnail([...currentThumbnail, ...newImages]);
-        }
-      };
-      reader.readAsDataURL(files[i]);
-    }
-
-    const imageName2 = e.currentTarget.files;
-    const entries = Object.entries(imageName2);
-    const Array = entries.map(item => item[1])
-    setImgName(Array);
-  }
 
   // ****************************************************************
 
-  // ****************************************************************
+
   const handleImageDelete = (index) => {
     const imagesCopy = [...currentImages];
     imagesCopy.splice(index, 1);
     setCurrentImages(imagesCopy);
   };
-
+  
   const handleChange = (event: SelectChangeEvent) => {
     setCategoryValue(event.target.value as string);
     console.log(categoryValue)
   };
   const handleChangesub = (event: SelectChangeEvent) => {
     setSubCategoryValue(event.target.value as string);
-
+  
   };
-
-
+  
+  
   useEffect(()=>{    
     getCategory().then((res:any)=>{
-        setCategory(res.data.data.categories)
-   })
-
-},[])
-useEffect(()=>{    
+      setCategory(res.data.data.categories)
+    })
+  
+  },[])
+  useEffect(()=>{    
     getSubCategory().then((res:any)=>{
-        setSubCategory(res.data.data.subcategories)
-   })
-
-},[])
-
-const handleNameChange = (e) => {
+      setSubCategory(res.data.data.subcategories)
+    })
+  
+  },[])
+  
+  const handleNameChange = (e) => {
     setName(e.target.value)
   };
   
@@ -143,7 +127,7 @@ const handleNameChange = (e) => {
   const handleClickOpen = () => {
     setOpen(true);
   };
-
+  
   const handleClose = () => {
     setOpen(false)
   };
@@ -154,17 +138,18 @@ const handleNameChange = (e) => {
     newdata.append('description', Desc)
     newdata.append('category', categoryValue)
     newdata.append('subcategory', subcategoryValue)
-
-    imgName.map(item=>newdata.append('images', item))
-    setReload(!reload)
+    newdata.append('thumbnail', thumbnailSrc);
+  imgsSrc.map((item: any) => {
+    newdata.append('images', item);
+  });    setReload(!reload)
     setOpen(false)
-
-
-
+  
     axios.patch(`http://localhost:8000/api/products/${id}`, newdata)
   };
+  
 
-
+  
+  
   return (
     <div >
        <Box >
@@ -176,26 +161,29 @@ const handleNameChange = (e) => {
         <DialogContent sx={{display:"flex" , flexDirection: 'column', gap:4}}>
         <Box component="form" noValidate autoComplete="off" className="flex flex-col items-center gap-3 my-5" dir="rtl">
 
-  <div className="flex flex-col gap-5">
-    <div className="flex gap-10">
-    {currentImages && currentImages.map((image, index) => (
-      <div key={index}>
-        <img src={image} alt="" onChange={(e)=>handleInputChange(e)}/>
-        <Button onClick={() => handleImageDelete(index)}>Delete</Button>
-      </div>
-    ))}
-    </div>
-    <input type="file" ref={fileInputRef} onChange={handleImageChange } onClick={() => fileInputRef.current.click()} multiple />
-  </div>
+        {/* <div className="flex flex-col gap-5 w-full ">
+            <div className="flex gap-10">
+              {currentImages && currentImages.map((image, index) => (
+                <div key={index}>
+                  <Image src={image} alt="" onChange={(e)=>handleInputChange(e)} width={150} height={150}/>
+                  <Button onClick={() => handleImageDelete(index)}>Delete</Button>
+                </div>
+              ))}
+  </div><input type="file" ref={fileInputRef && fileInputRef} onChange={handleImageChange} onClick={() => fileInputRef.current.click()} multiple />
+          </div> */}
 
-<div className="flex flex-col gap-5 w-full">
-    <div className="flex gap-10">
-      <div>
-        <Image src={currentThumbnail} alt="" width={150} height={150}/>
-      </div>
-    </div>
-    <input type="file" ref={fileInputRef2} onChange={handleThumbnailChange } onClick={() => fileInputRef2.current.click()} />
-  </div>
+{/* ***************************************************** */}
+
+
+
+<UploadImages
+  // value={value}
+  // errors={errors}
+  // register={register}
+  setImgsSrc={setImgsSrc}
+  setThumbnailSrc={setThumbnailSrc}
+/>
+
 
 {/* ***************************************** */}
 
@@ -236,7 +224,7 @@ const handleNameChange = (e) => {
           onChange={handleChangesub}
         >
           {subcategory.map(item=>  (
-    <MenuItem key={item.id} defaultValue={item.name} value={item._id} sx={{paddingX:"50px"}} dir="rtl">{item.name}</MenuItem> 
+        <MenuItem key={item.id} defaultValue={item.name} value={item._id} sx={{paddingX:"50px"}} dir="rtl">{item.name}</MenuItem> 
     
           ))
         }

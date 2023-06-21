@@ -73,7 +73,7 @@ const adminLogin = ({username,password}:any)=>{
           localStorage.setItem("accessToken","JWT_ACCESS_TOKEN_SECRET=c44715faa99ebc0970a03f15da0300da7936ddf09ebe7d9aa980bd4f5d5f6fcf ")
           cookies.set("accessToken",res.data.token.accessToken)
           cookies.set("refreshToken",res.data.token.accessToken)
-          router.push("/Dashboard")
+          router.push("/Dashboard/order")
             
       }else{
           alert(res.data.message)
@@ -123,7 +123,7 @@ const login =(e:any)=>{
         <TextField placeholder="نام کاربری و یا ایمیل "  id="username" inputProps={{...register("username",{required:"نام کاربری را وارد کنید"})}}  error={!!errors?.username} onChange={onChangeHandler}  value={admins.username}/>
         {errors.username && <p className="text-red-500 text-xs pb-5">نام کاربری را به درستی وارد کنید!</p>}
 
-        <TextField  placeholder="کلمه عبور " id="password" inputProps={{...register("password",{required:"نام کاربری را وارد کنید"})}} error={!!errors?.password} onChange={onChangeHandler} value={admins.password}/>
+        <TextField type="password"  placeholder="کلمه عبور " id="password" inputProps={{...register("password",{required:"نام کاربری را وارد کنید"})}} error={!!errors?.password} onChange={onChangeHandler} value={admins.password}/>
         {errors.password && <p className="text-red-500 text-xs pb-5">رمز عبو را به درستی وارد کنید!</p>}
 
 
