@@ -113,9 +113,9 @@ const cancel = () => {alert("Cancelled")}
         <input type="text" placeholder="جستجو ..." dir="rtl" className="p-2 outline-none" onChange={(e)=>searchfunction(e)}/>
       </div>
         </div>
-        <table className="w-[65%] border overflow-x-scroll" dir="rtl">
+        <table className="w-[65%] border overflow-x-scroll rounded-xl	" dir="rtl">
             <thead>
-                <tr className="border-b">
+                <tr className="border-b bg-green-400 rounded-xl	 ">
                     <th className="p-5">تصویر</th>
                     <th className="p-5 text-right px-5">عنوان</th>
                     <th className="py-5 curser-pointer text-right" onClick={sortPrice}>قیمت {price ?<ArrowDropUpIcon />:<ArrowDropDownIcon/> }</th>
@@ -132,7 +132,7 @@ const cancel = () => {alert("Cancelled")}
 
             <>
              
-            <tr className="border-b hover:bg-gray-100 hover:border-red-500 hover:border">
+            <tr className="border-b hover:bg-gray-100 hover:border-red-500">
                 <th className=" w-32 p-2"><img src={`http://localhost:8000/images/products/images/${item.images[0]}`} alt="" /></th>
                 <th className="w-1/4 text-right px-5">{item.name}</th>
                 <th className="w-1/4 text-right px-5" >
@@ -168,10 +168,9 @@ const cancel = () => {alert("Cancelled")}
       }       
 
             </tbody>
+
         </table>
-
-
-        <div className="flex justify-center p-5 border" dir="rtl">
+        <div className="flex justify-center p-5 text-center " dir="rtl">
             <div className='border border-green-500 w-40 flex justify-between items-center rounded-md'>
             <IconButton aria-label="Example"  onClick={beforpage} >
                 
@@ -185,5 +184,7 @@ const cancel = () => {alert("Cancelled")}
        
     
             </div>
+
+
     </div>
 )}
