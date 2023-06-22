@@ -31,6 +31,7 @@ const TextEditor = ({ value, onChange }: props) => {
       onChange={
         onChange
       }
+
     />
     </>
   );

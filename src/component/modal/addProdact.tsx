@@ -26,7 +26,6 @@ import usestore from "../../store"
 import axios from 'axios';
 // import UploadImages from '../UploadImages'
 import 'react-quill/dist/quill.snow.css';
-
 export default function FormDialog(row:any , userName:any) {
   const [open, setOpen] = React.useState(false);
   // const Editor = dynamic(() => import("../editor/editor"), { ssr: false });
@@ -126,9 +125,10 @@ setThumbnailSrc(Array[0]);
   const handlePriceChange = (e) => {
     setPrice(e.target.value)
   };
-  
-  const handleDescChange = (value) => {
-    setDesc(value)
+  const refTextEditor= useRef(null)
+  const handleDescChange = (e) => {
+    console.log(e)
+    // setDesc(e)
   };
   const handlequantityChange = (e) => {
     setQuantity(e.target.value)
@@ -178,6 +178,7 @@ console.log(row)
     newdata.append('category', categoryValue)
     newdata.append('subcategory', subcategoryValue)
     newdata.append('description', editor)
+
     newdata.append('brand', 'apple');
     newdata.append('thumbnail', thumbnailSrc);
     imgsSrc.map((item: any) => {
@@ -198,7 +199,6 @@ console.log(row)
     setEditor(e)
       }
 
-      
   return (
     <div >
        <Box >
@@ -301,6 +301,7 @@ console.log(row)
         onchange
       }
     />
+ editTables
         </Box>
     
 
