@@ -24,6 +24,7 @@
     "axios": "^1.4.0",
     "babel-polyfill": "^6.26.0",
     "ckbox": "^1.5.1",
+    "draft-js": "^0.11.7",
     "eslint": "8.41.0",
     "eslint-config-next": "13.4.3",
     "install": "^0.13.0",
@@ -32,7 +33,6 @@
     "react": "18.2.0",
     "react-data-table-component": "^7.5.3",
     "react-dom": "18.2.0",
-    "react-dropzone": "^14.2.3",
     "react-easy-edit": "^1.16.0",
     "react-hook-form": "^7.43.9",
     "react-query": "^3.39.3",
@@ -44,5 +44,8 @@
     "universal-cookie": "^4.0.4",
     "zod": "^3.21.4",
     "zustand": "^4.3.8"
+  },
+  "devDependencies": {
+    "@types/react-draft-wysiwyg": "^1.13.4"
   }
 }

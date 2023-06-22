@@ -82,12 +82,12 @@ const setReload = usestore((state) => state.setReload)
     <TableContainer component={Paper} sx={{ direction:"rtl" , width:"65%"} }>
       <FormDialog/>
       <Table sx={{ minWidth: 650 ,border: 1,borderBottom: 0, borderColor: 'grey.300'}} aria-label="simple table" >
-        <TableHead>
+        <TableHead className="bg-[#120051] text-white">
           <TableRow >
-            <TableCell align="center"> تصویر</TableCell>
-            <TableCell align="center"> عنوان</TableCell>
-            <TableCell align="center" onClick={handelSort}> دسته بندی {isCategory ?<ArrowDropUpIcon />:<ArrowDropDownIcon/> }</TableCell>
-            <TableCell align="center">امکانات</TableCell>
+            <TableCell align="center" sx={{color:"white"}}> تصویر</TableCell>
+            <TableCell align="center" sx={{color:"white"}}> عنوان</TableCell>
+            <TableCell align="center" sx={{color:"white"}} onClick={handelSort}> دسته بندی {isCategory ?<ArrowDropUpIcon />:<ArrowDropDownIcon/> }</TableCell>
+            <TableCell align="center" sx={{color:"white"}}>امکانات</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
@@ -133,14 +133,14 @@ const setReload = usestore((state) => state.setReload)
       </Table>
 
       <div className="flex justify-center p-5 border">
-            <div className='border border-green-500 w-40 flex justify-between items-center rounded-md'>
+            <div className='border border-[#120051]w-40 flex justify-between items-center rounded-md'>
             <IconButton aria-label="Example"  onClick={beforpage} >
                 
-                <KeyboardArrowRightIcon className='text-green-600'/>
+                <KeyboardArrowRightIcon className='text-[#120051]'/>
             </IconButton> 
-            <span className='border border-t-0 border-green-500 border-b-0 h-full px-7 py-2 text-green-600'> {page} </span>
+            <span className='border border-t-0 border-[#120051] border-b-0 h-full px-7 py-2 text-[#120051]0'> {page} </span>
             <IconButton aria-label="Example" onClick={nextpage}>
-            <KeyboardArrowLeftIcon className='text-green-600'/>
+            <KeyboardArrowLeftIcon className='text-[#120051]'/>
             </IconButton>    
             </div>
        

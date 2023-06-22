@@ -11,7 +11,7 @@ import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
 import usestore from "../../store"
-
+import FilterListIcon from '@mui/icons-material/FilterList';
 
 
  export default function DialogSelect() {
@@ -41,7 +41,7 @@ import usestore from "../../store"
 // console.log(pay)
   return (
     <div>
-      <Button onClick={handleClickOpen} className="text-gray-700">فیلتر</Button>
+      <Button onClick={handleClickOpen} className=" text-white"><FilterListIcon/></Button>
       <Dialog disableEscapeKeyDown open={open} onClose={handleClose}>
         <DialogTitle Align="RIGHT">وضعیت سفارش </DialogTitle>
         <DialogContent>
