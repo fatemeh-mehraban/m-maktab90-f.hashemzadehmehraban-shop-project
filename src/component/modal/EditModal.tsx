@@ -11,7 +11,7 @@ import { Box } from '@mui/material';
 import { useRef,useCallback } from 'react';
 import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
 import dynamic from "next/dynamic";
-import { useState, useEffect } from 'react';
+import { useState, useEffect,useMemo} from 'react';
 import MenuItem from '@mui/material/MenuItem';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
 import { getCategory, getSubCategory } from '@/lib/services/axios'
@@ -36,12 +36,14 @@ export default function FormDialogEdit(data) {
   const [Name, setName] = useState(data.data ? data.data.name : "")
   const [price, setPrice] = useState(data.data ? data.data.price : "")
   const [quantity, setQuantity] = useState(data.data ? data.data.quantity : "")
-  const [Desc, setDesc] = useState(data.data ? data.data.description : "")
+  const [editor,setEditor]=useState(data.data ? data.data.description : "")
   const [img, setImg] = useState(data.data ? data.data.images : "")
   const [imgName, setImgName] = useState([])
   const [currentThumbnailName, setCurrentThumbnailName] = useState([])
-  const Editor = dynamic(() => import('../editor/editor'), { ssr: false });
-
+  const ReactQuill = useMemo(
+    () => dynamic(import('react-quill'), { ssr: false }),
+    []
+    );
   let newdata = new FormData();
   const reload = usestore((state) => state.reload)
   const setReload = usestore((state) => state.setReload)
@@ -104,7 +106,7 @@ const handleThumbnailChange = (e) => {
 const imageName2 = e.currentTarget.files;
 const entries=Object.entries(imageName2); 
 const Array=entries.map(item=>item[1]) 
- setCurrentThumbnailName(Array[0]);
+setThumbnailSrc(Array[0]);
 }
   // // ***********************************************************************
 
@@ -170,10 +172,10 @@ const Array=entries.map(item=>item[1])
     newdata.append('name', Name);
     newdata.append('price', price)
     newdata.append('quantity', quantity)
-    newdata.append('description', Desc)
+    newdata.append('description', editor)
     newdata.append('category', categoryValue)
     newdata.append('subcategory', subcategoryValue)
-    newdata.append('thumbnail',currentThumbnailName);
+    newdata.append('thumbnail',thumbnailSrc);
     imgName.map(item=>newdata.append('images', item))
 
       setReload(!reload)
@@ -185,7 +187,10 @@ const Array=entries.map(item=>item[1])
   };
   
 
-  
+  const onchange =(e)=>{
+    console.log(e)
+    setEditor(e)
+      }
   
   return (
     <div >
@@ -284,9 +289,14 @@ const Array=entries.map(item=>item[1])
         <TextField  label="موجودی" sx={{width:1}} value={quantity}  defaultValue={data.data && data.data.quantity} onChange={(e)=>handlequantityChange(e)}/>
         <TextField  label="قیمت" sx={{width:1}} value={price}  defaultValue={data.data && data.data.price} onChange={(e)=>handlePriceChange(e)} />
         <Box className="reletive w-full mt-10">
-        <div className="w-full ">
-            <Editor refTextEditor={refTextEditor} value={Desc} />
-          </div>
+        <ReactQuill
+     theme="snow"
+      value={editor}
+      placeholder="ـوضیحات"
+      onChange={
+        onchange
+      }
+    />
         </Box>
 
 

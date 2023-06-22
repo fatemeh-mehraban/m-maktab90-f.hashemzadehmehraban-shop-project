@@ -13,7 +13,7 @@ import { CKBox } from "@ckbox/core";
 import { Component } from 'react';
 import  {CKEditor}  from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
-import  { useRef,useState,useEffect } from 'react';
+import  { useRef,useState,useEffect, useMemo } from 'react';
 import AddIcon from '@mui/icons-material/Add';
 import dynamic from "next/dynamic";
 import Image from 'next/image'
@@ -24,11 +24,16 @@ import FormControl from '@mui/material/FormControl'
 import InputLabel from '@mui/material/InputLabel';
 import usestore from "../../store"
 import axios from 'axios';
-import UploadImages from '../UploadImages'
+// import UploadImages from '../UploadImages'
+import 'react-quill/dist/quill.snow.css';
 
 export default function FormDialog(row:any , userName:any) {
   const [open, setOpen] = React.useState(false);
-  const Editor = dynamic(() => import("../editor/editor"), { ssr: false });
+  // const Editor = dynamic(() => import("../editor/editor"), { ssr: false });
+  const ReactQuill = useMemo(
+    () => dynamic(import('react-quill'), { ssr: false }),
+    []
+    );
   
   const [category, setCategory] = useState();
   const [subCategory, setSubCategory] = useState();
@@ -40,7 +45,7 @@ export default function FormDialog(row:any , userName:any) {
   const [Name, setName] = useState("")
   const [price, setPrice] = useState("")
   const [quantity, setQuantity] = useState("")
-  const [Desc, setDesc] = useState("")
+  const [editor,setEditor]=useState("")
   const [currentThumbnail, setCurrentThumbnail] = useState("");
 
 
@@ -102,7 +107,7 @@ const handleThumbnailChange = (e) => {
 const imageName2 = e.currentTarget.files;
 const entries=Object.entries(imageName2); 
 const Array=entries.map(item=>item[1]) 
- setCurrentThumbnailName(Array[0]);
+setThumbnailSrc(Array[0]);
 }
 
 
@@ -172,7 +177,7 @@ console.log(row)
     newdata.append('quantity', quantity)
     newdata.append('category', categoryValue)
     newdata.append('subcategory', subcategoryValue)
-    newdata.append('description', Desc)
+    newdata.append('description', editor)
     newdata.append('brand', 'apple');
     newdata.append('thumbnail', thumbnailSrc);
     imgsSrc.map((item: any) => {
@@ -185,7 +190,10 @@ console.log(row)
 
 
   };
-
+  const onchange =(e)=>{
+    console.log(e)
+    setEditor(e)
+      }
   return (
     <div >
        <Box >
@@ -275,10 +283,19 @@ console.log(row)
 
 
         <Box className="reletive w-full mt-10">
-        <Editor            
-        value={"توضیحات"}
-        onChange={(value)=>handleDescChange(value)}
-     />
+        {/* <Editor            
+        value={editor}
+        onChange={onchange}
+     /> */}
+
+<ReactQuill
+     theme="snow"
+      value={editor}
+      placeholder="ـوضیحات"
+      onChange={
+        onchange
+      }
+    />
         </Box>
     
 
