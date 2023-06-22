@@ -55,7 +55,7 @@ useEffect(()=>{
               <span className="font-semibold text-gray-700">
                 درباره ی محصول:
               </span>
-             { products && <span className="mb-6"> {products.description}</span>}
+             { products && <div className="mb-6" dangerouslySetInnerHTML={{ __html: products.description }}/>}
             </div>
           </div>
         </div>

@@ -8,7 +8,10 @@ import DialogTitle from '@mui/material/DialogTitle';
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import axios from 'axios';
 import usestore from "../../store"
-
+import { renderToStaticMarkup } from 'react-dom/server';
+import swal from 'sweetalert';
+// import swal from '@sweetalert/with-react'
+import { Component } from 'react';
 export default function AlertDialogDelete({row , setCounter , setPage , counter,data}) {
   const [open, setOpen] = React.useState(false);
   const reload = usestore((state) => state.reload)
@@ -24,6 +27,8 @@ export default function AlertDialogDelete({row , setCounter , setPage , counter,
     axios.delete(`http://localhost:8000/api/products/${id}`).then(res=>{
 
       setReload(!reload)
+return swal("حذف شد!", "error")
+
     })
     setCounter(counter-1)
     
@@ -46,15 +51,14 @@ export default function AlertDialogDelete({row , setCounter , setPage , counter,
         </DialogTitle>
         <DialogContent>
           <DialogContentText id="alert-dialog-description">
-            Let Google help apps determine location. This means sending anonymous
-            location data to Google, even when no apps are running.
+از حذف کالا مطمئن هستید؟
           </DialogContentText>
+          
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleClose}>لغو</Button>
+          <Button onClick={handleClose}>خیر</Button>
           <Button onClick={()=>handledelete(row._id)} autoFocus>
-            حذف
-          </Button>
+بله          </Button>
         </DialogActions>
       </Dialog>
     </div>

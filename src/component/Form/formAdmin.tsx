@@ -81,7 +81,7 @@ const adminLogin = ({username,password}:any)=>{
     })
     .catch(error=>{
    
-        console.log(error)
+        alert("اطلاعات شما با اطلاعات کاربر مغایرت دارد!")
     })
     // const token= cookies.get("accessToken")
 }
@@ -92,6 +92,8 @@ const login =(e:any)=>{
    const password=admins.password
    adminLogin({username,password})
    console.log(e)
+   admins.username=""
+   admins.password=""
 }
 
 
@@ -100,7 +102,7 @@ const login =(e:any)=>{
 
   return (
     <>
-      <AccountCircle onClick={handleClickOpen} />
+      <AccountCircle onClick={handleClickOpen} sx={{mt:1}}/>
       <Dialog
         fullWidth={fullWidth}
         maxWidth={maxWidth}

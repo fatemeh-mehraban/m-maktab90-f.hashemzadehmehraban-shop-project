@@ -11,7 +11,7 @@ import { Box } from '@mui/material';
 import { useRef,useCallback } from 'react';
 import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
 import dynamic from "next/dynamic";
-import { useState, useEffect } from 'react';
+import { useState, useEffect,useMemo} from 'react';
 import MenuItem from '@mui/material/MenuItem';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
 import { getCategory, getSubCategory } from '@/lib/services/axios'
@@ -26,6 +26,7 @@ import UploadImages from '../UploadImages'
 // import Dropzone from 'react-dropzone'
 
 export default function FormDialogEdit(data) {
+  const refTextEditor = useRef(null);
 
   const [open, setOpen] = React.useState(false);
   const [categoryValue, setCategoryValue] = useState('');
@@ -35,22 +36,31 @@ export default function FormDialogEdit(data) {
   const [Name, setName] = useState(data.data ? data.data.name : "")
   const [price, setPrice] = useState(data.data ? data.data.price : "")
   const [quantity, setQuantity] = useState(data.data ? data.data.quantity : "")
-  const [Desc, setDesc] = useState(data.data ? data.data.description : "")
+  const [editor,setEditor]=useState(data.data ? data.data.description : "")
   const [img, setImg] = useState(data.data ? data.data.images : "")
   const [imgName, setImgName] = useState([])
   const [currentThumbnailName, setCurrentThumbnailName] = useState([])
-  const Editor = dynamic(() => import("../editor/editor"), { ssr: false });
-
+  const ReactQuill = useMemo(
+    () => dynamic(import('react-quill'), { ssr: false }),
+    []
+    );
   let newdata = new FormData();
   const reload = usestore((state) => state.reload)
   const setReload = usestore((state) => state.setReload)
   const [currentThumbnail, setCurrentThumbnail] = useState(data.data ? ["http://localhost:8000/images/products/thumbnails/" + data.data.images[0]] : "");
-  const [thumbnailSrc, setThumbnailSrc] = useState<unknown | string>('');
-  const [imgsSrc, setImgsSrc] = useState<unknown[] | never[]>([]);
 
-  const [currentImages, setCurrentImages] = useState(data.data ? ["http://localhost:8000/images/products/images/" + data.data.images[0]] : "");
+
+  const [thumbnailSrc, setThumbnailSrc] = useState(data.data ? `http://localhost:8000/images/products/thumbnails/${data.data.images[0]}` : "");
+  const [imgsSrc, setImgsSrc] = useState([`http://localhost:8000/images/products/images/${ data.data.images[0]}`]);
+
+
+
+  const [currentImages, setCurrentImages] = useState(data.data ? [`http://localhost:8000/images/products/images/${data.data.images[0]}`] : "");
+  const [currentImages2, setCurrentImages2] = useState(data.data ? [`http://localhost:8000/images/products/thumbnails/${data.data.images[0]}`] : "");
   // *****************************************************************
-  const fileInputRef2 = useRef(null);
+ 
+  const fileInputRef = useRef(null);
+
   const handleImageChange = (e) => {
     const files = e.target.files;
     const newImages = [...currentImages];
@@ -68,16 +78,41 @@ export default function FormDialogEdit(data) {
       reader.readAsDataURL(files[i]);
     }
 
-    const imageName2 = e.currentTarget.files;
-    const entries = Object.entries(imageName2);
-    const Array = entries.map(item => item[1])
-    setCurrentImages(Array);
+  const imageName2 = e.currentTarget.files;
+  const entries=Object.entries(imageName2); 
+  const Array=entries.map(item=>item[1]) 
+  setImgName(Array);
   }
-  // ***********************************************************************
+//  **********************
+ 
+ 
+const fileInputRef2 = useRef(null);
+
+const handleThumbnailChange = (e) => {
+  const file = e.target.files[0];
+
+  // for (let i = 0; i < files.length; i++) {
+  //   const file = files[i];
+  //   console.log(file)
+
+    const reader = new FileReader();
+    reader.readAsDataURL(file)
+    reader.onload = () => {
+        setCurrentThumbnail(reader.result);
+    };
+    reader.onerror=()=>{
+      consol.log(reader.error)
+    }
+const imageName2 = e.currentTarget.files;
+const entries=Object.entries(imageName2); 
+const Array=entries.map(item=>item[1]) 
+setThumbnailSrc(Array[0]);
+}
+  // // ***********************************************************************
 
 
 
-  // ****************************************************************
+  // // ****************************************************************
 
 
   const handleImageDelete = (index) => {
@@ -132,23 +167,30 @@ export default function FormDialogEdit(data) {
     setOpen(false)
   };
   const handleSubmit = (id:string) => {
+    console.log(refTextEditor.currentValue);
+    imgsSrc
     newdata.append('name', Name);
     newdata.append('price', price)
     newdata.append('quantity', quantity)
-    newdata.append('description', Desc)
+    newdata.append('description', editor)
     newdata.append('category', categoryValue)
     newdata.append('subcategory', subcategoryValue)
-    newdata.append('thumbnail', thumbnailSrc);
-  imgsSrc.map((item: any) => {
-    newdata.append('images', item);
-  });    setReload(!reload)
+    newdata.append('thumbnail',thumbnailSrc);
+    imgName.map(item=>newdata.append('images', item))
+
+      setReload(!reload)
     setOpen(false)
-  
+  // useEffect(()=>{
+
     axios.patch(`http://localhost:8000/api/products/${id}`, newdata)
+  // },[newdata])
   };
   
 
-  
+  const onchange =(e)=>{
+    console.log(e)
+    setEditor(e)
+      }
   
   return (
     <div >
@@ -161,28 +203,41 @@ export default function FormDialogEdit(data) {
         <DialogContent sx={{display:"flex" , flexDirection: 'column', gap:4}}>
         <Box component="form" noValidate autoComplete="off" className="flex flex-col items-center gap-3 my-5" dir="rtl">
 
-        {/* <div className="flex flex-col gap-5 w-full ">
+        <div className="flex flex-col gap-5 w-full ">
             <div className="flex gap-10">
               {currentImages && currentImages.map((image, index) => (
-                <div key={index}>
-                  <Image src={image} alt="" onChange={(e)=>handleInputChange(e)} width={150} height={150}/>
+                <div key={index} className="rounded-xl">
+                  <Image className="rounded-xl" src={image} alt="" onChange={(e)=>handleInputChange(e)} width={100} height={150}/>
                   <Button onClick={() => handleImageDelete(index)}>Delete</Button>
                 </div>
               ))}
-  </div><input type="file" ref={fileInputRef && fileInputRef} onChange={handleImageChange} onClick={() => fileInputRef.current.click()} multiple />
-          </div> */}
+  </div>
+  <div> 
+    <span className="text-green-500 font-bold">عکس کالا: </span>
+    <input type="file" ref={fileInputRef && fileInputRef} onChange={handleImageChange} onClick={() => fileInputRef.current.click()} multiple />
+    </div>
+          </div>
 
 {/* ***************************************************** */}
 
+<div className="flex flex-col gap-5 w-full">
+    <div className="flex gap-10">
+      <div>
+        <Image src={currentThumbnail} alt="" width={150} height={150}/>
+      </div>
+    </div>
+    <input type="file" ref={fileInputRef2} onChange={handleThumbnailChange } onClick={() => fileInputRef2.current.click()} />
+  </div>
 
-
-<UploadImages
+{/* <UploadImages
   // value={value}
   // errors={errors}
   // register={register}
   setImgsSrc={setImgsSrc}
   setThumbnailSrc={setThumbnailSrc}
-/>
+  imgsSrc={imgsSrc}
+  thumbnailSrc={thumbnailSrc}
+/> */}
 
 
 {/* ***************************************** */}
@@ -234,10 +289,14 @@ export default function FormDialogEdit(data) {
         <TextField  label="موجودی" sx={{width:1}} value={quantity}  defaultValue={data.data && data.data.quantity} onChange={(e)=>handlequantityChange(e)}/>
         <TextField  label="قیمت" sx={{width:1}} value={price}  defaultValue={data.data && data.data.price} onChange={(e)=>handlePriceChange(e)} />
         <Box className="reletive w-full mt-10">
-        <Editor            
-        value={Desc} 
-        onChange={(value)=>handleDescChange(value)}
-     />
+        <ReactQuill
+     theme="snow"
+      value={editor}
+      placeholder="ـوضیحات"
+      onChange={
+        onchange
+      }
+    />
         </Box>
 
 
