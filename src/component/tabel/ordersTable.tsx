@@ -21,7 +21,6 @@ import YoutubeSearchedForIcon from '@mui/icons-material/YoutubeSearchedFor';
 import usestore from "../../store"
 import FormDialogOrdaer from '../modal/orderModal';
 
-
 export default function BasicTable({limit ,search}:{limit:number,search:string}) {
   
   const [user , setUser] = useState([])
@@ -69,27 +68,31 @@ export default function BasicTable({limit ,search}:{limit:number,search:string})
         };
 
   return (
-    <TableContainer Align="LEFT" component={Paper} sx={{ direction:"rtl" , width:"65%"} } >
+    <TableContainer Align="LEFT" component={Paper} sx={{ direction:"rtl" , width:"70%" } } >
 
   
 
 
-      <div className='border border-green-400 rounded-md mb-5 w-1/4 flex'>
+      <div className="flex gap-5 items-center justify-end">
+      <div className='shadow-xl	 rounded-md mb-5 ml-2 w-1/4 flex items-center'>
             {/* <YoutubeSearchedForIcon className="bg-green-400 h-full text-6xl px-4 py-2"/> */}
-            {/* <div className="bg-green-400"> <DialogSelect/> </div> */}
+             <div className="bg-[#120051] text-white"> <DialogSelect/> </div> 
+            
             <input type="text" placeholder="جستجو ..." dir="rtl" className="p-2 outline-none" onChange={(e)=>console.log(1)}/>
         </div>
+        {/* <div>فیلتر</div> */}
+      </div>
         
-
+        
 
       <Table sx={{ minWidth: 650 ,border: 1,borderBottom: 0, borderColor: 'grey.300'}} aria-label="simple table" >
         
-        <TableHead>
+        <TableHead className="bg-[#120051] text-white">
           <TableRow >
-            <TableCell align="right">نام کاربر</TableCell>
-            <TableCell align="right">مجموع مبلغ</TableCell>
-            <TableCell align="right" onClick={handelSort}>زمان ثبت سفارش {date ?<ArrowDropUpIcon />:<ArrowDropDownIcon/> }</TableCell>
-            <TableCell align="right"></TableCell>
+            <TableCell align="right" sx={{color:"white"}}>نام کاربر</TableCell>
+            <TableCell align="right" sx={{color:"white"}}>مجموع مبلغ</TableCell>
+            <TableCell align="right" onClick={handelSort} sx={{color:"white"}}>زمان ثبت سفارش {date ?<ArrowDropUpIcon />:<ArrowDropDownIcon/> }</TableCell>
+            <TableCell align="right" sx={{color:"white"}}></TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
@@ -117,14 +120,14 @@ export default function BasicTable({limit ,search}:{limit:number,search:string})
       </Table>
 
       <div className="flex justify-center p-5 border">
-            <div className='border border-green-500 w-40 flex justify-between items-center rounded-md'>
+            <div className='border border-[#120051] w-40 flex justify-between items-center rounded-md'>
             <IconButton aria-label="Example"  onClick={beforpage} >
                 
-                <KeyboardArrowRightIcon className='text-green-600'/>
+                <KeyboardArrowRightIcon className='text-[#120051]'/>
             </IconButton> 
-            <span className='border border-t-0 border-green-500 border-b-0 h-full px-7 py-2 text-green-600'> {page} </span>
+            <span className='border border-t-0 border-[#120051] border-b-0 h-full px-7 py-2 text-[#120051]'> {page} </span>
             <IconButton aria-label="Example" onClick={nextpage}>
-            <KeyboardArrowLeftIcon className='text-green-600'/>
+            <KeyboardArrowLeftIcon className='text-[#120051]'/>
             </IconButton>    
             </div>
        

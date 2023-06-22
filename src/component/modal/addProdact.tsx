@@ -24,8 +24,8 @@ import FormControl from '@mui/material/FormControl'
 import InputLabel from '@mui/material/InputLabel';
 import usestore from "../../store"
 import axios from 'axios';
-// import UploadImages from '../UploadImages'
 import 'react-quill/dist/quill.snow.css';
+
 
 export default function FormDialog(row:any , userName:any) {
   const [open, setOpen] = React.useState(false);
@@ -126,9 +126,10 @@ setThumbnailSrc(Array[0]);
   const handlePriceChange = (e) => {
     setPrice(e.target.value)
   };
-  
-  const handleDescChange = (value) => {
-    setDesc(value)
+  const refTextEditor= useRef(null)
+  const handleDescChange = (e) => {
+    console.log(e)
+    // setDesc(e)
   };
   const handlequantityChange = (e) => {
     setQuantity(e.target.value)
@@ -177,6 +178,7 @@ console.log(row)
     newdata.append('quantity', quantity)
     newdata.append('category', categoryValue)
     newdata.append('subcategory', subcategoryValue)
+
     newdata.append('description', editor)
     newdata.append('brand', 'apple');
     newdata.append('thumbnail', thumbnailSrc);
@@ -190,6 +192,7 @@ console.log(row)
 
 
   };
+
   const onchange =(e)=>{
     console.log(e)
     setEditor(e)
@@ -283,6 +286,8 @@ console.log(row)
 
 
         <Box className="reletive w-full mt-10">
+
+
         {/* <Editor            
         value={editor}
         onChange={onchange}
