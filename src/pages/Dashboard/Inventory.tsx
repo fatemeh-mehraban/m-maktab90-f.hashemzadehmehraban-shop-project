@@ -19,7 +19,7 @@ export function Inventory() {
 
 
       <PersistentDrawerRight>
-      <div className="py-40 mt-20  w-full flex flex-col justify-center items-end px-5"> 
+      <div className=" w-full flex justify-center items-csnter px-5"> 
   
       <InventoryTable search={search} limit={4}/>
       </div>

@@ -31,7 +31,7 @@ const handlesubcategory = (category,subcat) => {
     router.push(`/categories/${category}/subcategories/${subcat}`);
   };
   return (
-    <div className="p-8 bg-white rounded-xl flex justify-between w-full shadow-md absolute">
+    <div className="p-8 bg-white rounded-xl flex justify-between w-full shadow-md absolute z-20">
     {categories.map((item:any)=>{
         return <>
          <div key={item._id}>
