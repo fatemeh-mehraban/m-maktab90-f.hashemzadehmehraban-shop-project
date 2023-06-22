@@ -190,10 +190,15 @@ console.log(row)
 
 
   };
+
+
+
   const onchange =(e)=>{
     console.log(e)
     setEditor(e)
       }
+
+      
   return (
     <div >
        <Box >
