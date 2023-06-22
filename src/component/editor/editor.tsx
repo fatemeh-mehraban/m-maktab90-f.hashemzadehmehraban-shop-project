@@ -1,24 +1,23 @@
-import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
-import { CKEditor } from "@ckeditor/ckeditor5-react";
-
-interface EditorType{
-  value:string,
-  onChange:(x:string)=>void
+import React, { Dispatch, SetStateAction, useEffect, useState } from 'react';
+import ReactQuill from 'react-quill';
+import 'react-quill/dist/quill.snow.css';
+interface props {
+  value: string |undefined;
+  refTextEditor: any;
 }
-const Editor = ({
-  value,
-  onChange
-}:EditorType) => {
+const TextEditor = ({ value, refTextEditor }: props) => {
+  const [values, setValue] = useState('');
   return (
-    <CKEditor
-      editor={ClassicEditor}
-      data={value}
-      onChange={(event, editor) => {
-        const data = editor.getData();
-        onChange(data);
-      }}
+    <ReactQuill
+      theme="snow"
+      value={value}
+      onChange={(e) => {
+        setValue(e);
+        refTextEditor && refTextEditor.currentValue=e;
+      }
+    }
     />
   );
 };
 
-export default Editor
+export default TextEditor;

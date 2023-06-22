@@ -34,18 +34,23 @@ export default function FormDialog(row:any , userName:any) {
   const [subCategory, setSubCategory] = useState();
   const [categoryValue, setCategoryValue] =useState('');
   const [subcategoryValue, setSubCategoryValue] =useState('');
-  const [currentThumbnail, setCurrentThumbnail] = useState();
-  const [currentImages, setCurrentImages] = useState([]);
   const [img , setImg] = useState("")
   const [imgName , setImgName] = useState([])
   const [currentThumbnailName , setCurrentThumbnailName] = useState([])
-  const [thumbnailSrc, setThumbnailSrc] = useState<unknown | string>('');
-  const [imgsSrc, setImgsSrc] = useState<unknown[] | never[]>([]);
   const [Name, setName] = useState("")
   const [price, setPrice] = useState("")
   const [quantity, setQuantity] = useState("")
   const [Desc, setDesc] = useState("")
+  const [currentThumbnail, setCurrentThumbnail] = useState("");
 
+
+  const [thumbnailSrc, setThumbnailSrc] = useState("");
+  const [imgsSrc, setImgsSrc] = useState([]);
+
+
+
+  const [currentImages, setCurrentImages] = useState("");
+  const [currentImages2, setCurrentImages2] = useState("");
   let newdata = new FormData();
   const reload = usestore((state) => state.reload)
   const setReload = usestore((state) => state.setReload)
@@ -74,29 +79,31 @@ export default function FormDialog(row:any , userName:any) {
   const Array=entries.map(item=>item[1]) 
   setImgName(Array);
   }
-  // ***********************************************************************
-  const fileInputRef2 = useRef(null);
+//  **********************
+ 
+ 
+const fileInputRef2 = useRef(null);
 
-  const handleThumbnailChange = (e) => {
-    const file = e.target.files[0];
+const handleThumbnailChange = (e) => {
+  const file = e.target.files[0];
 
-    // for (let i = 0; i < files.length; i++) {
-    //   const file = files[i];
-    //   console.log(file)
+  // for (let i = 0; i < files.length; i++) {
+  //   const file = files[i];
+  //   console.log(file)
 
-      const reader = new FileReader();
-      reader.readAsDataURL(file)
-      reader.onload = () => {
-          setCurrentThumbnail(reader.result);
-      };
-      reader.onerror=()=>{
-        consol.log(reader.error)
-      }
-  const imageName2 = e.currentTarget.files;
-  const entries=Object.entries(imageName2); 
-  const Array=entries.map(item=>item[1]) 
-   setCurrentThumbnailName(Array[0]);
-  }
+    const reader = new FileReader();
+    reader.readAsDataURL(file)
+    reader.onload = () => {
+        setCurrentThumbnail(reader.result);
+    };
+    reader.onerror=()=>{
+      consol.log(reader.error)
+    }
+const imageName2 = e.currentTarget.files;
+const entries=Object.entries(imageName2); 
+const Array=entries.map(item=>item[1]) 
+ setCurrentThumbnailName(Array[0]);
+}
 
 
   const handleClickOpen = () => {
@@ -193,10 +200,31 @@ console.log(row)
         <Box component="form" noValidate autoComplete="off" className="flex flex-col items-center gap-3 my-5" dir="rtl">
 
 
-        <UploadImages
-  setImgsSrc={setImgsSrc}
-  setThumbnailSrc={setThumbnailSrc}
-/>
+        <div className="flex flex-col gap-5 w-full ">
+            <div className="flex gap-10">
+              {currentImages && currentImages.map((image, index) => (
+                <div key={index} className="rounded-xl">
+                  <Image className="rounded-xl" src={image} alt="" onChange={(e)=>handleInputChange(e)} width={100} height={150}/>
+                  <Button onClick={() => handleImageDelete(index)}>Delete</Button>
+                </div>
+              ))}
+  </div>
+  <div> 
+    <span className="text-green-500 font-bold">عکس کالا: </span>
+    <input type="file" ref={fileInputRef && fileInputRef} onChange={handleImageChange} onClick={() => fileInputRef.current.click()} multiple />
+    </div>
+          </div>
+
+{/* ***************************************************** */}
+
+<div className="flex flex-col gap-5 w-full">
+    <div className="flex gap-10">
+      <div>
+        <Image src={currentThumbnail} alt="" width={150} height={150}/>
+      </div>
+    </div>
+    <input type="file" ref={fileInputRef2} onChange={handleThumbnailChange } onClick={() => fileInputRef2.current.click()} />
+  </div>
 
 
 
