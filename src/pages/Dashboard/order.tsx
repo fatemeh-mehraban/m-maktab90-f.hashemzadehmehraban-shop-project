@@ -12,7 +12,7 @@ export function Order() {
     return (
 
       <PersistentDrawerRight>
-      <div className="text-white px-5 w-full flex items-end justify-center flex-col">   
+      <div className="text-white h-screen px-5 w-full flex items-end justify-center items-center flex-col">   
 
        <BasicTable limit={4} search={search}/>
       </div>

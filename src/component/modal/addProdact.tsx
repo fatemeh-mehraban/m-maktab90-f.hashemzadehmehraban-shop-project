@@ -24,15 +24,7 @@ import FormControl from '@mui/material/FormControl'
 import InputLabel from '@mui/material/InputLabel';
 import usestore from "../../store"
 import axios from 'axios';
-<<<<<<< HEAD
-// import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
-// import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
-// import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
-// import { CKEditor } from "@ckeditor/ckeditor5-react";
-=======
 import UploadImages from '../UploadImages'
-
->>>>>>> e89914ac2a4160735dfed9ff84045b553211c744
 export default function FormDialog(row:any , userName:any) {
   const [open, setOpen] = React.useState(false);
   const Editor = dynamic(() => import("../editor/editor"), { ssr: false });

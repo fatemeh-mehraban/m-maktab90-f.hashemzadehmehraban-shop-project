@@ -20,11 +20,6 @@ export function Inventory() {
 
       <PersistentDrawerRight>
       <div className="py-40 mt-20  w-full flex flex-col justify-center items-end px-5"> 
-
-      <div className='border border-green-400 rounded-md mb-5'>
-        <YoutubeSearchedForIcon className="bg-green-400 h-full text-6xl px-4 py-2"/>
-        <input type="text" placeholder="جستجو ..." dir="rtl" className="p-2 outline-none" onChange={(e)=>searchfunction(e)}/>
-      </div>
   
       <InventoryTable search={search} limit={4}/>
       </div>
