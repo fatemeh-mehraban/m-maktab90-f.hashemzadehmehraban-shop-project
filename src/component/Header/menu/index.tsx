@@ -20,12 +20,13 @@ export default function MegaMenu() {
   useEffect(()=>{    
     getSubCategory().then((res:any)=>{
         setSubCategories(res.data.data.subcategories)
-        console.log(res.data.data)
+        // console.log(res.data.data)
    })
 
 },[])
 const handlecategoryClick = (productId) => {
     router.push(`/categories/${productId}`);
+    
   };
 const handlesubcategory = (category,subcat) => {
     router.push(`/categories/${category}/subcategories/${subcat}`);

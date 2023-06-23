@@ -101,7 +101,7 @@ const handleThumbnailChange = (e) => {
         setCurrentThumbnail(reader.result);
     };
     reader.onerror=()=>{
-      consol.log(reader.error)
+      console.log(reader.error)
     }
 const imageName2 = e.currentTarget.files;
 const entries=Object.entries(imageName2); 
@@ -171,7 +171,7 @@ console.log(row)
   };
 
 
-  const handleSubmit = (id:string) => {
+  const handleSubmit = () => {
     newdata.append('name', Name);
     newdata.append('price', price)
     newdata.append('quantity', quantity)
@@ -194,7 +194,7 @@ console.log(row)
 
 
 
-  const onchange =(e)=>{
+  const onchange =(e:any)=>{
     console.log(e)
     setEditor(e)
       }
@@ -215,16 +215,16 @@ console.log(row)
 
         <div className="flex flex-col gap-5 w-full ">
             <div className="flex gap-10">
-              {currentImages && currentImages.map((image, index) => (
+              {currentImages && currentImages.map((image:any, index:any) => (
                 <div key={index} className="rounded-xl">
-                  <Image className="rounded-xl" src={image} alt="" onChange={(e)=>handleInputChange(e)} width={100} height={150}/>
+                  <Image className="rounded-xl" src={image} alt=""  width={100} height={150}/>
                   <Button onClick={() => handleImageDelete(index)}>Delete</Button>
                 </div>
               ))}
   </div>
   <div> 
     <span className="text-green-500 font-bold">عکس کالا: </span>
-    <input type="file" ref={fileInputRef && fileInputRef} onChange={handleImageChange} onClick={() => fileInputRef.current.click()} multiple />
+    <input type="file" ref={fileInputRef && fileInputRef} onChange={handleImageChange} onClick={() =>fileInputRef && fileInputRef.current.click()} multiple />
     </div>
           </div>
 
@@ -236,7 +236,7 @@ console.log(row)
         <Image src={currentThumbnail} alt="" width={150} height={150}/>
       </div>
     </div>
-    <input type="file" ref={fileInputRef2} onChange={handleThumbnailChange } onClick={() => fileInputRef2.current.click()} />
+    <input type="file" ref={fileInputRef2} onChange={handleThumbnailChange } onClick={() => fileInputRef2 && fileInputRef2.current.click()} />
   </div>
 
 
@@ -255,7 +255,7 @@ console.log(row)
           label="دسته بندی"
           onChange={handleChangeCategory}
         >
-          { category && category.map(item=>  (
+          { category && category.map((item:any)=>  (
     <MenuItem key={item.id} defaultValue={item.name} value={item._id} sx={{paddingX:"50px"}} dir="rtl">{item.name}</MenuItem> 
   ))
         }
@@ -273,7 +273,7 @@ console.log(row)
           label=" زیرمجموعه"
           onChange={handleChangesub}
         >
-          {subCategory && subCategory.map(item=>  (
+          {subCategory && subCategory.map((item:any)=>  (
     <MenuItem key={item.id} defaultValue={item.name} value={item._id} sx={{paddingX:"50px"}} dir="rtl">{item.name}</MenuItem> 
     
           ))

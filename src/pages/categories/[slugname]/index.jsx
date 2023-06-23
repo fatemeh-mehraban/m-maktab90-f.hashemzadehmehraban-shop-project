@@ -17,8 +17,7 @@ export default function Categorypage(){
     const [isSubCategoryMatched , setisSubCategoryMatched ]=useState([])
     const router= useRouter()
     const {slugname,asPath}= router.query
-    console.log(router)
-    // let isSubCategoryMatched 
+
     useEffect(() => {
         getCategory().then(res => setCategory(res.data.data.categories.find(item => slugname && item.slugname === slugname)));
         getSubCategory().then(res => {
