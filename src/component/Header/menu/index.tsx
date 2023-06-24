@@ -4,12 +4,14 @@ import axios from 'axios'
 import { GetServerSideProps } from 'next'
 import { useContext ,useEffect , useState} from 'react'
 import { useRouter } from 'next/router';
+import usestore from '@/store';
 
 export default function MegaMenu() {
     const [categories , setCategories]= useState([])
     const [subCategories , setSubCategories]= useState([])
     const router = useRouter();
-
+    const isCategories = usestore((state) => state.isCategories)
+    const setIsCategories = usestore((state) => state.setIsCategories)
     useEffect(()=>{    
         getCategory().then((res:any)=>{
             setCategories(res.data.data.categories)
@@ -26,10 +28,12 @@ export default function MegaMenu() {
 },[])
 const handlecategoryClick = (productId) => {
     router.push(`/categories/${productId}`);
+    setIsCategories(false)
     
   };
 const handlesubcategory = (category,subcat) => {
     router.push(`/categories/${category}/subcategories/${subcat}`);
+    setIsCategories(false)
   };
   return (
     <div className="p-8 bg-white rounded-xl flex justify-between w-full shadow-md absolute z-20">

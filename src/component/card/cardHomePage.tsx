@@ -12,7 +12,7 @@ const MiniCardProduct2 = ({Products}) => {
   return (
     <>
               <div
-            className=" bg-white rounded-xl w-44 flex flex-col justify-center items-center gap-8 border border-gray-200 shadow p-2"
+            className=" bg-white rounded-xl flex flex-col justify-center items-center gap-8 border border-gray-200 shadow p-2"
           >
             <Image
               src={`http://localhost:8000/images/products/images/${Products.images[0]}`}

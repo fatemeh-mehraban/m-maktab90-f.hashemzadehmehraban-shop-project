@@ -34,6 +34,7 @@ export default function Categorypage(){
         <Layout>
 
         <div className="flex">
+        <SidbarCategoryPage />
         <div className="py-20 px-10 w-full">
      {     category && <h1 className="text-right text-2xl pb-10">{category.name}</h1>}
 
@@ -46,7 +47,7 @@ export default function Categorypage(){
         </div>
         </div>
  
-      <SidbarCategoryPage AllsubCategory={subCategory}/>
+  
 
         </div>
         </Layout>

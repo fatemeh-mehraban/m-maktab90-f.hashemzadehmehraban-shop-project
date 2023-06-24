@@ -1,0 +1,961 @@
+// 'use strict';
+
+// Yall lazy load img
+function yall (options) {
+  options = options || {};
+
+  // Options
+  const lazyClass = options.lazyClass || "lazy";
+  const lazyBackgroundClass = options.lazyBackgroundClass || "lazy-bg";
+  const idleLoadTimeout = "idleLoadTimeout" in options ? options.idleLoadTimeout : 200;
+  const observeChanges = options.observeChanges || false;
+  const events = options.events || {};
+
+  // Shorthands (saves more than a few bytes!)
+  const win = window;
+  const ric = "requestIdleCallback";
+  const io = "IntersectionObserver";
+
+  // App stuff
+  const dataAttrs = ["srcset", "src", "poster"];
+  const arr = [];
+  const queryDOM = (selector, root) => arr.slice.call((root || document).querySelectorAll(selector || `img.${lazyClass},video.${lazyClass},iframe.${lazyClass},.${lazyBackgroundClass}`));
+
+  // This function handles lazy loading of elements.
+  const yallLoad = element => {
+    const parentNode = element.parentNode;
+    let sourceNode;
+
+    if (parentNode.nodeName == "PICTURE") {
+      sourceNode = parentNode;
+    }
+
+    if (element.nodeName == "VIDEO") {
+      sourceNode = element;
+    }
+
+    yallApplyFn(queryDOM("source", sourceNode), yallFlipDataAttrs);
+    yallFlipDataAttrs(element);
+
+    if (element.autoplay) {
+      element.load();
+    }
+
+    const classList = element.classList;
+
+    // Lazy load CSS background images
+    if (classList.contains(lazyBackgroundClass)) {
+      classList.remove(lazyBackgroundClass);
+      classList.add(options.lazyBackgroundLoaded || "lazy-bg-loaded");
+    }
+  };
+
+  const yallBindEvents = element => {
+    for (let eventIndex in events) {
+      element.addEventListener(eventIndex, events[eventIndex].listener || events[eventIndex], events[eventIndex].options || undefined);
+    }
+  };
+
+  // Added because there was a number of patterns like this peppered throughout
+  // the code. This just flips necessary data- attrs on an element
+  const yallFlipDataAttrs = element => {
+    for (let dataAttrIndex in dataAttrs) {
+      if (dataAttrs[dataAttrIndex] in element.dataset) {
+        win["requestAnimationFrame"](() => {
+          element.setAttribute(dataAttrs[dataAttrIndex], element.dataset[dataAttrs[dataAttrIndex]]);
+        });
+      }
+    }
+  };
+
+  // Noticed lots of loops where a function simply gets executed on every
+  // member of an array. This abstraction eliminates that repetiive code.
+  const yallApplyFn = (items, fn) => {
+    for (let itemIndex in items) {
+      fn instanceof win[io] ? fn.observe(items[itemIndex]) : fn(items[itemIndex]);
+    }
+  };
+
+  const yallIntersectionObserve = entry => {
+    if (entry.isIntersecting || entry.intersectionRatio) {
+      const element = entry.target;
+
+      if (ric in win && idleLoadTimeout) {
+        win[ric](() => {
+          yallLoad(element);
+        }, {
+          timeout: idleLoadTimeout
+        });
+      } else {
+        yallLoad(element);
+      }
+
+      element.classList.remove(lazyClass);
+      intersectionListener.unobserve(element);
+      lazyElements = lazyElements.filter(lazyElement => lazyElement != element);
+
+      if (!lazyElements.length && !observeChanges) {
+        intersectionListener.disconnect();
+      }
+    }
+  };
+
+  const yallMutationObserve = newElement => {
+    if (lazyElements.indexOf(newElement) < 0) {
+      lazyElements.push(newElement);
+      yallBindEvents(newElement);
+      intersectionListener.observe(newElement);
+    }
+  };
+
+  const yallCreateMutationObserver = entry => {
+    new MutationObserver(() => {
+      yallApplyFn(queryDOM(), yallMutationObserve);
+    }).observe(entry, options.mutationObserverOptions || {
+      childList: true,
+      subtree: true
+    });
+  };
+
+  let lazyElements = queryDOM();
+
+  // If the current user agent is a known crawler, immediately load all media
+  // for the elements yall is listening for and halt execution (good for SEO).
+  if (/baidu|(?:google|bing|yandex|duckduck)bot/i.test(navigator.userAgent)) {
+    yallApplyFn(lazyElements, yallLoad);
+
+    return;
+  }
+
+  if (io in win && `${io}Entry` in win) {
+    var intersectionListener = new win[io](entries => {
+      yallApplyFn(entries, yallIntersectionObserve);
+    }, {
+      rootMargin: `${"threshold" in options ? options.threshold : 200}px 0%`
+    });
+
+    yallApplyFn(lazyElements, yallBindEvents);
+    yallApplyFn(lazyElements, intersectionListener);
+
+    if (observeChanges) {
+      yallApplyFn(queryDOM(options.observeRootSelector || "body"), yallCreateMutationObserver);
+    }
+  }
+}
+
+document.addEventListener("DOMContentLoaded", function() {
+	yall({
+		observeChanges: true
+	});
+});
+
+
+jQuery.cookie=function(key,value,options){if(arguments.length>1&&String(value)!=="[object Object]"){options=jQuery.extend({},options);if(value===null||value===undefined){options.expires=-1}if(typeof options.expires==='number'){var days=options.expires,t=options.expires=new Date();t.setDate(t.getDate()+days)}value=String(value);return(document.cookie=[encodeURIComponent(key),'=',options.raw?value:encodeURIComponent(value),options.expires?'; expires='+options.expires.toUTCString():'',options.path?'; path='+options.path:'',options.domain?'; domain='+options.domain:'',options.secure?'; secure':''].join(''))}options=value||{};var result,decode=options.raw?function(s){return s}:decodeURIComponent;return(result=new RegExp('(?:^|; )'+encodeURIComponent(key)+'=([^;]*)').exec(document.cookie))?decode(result[1]):null};
+/*
+(function($){$.fn.hoverIntent=function(f,g){var cfg={sensitivity:7,interval:100,timeout:0};cfg=$.extend(cfg,g?{over:f,out:g}:f);var cX,cY,pX,pY;var track=function(ev){cX=ev.pageX;cY=ev.pageY};var compare=function(ev,ob){ob.hoverIntent_t=clearTimeout(ob.hoverIntent_t);if((Math.abs(pX-cX)+Math.abs(pY-cY))<cfg.sensitivity){$(ob).unbind("mousemove",track);ob.hoverIntent_s=1;return cfg.over.apply(ob,[ev])}else{pX=cX;pY=cY;ob.hoverIntent_t=setTimeout(function(){compare(ev,ob)},cfg.interval)}};var delay=function(ev,ob){ob.hoverIntent_t=clearTimeout(ob.hoverIntent_t);ob.hoverIntent_s=0;return cfg.out.apply(ob,[ev])};var handleHover=function(e){var p=(e.type=="mouseover"?e.fromElement:e.toElement)||e.relatedTarget;while(p&&p!=this){try{p=p.parentNode}catch(e){p=this}}if(p==this){return false}var ev=jQuery.extend({},e);var ob=this;if(ob.hoverIntent_t){ob.hoverIntent_t=clearTimeout(ob.hoverIntent_t)}if(e.type=="mouseover"){pX=ev.pageX;pY=ev.pageY;$(ob).bind("mousemove",track);if(ob.hoverIntent_s!=1){ob.hoverIntent_t=setTimeout(function(){compare(ev,ob)},cfg.interval)}}else{$(ob).unbind("mousemove",track);if(ob.hoverIntent_s==1){ob.hoverIntent_t=setTimeout(function(){delay(ev,ob)},cfg.timeout)}}};return this.mouseover(handleHover).mouseout(handleHover)}})(jQuery);
+*/
+
+(function($) {
+	$.fn.hoverIntent = function(handlerIn,handlerOut,selector) {
+
+		// default configuration values
+		var cfg = {
+			interval: 100,
+			sensitivity: 7,
+			timeout: 0
+		};
+
+		if ( typeof handlerIn === "object" ) {
+			cfg = $.extend(cfg, handlerIn );
+		} else if ($.isFunction(handlerOut)) {
+			cfg = $.extend(cfg, { over: handlerIn, out: handlerOut, selector: selector } );
+		} else {
+			cfg = $.extend(cfg, { over: handlerIn, out: handlerIn, selector: handlerOut } );
+		}
+
+		// instantiate variables
+		// cX, cY = current X and Y position of mouse, updated by mousemove event
+		// pX, pY = previous X and Y position of mouse, set by mouseover and polling interval
+		var cX, cY, pX, pY;
+
+		// A private function for getting mouse position
+		var track = function(ev) {
+			cX = ev.pageX;
+			cY = ev.pageY;
+		};
+
+		// A private function for comparing current and previous mouse position
+		var compare = function(ev,ob) {
+			ob.hoverIntent_t = clearTimeout(ob.hoverIntent_t);
+			// compare mouse positions to see if they've crossed the threshold
+			if ( ( Math.abs(pX-cX) + Math.abs(pY-cY) ) < cfg.sensitivity ) {
+				$(ob).off("mousemove.hoverIntent",track);
+				// set hoverIntent state to true (so mouseOut can be called)
+				ob.hoverIntent_s = 1;
+				return cfg.over.apply(ob,[ev]);
+			} else {
+				// set previous coordinates for next time
+				pX = cX; pY = cY;
+				// use self-calling timeout, guarantees intervals are spaced out properly (avoids JavaScript timer bugs)
+				ob.hoverIntent_t = setTimeout( function(){compare(ev, ob);} , cfg.interval );
+			}
+		};
+
+		// A private function for delaying the mouseOut function
+		var delay = function(ev,ob) {
+			ob.hoverIntent_t = clearTimeout(ob.hoverIntent_t);
+			ob.hoverIntent_s = 0;
+			return cfg.out.apply(ob,[ev]);
+		};
+
+		// A private function for handling mouse 'hovering'
+		var handleHover = function(e) {
+			// copy objects to be passed into t (required for event object to be passed in IE)
+			var ev = jQuery.extend({},e);
+			var ob = this;
+
+			// cancel hoverIntent timer if it exists
+			if (ob.hoverIntent_t) { ob.hoverIntent_t = clearTimeout(ob.hoverIntent_t); }
+
+			// if e.type == "mouseenter"
+			if (e.type == "mouseenter") {
+				// set "previous" X and Y position based on initial entry point
+				pX = ev.pageX; pY = ev.pageY;
+				// update "current" X and Y position based on mousemove
+				$(ob).on("mousemove.hoverIntent",track);
+				// start polling interval (self-calling timeout) to compare mouse coordinates over time
+				if (ob.hoverIntent_s != 1) { ob.hoverIntent_t = setTimeout( function(){compare(ev,ob);} , cfg.interval );}
+
+				// else e.type == "mouseleave"
+			} else {
+				// unbind expensive mousemove event
+				$(ob).off("mousemove.hoverIntent",track);
+				// if hoverIntent state is true, then call the mouseOut function after the specified delay
+				if (ob.hoverIntent_s == 1) { ob.hoverIntent_t = setTimeout( function(){delay(ev,ob);} , cfg.timeout );}
+			}
+		};
+
+		// listen for mouseenter and mouseleave
+		return this.on({'mouseenter.hoverIntent':handleHover,'mouseleave.hoverIntent':handleHover}, cfg.selector);
+	};
+})(jQuery);
+
+
+
+(function($){$.fn.jTruncate=function(options){var defaults={length:300,minTrail:20,moreText:"more",lessText:"less",ellipsisText:"...",moreAni:"",lessAni:""};var options=$.extend(defaults,options);return this.each(function(){obj=$(this);var body=obj.html();if(body.length>options.length+options.minTrail){var splitLocation=body.indexOf(' ',options.length);if(splitLocation!=-1){var splitLocation=body.indexOf(' ',options.length);var str1=body.substring(0,splitLocation);var str2=body.substring(splitLocation,body.length-1);obj.html(str1+'<span class="truncate_ellipsis">'+options.ellipsisText+'</span>'+'<span class="truncate_more">'+str2+'</span>');obj.find('.truncate_more').css("display","none");obj.append('<div class="clearboth">'+'<a href="#" class="truncate_more_link">'+options.moreText+'</a>'+'</div>');var moreLink=$('.truncate_more_link',obj);var moreContent=$('.truncate_more',obj);var ellipsis=$('.truncate_ellipsis',obj);moreLink.click(function(){if(moreLink.text()==options.moreText){moreContent.show(options.moreAni);moreLink.text(options.lessText);ellipsis.css("display","none");}else{moreContent.hide(options.lessAni);moreLink.text(options.moreText);ellipsis.css("display","inline");}return false;});}}});};})(jQuery);jQuery.easing.jswing=jQuery.easing.swing;jQuery.extend(jQuery.easing,{def:"easeOutQuad",swing:function(e,f,a,h,g){return jQuery.easing[jQuery.easing.def](e,f,a,h,g)},easeInQuad:function(e,f,a,h,g){return h*(f/=g)*f+a},easeOutQuad:function(e,f,a,h,g){return-h*(f/=g)*(f-2)+a},easeInOutQuad:function(e,f,a,h,g){if((f/=g/2)<1){return h/2*f*f+a}return-h/2*((--f)*(f-2)-1)+a},easeInCubic:function(e,f,a,h,g){return h*(f/=g)*f*f+a},easeOutCubic:function(e,f,a,h,g){return h*((f=f/g-1)*f*f+1)+a},easeInOutCubic:function(e,f,a,h,g){if((f/=g/2)<1){return h/2*f*f*f+a}return h/2*((f-=2)*f*f+2)+a},easeInQuart:function(e,f,a,h,g){return h*(f/=g)*f*f*f+a},easeOutQuart:function(e,f,a,h,g){return-h*((f=f/g-1)*f*f*f-1)+a},easeInOutQuart:function(e,f,a,h,g){if((f/=g/2)<1){return h/2*f*f*f*f+a}return-h/2*((f-=2)*f*f*f-2)+a},easeInQuint:function(e,f,a,h,g){return h*(f/=g)*f*f*f*f+a},easeOutQuint:function(e,f,a,h,g){return h*((f=f/g-1)*f*f*f*f+1)+a},easeInOutQuint:function(e,f,a,h,g){if((f/=g/2)<1){return h/2*f*f*f*f*f+a}return h/2*((f-=2)*f*f*f*f+2)+a},easeInSine:function(e,f,a,h,g){return-h*Math.cos(f/g*(Math.PI/2))+h+a},easeOutSine:function(e,f,a,h,g){return h*Math.sin(f/g*(Math.PI/2))+a},easeInOutSine:function(e,f,a,h,g){return-h/2*(Math.cos(Math.PI*f/g)-1)+a},easeInExpo:function(e,f,a,h,g){return(f==0)?a:h*Math.pow(2,10*(f/g-1))+a},easeOutExpo:function(e,f,a,h,g){return(f==g)?a+h:h*(-Math.pow(2,-10*f/g)+1)+a},easeInOutExpo:function(e,f,a,h,g){if(f==0){return a}if(f==g){return a+h}if((f/=g/2)<1){return h/2*Math.pow(2,10*(f-1))+a}return h/2*(-Math.pow(2,-10*--f)+2)+a},easeInCirc:function(e,f,a,h,g){return-h*(Math.sqrt(1-(f/=g)*f)-1)+a},easeOutCirc:function(e,f,a,h,g){return h*Math.sqrt(1-(f=f/g-1)*f)+a},easeInOutCirc:function(e,f,a,h,g){if((f/=g/2)<1){return-h/2*(Math.sqrt(1-f*f)-1)+a}return h/2*(Math.sqrt(1-(f-=2)*f)+1)+a},easeInElastic:function(f,h,e,l,k){var i=1.70158;var j=0;var g=l;if(h==0){return e}if((h/=k)==1){return e+l}if(!j){j=k*0.3}if(g<Math.abs(l)){g=l;var i=j/4}else{var i=j/(2*Math.PI)*Math.asin(l/g)}return-(g*Math.pow(2,10*(h-=1))*Math.sin((h*k-i)*(2*Math.PI)/j))+e},easeOutElastic:function(f,h,e,l,k){var i=1.70158;var j=0;var g=l;if(h==0){return e}if((h/=k)==1){return e+l}if(!j){j=k*0.3}if(g<Math.abs(l)){g=l;var i=j/4}else{var i=j/(2*Math.PI)*Math.asin(l/g)}return g*Math.pow(2,-10*h)*Math.sin((h*k-i)*(2*Math.PI)/j)+l+e},easeInOutElastic:function(f,h,e,l,k){var i=1.70158;var j=0;var g=l;if(h==0){return e}if((h/=k/2)==2){return e+l}if(!j){j=k*(0.3*1.5)}if(g<Math.abs(l)){g=l;var i=j/4}else{var i=j/(2*Math.PI)*Math.asin(l/g)}if(h<1){return-0.5*(g*Math.pow(2,10*(h-=1))*Math.sin((h*k-i)*(2*Math.PI)/j))+e}return g*Math.pow(2,-10*(h-=1))*Math.sin((h*k-i)*(2*Math.PI)/j)*0.5+l+e},easeInBack:function(e,f,a,i,h,g){if(g==undefined){g=1.70158}return i*(f/=h)*f*((g+1)*f-g)+a},easeOutBack:function(e,f,a,i,h,g){if(g==undefined){g=1.70158}return i*((f=f/h-1)*f*((g+1)*f+g)+1)+a},easeInOutBack:function(e,f,a,i,h,g){if(g==undefined){g=1.70158}if((f/=h/2)<1){return i/2*(f*f*(((g*=(1.525))+1)*f-g))+a}return i/2*((f-=2)*f*(((g*=(1.525))+1)*f+g)+2)+a},easeInBounce:function(e,f,a,h,g){return h-jQuery.easing.easeOutBounce(e,g-f,0,h,g)+a},easeOutBounce:function(e,f,a,h,g){if((f/=g)<(1/2.75)){return h*(7.5625*f*f)+a}else{if(f<(2/2.75)){return h*(7.5625*(f-=(1.5/2.75))*f+0.75)+a}else{if(f<(2.5/2.75)){return h*(7.5625*(f-=(2.25/2.75))*f+0.9375)+a}else{return h*(7.5625*(f-=(2.625/2.75))*f+0.984375)+a}}}},easeInOutBounce:function(e,f,a,h,g){if(f<g/2){return jQuery.easing.easeInBounce(e,f*2,0,h,g)*0.5+a}return jQuery.easing.easeOutBounce(e,f*2-g,0,h,g)*0.5+h*0.5+a}});$(document).ready(function(){$('noscript').hide();
+
+$(".check_all").click(function(){
+	$("form:parent").find(':checkbox').each(function(){
+		if($(this).attr('class')!='check_all')
+		$(this).attr('checked',!$(this).attr('checked'));
+	});
+});
+
+(function($) {
+	$.fn.shiftClick = function() {
+		var lastSelected;
+		var checkBoxes = $(this);
+
+		this.each(function() {
+			$(this).click(function(ev) {
+				if (ev.shiftKey) {
+					var last = checkBoxes.index(lastSelected);
+					var first = checkBoxes.index(this);
+					var start = Math.min(first, last);
+					var end = Math.max(first, last);
+					var chk = lastSelected.checked;
+					for (var i = start; i < end; i++) {
+						checkBoxes[i].checked = chk;
+					}
+				} else {
+					lastSelected = this;
+				}
+			})
+		});
+	};
+})(jQuery);
+    
+$(document.body).on('click', '.check_all' , function() {
+	$("form:parent").find(':checkbox').each(function(){
+		if($(this).attr('class')!='check_all')
+		$(this).attr('checked',!$(this).attr('checked'));
+	});
+}).on('click', '.confirm' , function() {
+	if(!confirmIt())
+		return false;
+})
+
+
+$('textarea[maxlength]').keyup(function(){var max=parseInt($(this).attr('maxlength'));if($(this).val().length>max){$(this).val($(this).val().substr(0,$(this).attr('maxlength')));}
+$(this).parent().find('.chars_remaining').html(''+(max-$(this).val().length)+' کاراکتر باقیمانده');});
+
+setTimeout(function(){$(".auto_hide").slideUp('slow',function(){$(".auto_hide").remove();});},10000);
+$.ajaxSetup({cache:false,error:function(x,t,m){loading(0);}});});var confirm_message='مطمئن هستید؟';var loaders=0;function isemail(str){var re=/^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;if(!str.match(re)){return(false)}return(true);}
+function confirmIt(message){if(!message)message=confirm_message;return confirm(message);}
+function rnd(){return"&r="+(Math.random()*10000)}
+function implode(glue,pieces){return((pieces instanceof Array)?pieces.join(glue):pieces)}
+function str_replace(search,replace,subject,count){var i=0,j=0,temp='',repl='',sl=0,fl=0,f=[].concat(search),r=[].concat(replace),s=subject,ra=r instanceof Array,sa=s instanceof Array;s=[].concat(s);if(count){this.window[count]=0}for(i=0,sl=s.length;i<sl;i++){if(s[i]===''){continue}for(j=0,fl=f.length;j<fl;j++){temp=s[i]+'';repl=ra?(r[j]!==undefined?r[j]:''):r[0];s[i]=(temp).split(f[j]).join(repl);if(count&&s[i]!==temp){this.window[count]+=(temp.length-s[i].length)/f[j].length}}}return sa?s:s[0]}
+function loading(set){if(set==1)$('#loading').show();else if(set==0)$('#loading').hide();}
+
+var loadedScripts=new Array();
+var loadedcss=new Array();
+function json2page(json)
+{
+
+	if(!json.jsFiles){
+		json.jsFiles = [];
+	}
+	// return;
+	$.each(json, function(key1, value1){
+		$.each(value1, function(key2, value2){
+			switch (key1) {
+				case 'jsFiles':
+					
+				break;
+				case 'javascript_files':
+					
+					if($.inArray(value2, loadedScripts) < 0){
+						$.getScript( value2 ).done(function( script, textStatus ) {
+							// console.log( value2 );
+							loadedScripts.push(value2);
+						}).fail(function( jqxhr, settings, exception ) {
+							console.log( "Triggered ajaxError handler." );
+						});
+					}
+
+
+					// $.ajax({
+					// 	url: value2,
+					// 	dataType: "script",
+					// 	cache: false
+					// 	// success: success
+					// });
+
+				// $.getScript( value2, function( data, textStatus, jqxhr ) {
+				// 	eval( data );
+				// });
+				break;
+				// case 'css':
+				// $.ajax({
+				// 	url: value2,
+				// 	dataType: "script",
+				// 	success: success
+				// });
+				// break;
+				case 'css_files':
+
+
+						$('<link/>', {
+							rel: 'stylesheet',
+							type: 'text/css',
+							href:value2
+						 }).appendTo('head');
+
+					//console.log(value2);
+					// $.each(value2, function(key3, value3){
+					// 	console.log(key3, value3);
+					// });
+					// $.ajax({
+					// 	url: value2,
+					// 	dataType: "script",
+					// 	cache: false
+					// 	// success: success
+					// });
+				case 'css':
+					$('<style>' + value2 + '</style>').appendTo("head");    
+				break;
+				case 'html':
+				$(key2).html(value2);
+				break;
+				case 'val':
+				$(key2).val(value2);
+				break;
+				case 'eval':
+					// console.log(value2);
+				eval(value2);
+				break;
+				case 'table':
+				var table = $('<table></table>').addClass('table table-striped table-bordered table-condensed table-hover');
+				$.each(value2, function(key3, value3){
+					var row = $('<tr></tr>').addClass('tr_'+key3);
+					$.each(value3, function(key4, value4){
+						var col = $('<td></td>').html(value4);
+						row.append(col);
+					});
+					$(table).append(row);
+				});
+				$(key2).html(table);
+				break;
+				case 'debug':
+				/*					if(key2 =='time')
+				console.log('Time: '+value2+' Sec');
+				else*/
+				console.log(key2+': '+value2);
+				break;
+			}
+		});
+	});
+
+	loadjs(json.jsFiles, function() {
+		if(json.eval){
+			$.each(json.eval, function( key, code){
+				eval(code);
+				// console.log(code);
+			});
+		}
+	});
+	
+}
+
+
+
+function toEnglishNumber(strNum) {
+    var pn = ["۰", "۱", "۲", "۳", "۴", "۵", "۶", "۷", "۸", "۹"];
+    var en = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"];
+    var an = ["٠", "١", "٢", "٣", "٤", "٥", "٦", "٧", "٨", "٩"];
+    var cache = strNum;
+    for (var i = 0; i < 10; i++) {
+        var regex_fa = new RegExp(pn[i], 'g');
+        var regex_ar = new RegExp(an[i], 'g');
+        cache = cache.replace(regex_fa, en[i]);
+        cache = cache.replace(regex_ar, en[i]);
+    }
+    return cache;
+}
+
+$(document.body).on('keyup', '.numeric' , function() {
+    var o = toEnglishNumber($(this).val()).replace(/[^\d-]/g,'');//.
+    $(this).val(o);
+});
+
+// LoadJS is a tiny async loader for modern browsers
+loadjs = (function () {
+	/**
+	 * Global dependencies.
+	 * @global {Object} document - DOM
+	 */
+	
+	var devnull = function() {},
+		bundleIdCache = {},
+		bundleResultCache = {},
+		bundleCallbackQueue = {};
+	
+	
+	/**
+	 * Subscribe to bundle load event.
+	 * @param {string[]} bundleIds - Bundle ids
+	 * @param {Function} callbackFn - The callback function
+	 */
+	function subscribe(bundleIds, callbackFn) {
+	  // listify
+	  bundleIds = bundleIds.push ? bundleIds : [bundleIds];
+	
+	  var depsNotFound = [],
+		  i = bundleIds.length,
+		  numWaiting = i,
+		  fn,
+		  bundleId,
+		  r,
+		  q;
+	
+	  // define callback function
+	  fn = function (bundleId, pathsNotFound) {
+		if (pathsNotFound.length) depsNotFound.push(bundleId);
+	
+		numWaiting--;
+		if (!numWaiting) callbackFn(depsNotFound);
+	  };
+	
+	  // register callback
+	  while (i--) {
+		bundleId = bundleIds[i];
+	
+		// execute callback if in result cache
+		r = bundleResultCache[bundleId];
+		if (r) {
+		  fn(bundleId, r);
+		  continue;
+		}
+	
+		// add to callback queue
+		q = bundleCallbackQueue[bundleId] = bundleCallbackQueue[bundleId] || [];
+		q.push(fn);
+	  }
+	}
+	
+	
+	/**
+	 * Publish bundle load event.
+	 * @param {string} bundleId - Bundle id
+	 * @param {string[]} pathsNotFound - List of files not found
+	 */
+	function publish(bundleId, pathsNotFound) {
+	  // exit if id isn't defined
+	  if (!bundleId) return;
+	
+	  var q = bundleCallbackQueue[bundleId];
+	
+	  // cache result
+	  bundleResultCache[bundleId] = pathsNotFound;
+	
+	  // exit if queue is empty
+	  if (!q) return;
+	
+	  // empty callback queue
+	  while (q.length) {
+		q[0](bundleId, pathsNotFound);
+		q.splice(0, 1);
+	  }
+	}
+	
+	
+	/**
+	 * Execute callbacks.
+	 * @param {Object or Function} args - The callback args
+	 * @param {string[]} depsNotFound - List of dependencies not found
+	 */
+	function executeCallbacks(args, depsNotFound) {
+	  // accept function as argument
+	  if (args.call) args = {success: args};
+	
+	  // success and error callbacks
+	  if (depsNotFound.length) (args.error || devnull)(depsNotFound);
+	  else (args.success || devnull)(args);
+	}
+	
+	
+	/**
+	 * Load individual file.
+	 * @param {string} path - The file path
+	 * @param {Function} callbackFn - The callback function
+	 */
+	function loadFile(path, callbackFn, args, numTries) {
+	  var doc = document,
+		  async = args.async,
+		  maxTries = (args.numRetries || 0) + 1,
+		  beforeCallbackFn = args.before || devnull,
+		  pathname = path.replace(/[\?|#].*$/, ''),
+		  pathStripped = path.replace(/^(css|img)!/, ''),
+		  isLegacyIECss,
+		  e;
+	
+	  numTries = numTries || 0;
+	
+	  if (/(^css!|\.css$)/.test(pathname)) {
+		// css
+		e = doc.createElement('link');
+		e.rel = 'stylesheet';
+		e.href = pathStripped;
+	
+		// tag IE9+
+		isLegacyIECss = 'hideFocus' in e;
+	
+		// use preload in IE Edge (to detect load errors)
+		if (isLegacyIECss && e.relList) {
+		  isLegacyIECss = 0;
+		  e.rel = 'preload';
+		  e.as = 'style';
+		}
+	  } else if (/(^img!|\.(png|gif|jpg|svg|webp)$)/.test(pathname)) {
+		// image
+		e = doc.createElement('img');
+		e.src = pathStripped;    
+	  } else {
+		// javascript
+		e = doc.createElement('script');
+		e.src = path;
+		e.async = async === undefined ? true : async;
+	  }
+	
+	  e.onload = e.onerror = e.onbeforeload = function (ev) {
+		var result = ev.type[0];
+	
+		// treat empty stylesheets as failures to get around lack of onerror
+		// support in IE9-11
+		if (isLegacyIECss) {
+		  try {
+			if (!e.sheet.cssText.length) result = 'e';
+		  } catch (x) {
+			// sheets objects created from load errors don't allow access to
+			// `cssText` (unless error is Code:18 SecurityError)
+			if (x.code != 18) result = 'e';
+		  }
+		}
+	
+		// handle retries in case of load failure
+		if (result == 'e') {
+		  // increment counter
+		  numTries += 1;
+	
+		  // exit function and try again
+		  if (numTries < maxTries) {
+			return loadFile(path, callbackFn, args, numTries);
+		  }
+		} else if (e.rel == 'preload' && e.as == 'style') {
+		  // activate preloaded stylesheets
+		  return e.rel = 'stylesheet'; // jshint ignore:line
+		}
+		
+		// execute callback
+		callbackFn(path, result, ev.defaultPrevented);
+	  };
+	
+	  // add to document (unless callback returns `false`)
+	  if (beforeCallbackFn(path, e) !== false) doc.head.appendChild(e);
+	}
+	
+	
+	/**
+	 * Load multiple files.
+	 * @param {string[]} paths - The file paths
+	 * @param {Function} callbackFn - The callback function
+	 */
+	function loadFiles(paths, callbackFn, args) {
+	  // listify paths
+	  paths = paths.push ? paths : [paths];
+	
+	  var numWaiting = paths.length,
+		  x = numWaiting,
+		  pathsNotFound = [],
+		  fn,
+		  i;
+	
+	  // define callback function
+	  fn = function(path, result, defaultPrevented) {
+		// handle error
+		if (result == 'e') pathsNotFound.push(path);
+	
+		// handle beforeload event. If defaultPrevented then that means the load
+		// will be blocked (ex. Ghostery/ABP on Safari)
+		if (result == 'b') {
+		  if (defaultPrevented) pathsNotFound.push(path);
+		  else return;
+		}
+	
+		numWaiting--;
+		if (!numWaiting) callbackFn(pathsNotFound);
+	  };
+	
+	  // load scripts
+	  for (i=0; i < x; i++) loadFile(paths[i], fn, args);
+	}
+	
+	
+	/**
+	 * Initiate script load and register bundle.
+	 * @param {(string|string[])} paths - The file paths
+	 * @param {(string|Function|Object)} [arg1] - The (1) bundleId or (2) success
+	 *   callback or (3) object literal with success/error arguments, numRetries,
+	 *   etc.
+	 * @param {(Function|Object)} [arg2] - The (1) success callback or (2) object
+	 *   literal with success/error arguments, numRetries, etc.
+	 */
+	function loadjs(paths, arg1, arg2) {
+	  var bundleId,
+		  args;
+	
+	  // bundleId (if string)
+	  if (arg1 && arg1.trim) bundleId = arg1;
+	
+	  // args (default is {})
+	  args = (bundleId ? arg2 : arg1) || {};
+	
+	  // throw error if bundle is already defined
+	  if (bundleId) {
+		if (bundleId in bundleIdCache) {
+		  throw "LoadJS";
+		} else {
+		  bundleIdCache[bundleId] = true;
+		}
+	  }
+	
+	  function loadFn(resolve, reject) {
+		loadFiles(paths, function (pathsNotFound) {
+		  // execute callbacks
+		  executeCallbacks(args, pathsNotFound);
+		  
+		  // resolve Promise
+		  if (resolve) {
+			executeCallbacks({success: resolve, error: reject}, pathsNotFound);
+		  }
+	
+		  // publish bundle load event
+		  publish(bundleId, pathsNotFound);
+		}, args);
+	  }
+	  
+	  if (args.returnPromise) return new Promise(loadFn);
+	  else loadFn();
+	}
+	
+	
+	/**
+	 * Execute callbacks when dependencies have been satisfied.
+	 * @param {(string|string[])} deps - List of bundle ids
+	 * @param {Object} args - success/error arguments
+	 */
+	loadjs.ready = function ready(deps, args) {
+	  // subscribe to bundle load event
+	  subscribe(deps, function (depsNotFound) {
+		// execute callbacks
+		executeCallbacks(args, depsNotFound);
+	  });
+	
+	  return loadjs;
+	};
+	
+	
+	/**
+	 * Manually satisfy bundle dependencies.
+	 * @param {string} bundleId - The bundle id
+	 */
+	loadjs.done = function done(bundleId) {
+	  publish(bundleId, []);
+	};
+	
+	
+	/**
+	 * Reset loadjs dependencies statuses
+	 */
+	loadjs.reset = function reset() {
+	  bundleIdCache = {};
+	  bundleResultCache = {};
+	  bundleCallbackQueue = {};
+	};
+	
+	
+	/**
+	 * Determine if bundle has already been defined
+	 * @param String} bundleId - The bundle id
+	 */
+	loadjs.isDefined = function isDefined(bundleId) {
+	  return bundleId in bundleIdCache;
+	};
+	
+	
+	// export
+	return loadjs;
+	
+})();
+
+//jquery-visible
+$.fn.isInViewport = function() {
+	var elementTop = $(this).offset().top;
+	var elementBottom = elementTop + $(this).outerHeight();
+	var viewportTop = $(window).scrollTop();
+	var viewportBottom = viewportTop + $(window).height();
+	return elementBottom > viewportTop && elementTop < viewportBottom;
+};
+
+
+String.prototype.stripSlashes = function(){
+    return this.replace(/\\(.)/mg, "$1");
+}
+
+
+function utl_param(url, name){
+	return (RegExp(name + '=' + '(.+?)(&|$)').exec(url)||[,null])[1];
+}
+
+(function($){
+	$.fn.shiftClick = function() {
+		var lastSelected;
+		var checkBoxes = $(this);
+		this.each(function() {
+			$(this).click(function(ev) {
+				if (ev.shiftKey) {
+					var last = checkBoxes.index(lastSelected);
+					var first = checkBoxes.index(this);
+					var start = Math.min(first, last);
+					var end = Math.max(first, last);
+					var chk = lastSelected.checked;
+					for (var i = start; i < end; i++) {
+						checkBoxes[i].checked = chk;
+					}
+				} else {
+					lastSelected = this;
+				}
+			})
+		});
+	};
+})(jQuery);
+
+
+$(document).ready(function(){
+$('.submenu > a').click(function(e){
+	e.preventDefault();
+	var submenu = $(this).siblings('ul');
+	var li = $(this).parents('li');
+	var submenus = $('#sidebar li.submenu ul');
+	var submenus_parents = $('#sidebar li.submenu');
+	if(li.hasClass('open'))		{
+		if(($(window).width() > 768) || ($(window).width() < 479)) {
+			submenu.slideUp();
+		} else {
+			submenu.fadeOut(250);
+		}
+		li.removeClass('open');
+	} else			{
+		if(($(window).width() > 768) || ($(window).width() < 479)) {
+			submenus.slideUp();
+			submenu.slideDown();
+		} else {
+			submenus.fadeOut(250);
+			submenu.fadeIn(250);
+		}
+		submenus_parents.removeClass('open');
+		li.addClass('open');
+	}
+});
+
+var ul = $('#sidebar > ul');
+
+$('#sidebar > a').click(function(e){
+	e.preventDefault();
+	var sidebar = $('#sidebar');
+	if(sidebar.hasClass('open'))
+	{
+		sidebar.removeClass('open');
+		ul.slideUp(250);
+	} else		{
+		sidebar.addClass('open');
+		ul.slideDown(250);
+	}
+});
+
+// === Resize window related === //
+$(window).resize(function()			{
+	if($(window).width() > 479)				{
+		ul.css({'display':'block'});
+		$('#content-header .btn-group').css({width:'auto'});
+	}
+	if($(window).width() < 479)				{
+		ul.css({'display':'none'});
+		fix_position();
+	}
+	if($(window).width() > 768)				{
+		$('#user-nav > ul').css({width:'auto',margin:'0'});
+		$('#content-header .btn-group').css({width:'auto'});
+	}
+});
+
+if($(window).width() < 468)			{
+	ul.css({'display':'none'});
+	fix_position();
+}
+if($(window).width() > 479)			{
+	$('#content-header .btn-group').css({width:'auto'});
+	ul.css({'display':'block'});
+}
+
+if(typeof tooltip === "function"){
+	$('.tip').tooltip();
+	$('.tip-left').tooltip({ placement: 'left' });
+	$('.tip-right').tooltip({ placement: 'right' });
+	$('.tip-top').tooltip({ placement: 'top' });
+	$('.tip-bottom').tooltip({ placement: 'bottom' });
+}
+
+function fix_position()			{
+	var uwidth = $('#user-nav > ul').width();
+	$('#user-nav > ul').css({width:uwidth,'margin-left':'-' + uwidth / 2 + 'px'});
+
+	var cwidth = $('#content-header .btn-group').width();
+	$('#content-header .btn-group').css({width:cwidth,'margin-left':'-' + uwidth / 2 + 'px'});
+}
+
+});
+
+
+
+/* mousetrap v1.6.0 craig.is/killing/mice */
+(function(r,t,g){function u(a,b,h){a.addEventListener?a.addEventListener(b,h,!1):a.attachEvent("on"+b,h)}function y(a){if("keypress"==a.type){var b=String.fromCharCode(a.which);a.shiftKey||(b=b.toLowerCase());return b}return k[a.which]?k[a.which]:p[a.which]?p[a.which]:String.fromCharCode(a.which).toLowerCase()}function D(a){var b=[];a.shiftKey&&b.push("shift");a.altKey&&b.push("alt");a.ctrlKey&&b.push("ctrl");a.metaKey&&b.push("meta");return b}function v(a){return"shift"==a||"ctrl"==a||"alt"==a||
+"meta"==a}function z(a,b){var h,c,e,g=[];h=a;"+"===h?h=["+"]:(h=h.replace(/\+{2}/g,"+plus"),h=h.split("+"));for(e=0;e<h.length;++e)c=h[e],A[c]&&(c=A[c]),b&&"keypress"!=b&&B[c]&&(c=B[c],g.push("shift")),v(c)&&g.push(c);h=c;e=b;if(!e){if(!n){n={};for(var l in k)95<l&&112>l||k.hasOwnProperty(l)&&(n[k[l]]=l)}e=n[h]?"keydown":"keypress"}"keypress"==e&&g.length&&(e="keydown");return{key:c,modifiers:g,action:e}}function C(a,b){return null===a||a===t?!1:a===b?!0:C(a.parentNode,b)}function c(a){function b(a){a=
+a||{};var b=!1,m;for(m in n)a[m]?b=!0:n[m]=0;b||(w=!1)}function h(a,b,m,f,c,h){var g,e,k=[],l=m.type;if(!d._callbacks[a])return[];"keyup"==l&&v(a)&&(b=[a]);for(g=0;g<d._callbacks[a].length;++g)if(e=d._callbacks[a][g],(f||!e.seq||n[e.seq]==e.level)&&l==e.action){var q;(q="keypress"==l&&!m.metaKey&&!m.ctrlKey)||(q=e.modifiers,q=b.sort().join(",")===q.sort().join(","));q&&(q=f&&e.seq==f&&e.level==h,(!f&&e.combo==c||q)&&d._callbacks[a].splice(g,1),k.push(e))}return k}function g(a,b,m,f){d.stopCallback(b,
+b.target||b.srcElement,m,f)||!1!==a(b,m)||(b.preventDefault?b.preventDefault():b.returnValue=!1,b.stopPropagation?b.stopPropagation():b.cancelBubble=!0)}function e(a){"number"!==typeof a.which&&(a.which=a.keyCode);var b=y(a);b&&("keyup"==a.type&&x===b?x=!1:d.handleKey(b,D(a),a))}function k(a,c,m,f){function e(c){return function(){w=c;++n[a];clearTimeout(r);r=setTimeout(b,1E3)}}function h(c){g(m,c,a);"keyup"!==f&&(x=y(c));setTimeout(b,10)}for(var d=n[a]=0;d<c.length;++d){var p=d+1===c.length?h:e(f||
+z(c[d+1]).action);l(c[d],p,f,a,d)}}function l(a,b,c,f,e){d._directMap[a+":"+c]=b;a=a.replace(/\s+/g," ");var g=a.split(" ");1<g.length?k(a,g,b,c):(c=z(a,c),d._callbacks[c.key]=d._callbacks[c.key]||[],h(c.key,c.modifiers,{type:c.action},f,a,e),d._callbacks[c.key][f?"unshift":"push"]({callback:b,modifiers:c.modifiers,action:c.action,seq:f,level:e,combo:a}))}var d=this;a=a||t;if(!(d instanceof c))return new c(a);d.target=a;d._callbacks={};d._directMap={};var n={},r,x=!1,p=!1,w=!1;d._handleKey=function(a,
+c,e){var f=h(a,c,e),d;c={};var k=0,l=!1;for(d=0;d<f.length;++d)f[d].seq&&(k=Math.max(k,f[d].level));for(d=0;d<f.length;++d)f[d].seq?f[d].level==k&&(l=!0,c[f[d].seq]=1,g(f[d].callback,e,f[d].combo,f[d].seq)):l||g(f[d].callback,e,f[d].combo);f="keypress"==e.type&&p;e.type!=w||v(a)||f||b(c);p=l&&"keydown"==e.type};d._bindMultiple=function(a,b,c){for(var d=0;d<a.length;++d)l(a[d],b,c)};u(a,"keypress",e);u(a,"keydown",e);u(a,"keyup",e)}if(r){var k={8:"backspace",9:"tab",13:"enter",16:"shift",17:"ctrl",
+18:"alt",20:"capslock",27:"esc",32:"space",33:"pageup",34:"pagedown",35:"end",36:"home",37:"left",38:"up",39:"right",40:"down",45:"ins",46:"del",91:"meta",93:"meta",224:"meta"},p={106:"*",107:"+",109:"-",110:".",111:"/",186:";",187:"=",188:",",189:"-",190:".",191:"/",192:"`",219:"[",220:"\\",221:"]",222:"'"},B={"~":"`","!":"1","@":"2","#":"3",$:"4","%":"5","^":"6","&":"7","*":"8","(":"9",")":"0",_:"-","+":"=",":":";",'"':"'","<":",",">":".","?":"/","|":"\\"},A={option:"alt",command:"meta","return":"enter",
+escape:"esc",plus:"+",mod:/Mac|iPod|iPhone|iPad/.test(navigator.platform)?"meta":"ctrl"},n;for(g=1;20>g;++g)k[111+g]="f"+g;for(g=0;9>=g;++g)k[g+96]=g;c.prototype.bind=function(a,b,c){a=a instanceof Array?a:[a];this._bindMultiple.call(this,a,b,c);return this};c.prototype.unbind=function(a,b){return this.bind.call(this,a,function(){},b)};c.prototype.trigger=function(a,b){if(this._directMap[a+":"+b])this._directMap[a+":"+b]({},a);return this};c.prototype.reset=function(){this._callbacks={};this._directMap=
+{};return this};c.prototype.stopCallback=function(a,b){return-1<(" "+b.className+" ").indexOf(" mousetrap ")||C(b,this.target)?!1:"INPUT"==b.tagName||"SELECT"==b.tagName||"TEXTAREA"==b.tagName||b.isContentEditable};c.prototype.handleKey=function(){return this._handleKey.apply(this,arguments)};c.addKeycodes=function(a){for(var b in a)a.hasOwnProperty(b)&&(k[b]=a[b]);n=null};c.init=function(){var a=c(t),b;for(b in a)"_"!==b.charAt(0)&&(c[b]=function(b){return function(){return a[b].apply(a,arguments)}}(b))};
+c.init();r.Mousetrap=c;"undefined"!==typeof module&&module.exports&&(module.exports=c);"function"===typeof define&&define.amd&&define(function(){return c})}})("undefined"!==typeof window?window:null,"undefined"!==typeof window?document:null);
+
+
+
+
+/* NProgress, (c) 2013, 2014 Rico Sta. Cruz - http://ricostacruz.com/nprogress
+ * @license MIT */
+;(function(root,factory){if(typeof define==='function'&&define.amd){define(factory)}else if(typeof exports==='object'){module.exports=factory()}else{root.NProgress=factory()}})(this,function(){var NProgress={};NProgress.version='0.2.0';var Settings=NProgress.settings={minimum:0.08,easing:'linear',positionUsing:'',speed:200,trickle:true,trickleSpeed:200,showSpinner:true,barSelector:'[role="bar"]',spinnerSelector:'[role="spinner"]',parent:'body',template:'<div class="bar" role="bar"><div class="peg"></div></div><div class="spinner" role="spinner"><div class="spinner-icon"></div></div>'};NProgress.configure=function(options){var key,value;for(key in options){value=options[key];if(value!==undefined&&options.hasOwnProperty(key))Settings[key]=value}return this};NProgress.status=null;NProgress.set=function(n){var started=NProgress.isStarted();n=clamp(n,Settings.minimum,1);NProgress.status=(n===1?null:n);var progress=NProgress.render(!started),bar=progress.querySelector(Settings.barSelector),speed=Settings.speed,ease=Settings.easing;progress.offsetWidth;queue(function(next){if(Settings.positionUsing==='')Settings.positionUsing=NProgress.getPositioningCSS();css(bar,barPositionCSS(n,speed,ease));if(n===1){css(progress,{transition:'none',opacity:1});progress.offsetWidth;setTimeout(function(){css(progress,{transition:'all '+speed+'ms linear',opacity:0});setTimeout(function(){NProgress.remove();next()},speed)},speed)}else{setTimeout(next,speed)}});return this};NProgress.isStarted=function(){return typeof NProgress.status==='number'};NProgress.start=function(){if(!NProgress.status)NProgress.set(0);var work=function(){setTimeout(function(){if(!NProgress.status)return;NProgress.trickle();work()},Settings.trickleSpeed)};if(Settings.trickle)work();return this};NProgress.done=function(force){if(!force&&!NProgress.status)return this;return NProgress.inc(0.3+0.5*Math.random()).set(1)};NProgress.inc=function(amount){var n=NProgress.status;if(!n){return NProgress.start()}else if(n>1){return}else{if(typeof amount!=='number'){if(n>=0&&n<0.2){amount=0.1}else if(n>=0.2&&n<0.5){amount=0.04}else if(n>=0.5&&n<0.8){amount=0.02}else if(n>=0.8&&n<0.99){amount=0.005}else{amount=0}}n=clamp(n+amount,0,0.994);return NProgress.set(n)}};NProgress.trickle=function(){return NProgress.inc()};(function(){var initial=0,current=0;NProgress.promise=function($promise){if(!$promise||$promise.state()==="resolved"){return this}if(current===0){NProgress.start()}initial++;current++;$promise.always(function(){current--;if(current===0){initial=0;NProgress.done()}else{NProgress.set((initial-current)/initial)}});return this}})();NProgress.render=function(fromStart){if(NProgress.isRendered())return document.getElementById('nprogress');addClass(document.documentElement,'nprogress-busy');var progress=document.createElement('div');progress.id='nprogress';progress.innerHTML=Settings.template;var bar=progress.querySelector(Settings.barSelector),perc=fromStart?'-100':toBarPerc(NProgress.status||0),parent=document.querySelector(Settings.parent),spinner;css(bar,{transition:'all 0 linear',transform:'translate3d('+perc+'%,0,0)'});if(!Settings.showSpinner){spinner=progress.querySelector(Settings.spinnerSelector);spinner&&removeElement(spinner)}if(parent!=document.body){addClass(parent,'nprogress-custom-parent')}parent.appendChild(progress);return progress};NProgress.remove=function(){removeClass(document.documentElement,'nprogress-busy');removeClass(document.querySelector(Settings.parent),'nprogress-custom-parent');var progress=document.getElementById('nprogress');progress&&removeElement(progress)};NProgress.isRendered=function(){return!!document.getElementById('nprogress')};NProgress.getPositioningCSS=function(){var bodyStyle=document.body.style;var vendorPrefix=('WebkitTransform'in bodyStyle)?'Webkit':('MozTransform'in bodyStyle)?'Moz':('msTransform'in bodyStyle)?'ms':('OTransform'in bodyStyle)?'O':'';if(vendorPrefix+'Perspective'in bodyStyle){return'translate3d'}else if(vendorPrefix+'Transform'in bodyStyle){return'translate'}else{return'margin'}};function clamp(n,min,max){if(n<min)return min;if(n>max)return max;return n}function toBarPerc(n){return(-1+n)*100}function barPositionCSS(n,speed,ease){var barCSS;if(Settings.positionUsing==='translate3d'){barCSS={transform:'translate3d('+toBarPerc(n)+'%,0,0)'}}else if(Settings.positionUsing==='translate'){barCSS={transform:'translate('+toBarPerc(n)+'%,0)'}}else{barCSS={'margin-left':toBarPerc(n)+'%'}}barCSS.transition='all '+speed+'ms '+ease;return barCSS}var queue=(function(){var pending=[];function next(){var fn=pending.shift();if(fn){fn(next)}}return function(fn){pending.push(fn);if(pending.length==1)next()}})();var css=(function(){var cssPrefixes=['Webkit','O','Moz','ms'],cssProps={};function camelCase(string){return string.replace(/^-ms-/,'ms-').replace(/-([\da-z])/gi,function(match,letter){return letter.toUpperCase()})}function getVendorProp(name){var style=document.body.style;if(name in style)return name;var i=cssPrefixes.length,capName=name.charAt(0).toUpperCase()+name.slice(1),vendorName;while(i--){vendorName=cssPrefixes[i]+capName;if(vendorName in style)return vendorName}return name}function getStyleProp(name){name=camelCase(name);return cssProps[name]||(cssProps[name]=getVendorProp(name))}function applyCss(element,prop,value){prop=getStyleProp(prop);element.style[prop]=value}return function(element,properties){var args=arguments,prop,value;if(args.length==2){for(prop in properties){value=properties[prop];if(value!==undefined&&properties.hasOwnProperty(prop))applyCss(element,prop,value)}}else{applyCss(element,args[1],args[2])}}})();function hasClass(element,name){var list=typeof element=='string'?element:classList(element);return list.indexOf(' '+name+' ')>=0}function addClass(element,name){var oldList=classList(element),newList=oldList+name;if(hasClass(oldList,name))return;element.className=newList.substring(1)}function removeClass(element,name){var oldList=classList(element),newList;if(!hasClass(element,name))return;newList=oldList.replace(' '+name+' ',' ');element.className=newList.substring(1,newList.length-1)}function classList(element){return(' '+(element&&element.className||'')+' ').replace(/\s+/gi,' ')}function removeElement(element){element&&element.parentNode&&element.parentNode.removeChild(element)}return NProgress});
+
+//Add comma to numbers every three digits
+!function(i) {
+    var e = {
+        delimiter: ",",
+        divideThousand: !0,
+        delimiterRegExp: /[\.\,\s]/g
+    }
+      , n = i.fn.val;
+    i.fn.val = function(i) {
+        var e = this.data("divided");
+        return "undefined" == typeof i ? e ? e.value : n.call(this) : e ? n.call(this, i).change() : n.call(this, i)
+    }
+    ,
+    i.fn.divide = function(n) {
+        function t(i) {
+            return !i.is("input, textarea")
+        }
+        function a(i) {
+            return !isNaN(i)
+        }
+        function d(i) {
+			i = toEnglishNumber(i).replace(/[^\d-]/g,'');
+			// console.log(i);
+            if (i = i.replace(options.delimiterRegExp, ""), !a(i) && i.length > 0)
+                return console.warn(i + " is not a number"),-1;
+			
+				//
+            for (var e = "", n = i.length; n > 3; ) {
+                if (4 == i.length) {
+                    e = (options.divideThousand ? options.delimiter : "") + i.substring(1),
+                    n = 1;
+                    break
+                }
+                n -= 3,
+                e = options.delimiter + i.substring(n, n + 3) + e
+            }
+            return i.substring(0, n) + e
+        }
+        return options = i.extend({}, e, n),
+        this.each(function() {
+            var e = i(this);
+            !t(e) && e.data("divided") && e.unbind(".divide")
+        }),
+        this.each(function() {
+            var e = i(this);
+            if (t(e)) {
+                var n = d(e.text());
+                return void (n != -1 && e.text(n))
+            }
+            e.bind("input.divide change.divide", function() {
+                var i = this.value.replace(options.delimiterRegExp, "")
+                  , n = d(i)
+                  , t = e.data("divided");
+                if (n != -1) {
+                    if (!t) {
+                        t = {};
+                        var a = e.attr("name");
+                        void 0 != a ? (e.attr("name", ""),
+                        e.parent().append("<input type='hidden' name='" + a + "'>"),
+                        t.name = a) : t.name = null
+                    }
+                    t.value = i,
+                    this.value = n,
+                    e.data("divided", t),
+                    t.name && e.parent().children("input[name=" + t.name + "]").val(i)
+                }
+            }),
+            e.change()
+        }),
+        this
+    }
+}(jQuery);
