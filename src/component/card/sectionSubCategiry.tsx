@@ -49,13 +49,12 @@ const handleCardClick = (productId) => {
     router.push(`/products/${productId}`);
   };
 
-// console.log(router.asPath)
-
+  console.log(router.asPath)
 return (
     <>
         {
         categorysection.map(category=>(
-            <div key={category._id} className={`w-full flex flex-col gap-5 justify-center py-7 ${category.name === categoryName[0].name ? `bg-[${categoryName[0].bgColor}] `:  `bg-red-900`} my-10`}>
+            <div key={category._id} className={`w-full flex flex-col gap-5 justify-center rounded-3xl py-7 ${category.name === categoryName[0].name ? `bg-blue-400 `:  `bg-red-900`} my-10`}>
             <h3 className="text-center text-xl font-bold text-white">{category.name}</h3>
             <div className="flex justify-center gap-5">
             {

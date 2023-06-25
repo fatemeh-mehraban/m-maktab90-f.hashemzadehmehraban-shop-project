@@ -29,19 +29,19 @@ export default function Categorypage(){
         
     }, [slugname,category]);
     // console.log(subCategory)
-    // // console.log(category)
+    // console.log(products)
     return(
         <Layout>
 
-        <div className="flex">
+        <div className="flex p-10">
         <SidbarCategoryPage />
-        <div className="py-20 px-10 w-full">
-     {     category && <h1 className="text-right text-2xl pb-10">{category.name}</h1>}
+        <div className=" px-10 w-full">
+     {     category && <h1 className="text-right text-2xl pb-10 text-[#120052] font-bold">{category.name}</h1>}
 
         <div className="grid grid-cols-3 gap-10">
         {
        products && category && products.map(product => (
-            product.category._id === category._id &&  <CardCategoryPage  name={product.name} price={product.price} id={product._id} img={`http://localhost:8000/images/products/images/${product.images}`}/>
+            product.category._id === category._id &&  <CardCategoryPage  name={product.name} price={product.price} id={product._id} img={product.images[0]}/>
         ))
         }
         </div>

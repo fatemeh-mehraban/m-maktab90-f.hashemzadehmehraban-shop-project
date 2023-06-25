@@ -25,6 +25,7 @@ import HomeOutlinedIcon from '@mui/icons-material/HomeOutlined';
 import PersonalVideoIcon from '@mui/icons-material/PersonalVideo';
 import Inventory2OutlinedIcon from '@mui/icons-material/Inventory2Outlined';
 import { grey } from '@mui/material/colors';
+import {  useState } from "react"
 
 const drawerWidth = 240;
 
@@ -77,11 +78,11 @@ const DrawerHeader = styled('div')(({ theme }) => ({
   justifyContent: 'flex-start',
 }));
 
-export default function PersistentDrawerRight({children}:any) {
+export default function PersistentDrawerRight({children , path}:any) {
   const theme = useTheme();
-  const [open, setOpen] = React.useState(false);
+  const [open, setOpen] = React.useState(true);
   const router = useRouter()
-
+const {pathname} = useRouter()
 
 
 // ******************************
@@ -94,18 +95,20 @@ const handleRoute = (index:number)=>{
      }
      
     }
-    const handleRouteAdmin = (index:any)=>{
+    const [ selectedIndex,setselectedIndex]=useState(3)
+    const handleRouteAdmin = (e,index:any)=>{
     
     
       if( index=== 0 ){
         router.push("/products")
+        setselectedIndex(0)
         
        }else if(index=== 1){
         router.push("/Dashboard/order")
-    
+        setselectedIndex(1)
        }else if(index=== 2){
         router.push("/Dashboard/Inventory")
-    
+        setselectedIndex(2)
        }
     
        
@@ -120,7 +123,7 @@ const handleRoute = (index:number)=>{
   const handleDrawerClose = () => {
     setOpen(false);
   };
-
+ 
   return (
     <Box sx={{ display: 'flex' }}>
       <CssBaseline />
@@ -203,7 +206,7 @@ const handleRoute = (index:number)=>{
         <Divider />
         <List className="bg-gray-900 text-gray-100 h-full font-sans">
           {['کالاها', 'سفارش ها', 'موجودی کالا'].map((text, index) => (
-            <ListItem key={text} disablePadding sx={{ display: 'block' }}  onClick={()=>handleRouteAdmin(index)} className="font-sans">
+            <ListItem key={text} disablePadding sx={{ display: 'block' }}  onClick={(e)=>handleRouteAdmin(e,index)} className={`font-sans ${pathname===`/${path}`&& index === selectedIndex? "bg-white text-black" : ""}`}>
               {/* <Link href="/"> */}
               <ListItemButton
                 sx={{

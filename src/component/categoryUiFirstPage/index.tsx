@@ -52,6 +52,7 @@ export default function MiniCategory() {
       // console.log(item);
     }
   };
+      // console.log(Url);
 
 
   useEffect(() => {

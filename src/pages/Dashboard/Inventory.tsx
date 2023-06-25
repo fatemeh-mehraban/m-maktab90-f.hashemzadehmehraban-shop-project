@@ -18,7 +18,7 @@ export function Inventory() {
 
 
 
-      <PersistentDrawerRight>
+      <PersistentDrawerRight path="Dashboard/Inventory">
       <div className=" w-full flex justify-center items-csnter px-5"> 
   
       <InventoryTable search={search} limit={4}/>

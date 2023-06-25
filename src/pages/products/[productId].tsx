@@ -1,18 +1,26 @@
 import { useRouter } from 'next/router';
 import Layout from '@/layout/layout';
-import { GlobalContext } from '../../pages/api/context/GlobalContext';
-import { useState, useContext, useEffect } from 'react';
+import { useState, useEffect,useCallback } from 'react';
 import axios from 'axios';
 import Image from 'next/image';
 import { getCategory } from '@/lib/services/axios';
-
+import usestore from '@/store';
+import Cookies from "universal-cookie";
+import { cloneDeep } from 'lodash';
 // {products.category.name}
 const ProductPage = () => {
     const router = useRouter();
     const [products, setProducts]= useState([])
+    const [saveProducts, setSaveProducts]= useState([])
     const [Allproducts, setAllProducts]= useState([])
     const [category, setCategory]= useState([])
     const [productcategory, setProductcategory]= useState([])
+    const [quantityProduct, setquantityProduct]= useState()
+    const setBasket = usestore((state) => state.setBasket)
+    const basket = usestore((state) => state.basket)
+    const cookies = new Cookies();
+    const counter = usestore((state) => state.counter)
+    const setCounter = usestore((state) => state.setCounter)
 
     const {productId} = router.query;
 useEffect(()=>{
@@ -25,7 +33,9 @@ useEffect(()=>{
     setCategory(res.data.data.categories)
     setProductcategory(res.data.data.categories.find(item=> products && products.category && item._id === products.category._id ))
   })
-},[])
+},[category])
+
+
 const handleCardClick = (product) => {
   // console.log("1")
   router.push(`/products/${product._id}`);
@@ -33,6 +43,24 @@ const handleCardClick = (product) => {
 
 };
         // console.log(Allproducts)
+        const handleAddCart = (products) => {
+          const data={
+            ...products,
+            quantityProduct:counter,
+            totalprice:products.price*counter
+          }
+          setBasket(data);
+          router.push('/cart');
+        }
+      useEffect(()=>{
+        localStorage.setItem('data', JSON.stringify(basket))
+      },[basket])
+        if (!products) {
+          // Loading state
+          return <div>Loading...</div>;
+        }
+        
+    
   return (
     <>
       <Layout>
@@ -75,17 +103,19 @@ const handleCardClick = (product) => {
           <input
             type="number"
             className="w-24 border px-2 text center"
+            // value="1"
             min="1"
             max={products && products.quantity}
             onChange={(e) => {
               const value = parseInt(e.target.value);
+              setCounter(+value)
             }}
           />
           <button
             className="bg-[rgb(42,20,83)]  text-white rounded p-5 px-10 block mt-10"
             // onClick={incrementQuantity}
           >
-            <div className="flex gap-3">
+            <div className="flex gap-3" onClick={()=>handleAddCart(products)}>
               افزودن به سبد خرید{' '}
               <svg
                 xmlns="http://www.w3.org/2000/svg"

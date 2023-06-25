@@ -10,8 +10,8 @@ export const getCategory = async ()=>{
   return res
   }
   // *****************************************************
-  export const getProduct = (page:number)=>{
-    const res = axios.get(`http://localhost:8000/api/products?page=${page}&limit=3&fields=-rating,-createdAt,-updatedAt,-__v&sort=price&quantity[gte]=8`)
+  export const getProduct =async (page:number)=>{
+    const res =await axios.get(`http://localhost:8000/api/products?page=${page}&limit=3&fields=-rating,-createdAt,-updatedAt,-__v&sort=price&quantity[gte]=8`)
   return res
 }
 // getProduct().then(res=>console.log(res.data.total_pages))

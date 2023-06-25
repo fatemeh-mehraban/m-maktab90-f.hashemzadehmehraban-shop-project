@@ -8,6 +8,7 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import { useEffect ,useState} from 'react';
+import { useRouter } from "next/router";
 import axios from 'axios';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import ArrowDropUpIcon from '@mui/icons-material/ArrowDropUp';
@@ -26,6 +27,7 @@ import usestore from "../../store"
 import Image from 'next/image'
 
 const ProductTable = ({limit}:{limit:number}) => {
+  const router= useRouter()
   const [data , setData] = useState([])
   const [page , setPage] = useState(1)
   const [category , setCategory] = useState([])
@@ -35,6 +37,7 @@ const ProductTable = ({limit}:{limit:number}) => {
   const [pageData , setPageData] = useState([])
 const reload = usestore((state) => state.reload)
 const setReload = usestore((state) => state.setReload)
+
   useEffect(() => {
     axios.get(`http://localhost:8000/api/products`)
       .then((response) => {
@@ -49,6 +52,7 @@ const setReload = usestore((state) => state.setReload)
       .then((response) => {
             setData(response.data.data.products)
             setCopyData(data)
+            router.push(`/products?page=${page}`);
     })
   }, [limit,page,reload])
 

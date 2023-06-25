@@ -24,6 +24,8 @@ import FormControl from '@mui/material/FormControl'
 import InputLabel from '@mui/material/InputLabel';
 import usestore from "../../store"
 import axios from 'axios';
+import swal from 'sweetalert';
+
 // import UploadImages from '../UploadImages'
 import 'react-quill/dist/quill.snow.css';
 export default function FormDialog(row:any , userName:any) {
@@ -181,13 +183,18 @@ console.log(row)
 
     newdata.append('brand', 'apple');
     newdata.append('thumbnail', thumbnailSrc);
-    imgsSrc.map((item: any) => {
+    imgName.map((item: any) => {
     newdata.append('images', item);
     })
-    axios.post(`http://localhost:8000/api/products`, newdata)
+    if(Name!==null && price!==null && quantity!==null && categoryValue!==null && subcategoryValue!==null && editor!==null && thumbnailSrc!==null && imgName.length>0){
+      axios.post(`http://localhost:8000/api/products`, newdata)
+      swal(`${Name}`, ` !به محصولات اضافه شد`, "success")
+    }else{
+      swal(`اخطار`, ` !تمام فیلد ها باید پر شوند`, "error")
+    }
     setReload(!reload)
     setOpen(false)
-
+    
 
 
   };
