@@ -19,6 +19,7 @@ import { useForm } from "react-hook-form";
 import { z } from "Zod";
 // import { zodResolver } from "@hookform/resolvers/zod";
 import { zodResolver } from '@hookform/resolvers/zod';
+import swal from 'sweetalert';
 
 
 
@@ -70,10 +71,12 @@ const adminLogin = ({username,password}:any)=>{
   axios.post('http://localhost:8000/api/auth/login',{username,password})
   .then((res:any)=>{
       if(res.data.status === "success"){     
-          localStorage.setItem("accessToken","JWT_ACCESS_TOKEN_SECRET=c44715faa99ebc0970a03f15da0300da7936ddf09ebe7d9aa980bd4f5d5f6fcf ")
           cookies.set("accessToken",res.data.token.accessToken)
           cookies.set("refreshToken",res.data.token.accessToken)
-          router.push("/Dashboard/order")
+          cookies.set("rol",res.data.data.user.role)
+          cookies.set("id",res.data.data.user._id)
+          // console.log(res.data.data.user.role)
+          res.data.data.user.role === "ADMIN" ? router.push("/Dashboard/order"): router.push("/")
             
       }else{
           alert(res.data.message)
@@ -81,7 +84,7 @@ const adminLogin = ({username,password}:any)=>{
     })
     .catch(error=>{
    
-        alert("اطلاعات شما با اطلاعات کاربر مغایرت دارد!")
+      swal(``, `کاربری با این اطلاعات ثبت نام نکرده است!`, "error")
     })
     // const token= cookies.get("accessToken")
 }
@@ -94,6 +97,7 @@ const login =(e:any)=>{
    console.log(e)
    admins.username=""
    admins.password=""
+   setOpen(false)
 }
 
 

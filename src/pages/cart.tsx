@@ -1,6 +1,7 @@
 import CardCart from '@/component/card/cardCart';
 import Layout from '@/layout/layout';
 import Button from '@/component/kit/button';
+import MaxWidthDialog from '@/component/modal/userModal';
 import Link from 'next/link';
 import CallIcon from '@mui/icons-material/Call';
 import WhatsAppIcon from '@mui/icons-material/WhatsApp';
@@ -66,8 +67,8 @@ const[totalPrice,setTotalPrice]=useState(0)
                 </div>
 
 
-                <Button varients="pay" text=" پرداخت و خرید"/>
-            </div>
+                <MaxWidthDialog/>
+                 </div>
                 <div className="w-72 h-96 border bg-[#120051] flex flex-col gap-6 text-white items-center rounded-xl py-3">
                     <Image src="/barishow-footer (1).png" width={150} height={150}/>
                     <Link href="/" className="mt-10">تماس با ما <CallIcon sx={{mr:"10px"}}/></Link>

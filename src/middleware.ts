@@ -4,8 +4,8 @@ import { NextRequest, NextResponse } from "next/server";
 
 export function middleware(request: NextRequest) {
   const token = request.cookies.get("accessToken")?.value;
-  if (!token) return NextResponse.redirect(new URL("/", request.url));
-  // return NextResponse.redirect(new URL("/Dashboard", request.url))
+  const rol = request.cookies.get("rol")?.value;
+  if (rol==="USER") return NextResponse.redirect(new URL("/", request.url));
   NextResponse.next();
 }
 
