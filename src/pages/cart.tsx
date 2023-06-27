@@ -11,12 +11,14 @@ import MiniCardProduct2 from '@/component/card/cardHomePage';
 import { useState, useEffect } from 'react';
 import axios from "axios"
 import usestore from '@/store';
+import Cookies from "universal-cookie";
 
 export default function cart() {
 const[products,setProducts]=useState([])
 const[totalPrice,setTotalPrice]=useState(0)
         const basket = usestore((state) => state.basket)
         const counter = usestore((state) => state.counter)
+        const cookies = new Cookies();
 
     useEffect(()=>{
     axios.get("http://localhost:8000/api/products").then(res =>{
@@ -34,6 +36,20 @@ const[totalPrice,setTotalPrice]=useState(0)
 
         console.log(basket)
         console.log(totalPrice)
+},[counter])
+
+    useEffect(()=>{
+        const id = cookies.get("id");
+        let data={
+            user: id,
+            products: [
+              {
+                product:products._id,
+                count:counter
+              }
+            ],
+            "deliveryStatus": false
+          }
 },[counter])
 
   return (

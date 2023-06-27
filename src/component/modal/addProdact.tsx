@@ -25,12 +25,24 @@ import InputLabel from '@mui/material/InputLabel';
 import usestore from "../../store"
 import axios from 'axios';
 import swal from 'sweetalert';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { z } from "Zod";
+import { useForm } from "react-hook-form";
 
-// import UploadImages from '../UploadImages'
 import 'react-quill/dist/quill.snow.css';
 export default function FormDialog(row:any , userName:any) {
+
+  const personSchema = z.object({
+    name: z.string().min(1, { message: "نام وارد نشده  است" }),
+    category: z.string().min(1, { message: "دسته بندی وارد نشده  است" }),
+    // subcategory: z.string().min(1, { message: "زیرمجموعه وارد نشده است" }),
+    inventor: z.string().min(1, { message: "تعداد وارد نشده است" }),
+    price: z.string().min(4, { message: "قیمت وارد نشده است" }),
+    // description: z.string().min(1, { message: " توضیحات وارد نشده است  " }),
+  })
+  const { register , handleSubmit , formState:{errors} } = useForm( {resolver: zodResolver(personSchema)});
+
   const [open, setOpen] = React.useState(false);
-  // const Editor = dynamic(() => import("../editor/editor"), { ssr: false });
   const ReactQuill = useMemo(
     () => dynamic(import('react-quill'), { ssr: false }),
     []
@@ -143,7 +155,7 @@ setThumbnailSrc(Array[0]);
   };
 
 
-console.log(row)
+// console.log(row)
 
   useEffect(() => {
     getCategory().then(res=> setCategory(res.data.data.categories))
@@ -173,7 +185,7 @@ console.log(row)
   };
 
 
-  const handleSubmit = () => {
+  const handleSubmit2 = () => {
     newdata.append('name', Name);
     newdata.append('price', price)
     newdata.append('quantity', quantity)
@@ -182,16 +194,14 @@ console.log(row)
     newdata.append('description', editor)
 
     newdata.append('brand', 'apple');
-    newdata.append('thumbnail', thumbnailSrc);
+    // newdata.append('thumbnail', thumbnailSrc);
     imgName.map((item: any) => {
     newdata.append('images', item);
     })
-    if(Name!==null && price!==null && quantity!==null && categoryValue!==null && subcategoryValue!==null && editor!==null && thumbnailSrc!==null && imgName.length>0){
+    // if(Name!==null && price!==null && quantity!==null && categoryValue!==null && subcategoryValue!==null && editor!==null && imgName.length>0){
       axios.post(`http://localhost:8000/api/products`, newdata)
       swal(`${Name}`, ` !به محصولات اضافه شد`, "success")
-    }else{
-      swal(`اخطار`, ` !تمام فیلد ها باید پر شوند`, "error")
-    }
+    // }
     setReload(!reload)
     setOpen(false)
     
@@ -217,7 +227,7 @@ console.log(row)
       <Dialog open={open} onClose={handleClose} dir="rtl"  >
         <DialogTitle> محصول جدید</DialogTitle>
         <DialogContent sx={{display:"flex" , flexDirection: 'column', gap:4}}>
-        <Box component="form" noValidate autoComplete="off" className="flex flex-col items-center gap-3 my-5" dir="rtl">
+        <Box component="form" noValidate autoComplete="off" className="flex flex-col items-center gap-3 my-5" dir="rtl" onSubmit={handleSubmit(handleSubmit2)}>
 
 
         <div className="flex flex-col gap-5 w-full ">
@@ -237,20 +247,21 @@ console.log(row)
 
 {/* ***************************************************** */}
 
-<div className="flex flex-col gap-5 w-full">
+{/* <div className="flex flex-col gap-5 w-full">
     <div className="flex gap-10">
       <div>
         <Image src={currentThumbnail} alt="" width={150} height={150}/>
       </div>
     </div>
     <input type="file" ref={fileInputRef2} onChange={handleThumbnailChange } onClick={() => fileInputRef2 && fileInputRef2.current.click()} />
-  </div>
+  </div> */}
 
 
 
 {/* ***************************************** */}
 
-        <TextField name="name"  label="نام کالا" sx={{width:1}} onChange={(e)=>handleChange(e)}/>
+        <TextField name="name"  label="نام کالا" inputProps={{...register("name",{required:"نام کاربری را وارد کنید"})}} sx={{width:1}} onChange={(e)=>handleChange(e)}/>
+        {errors.name && <p className="text-red-500 text-xs pb-5">نام کاربری را وارد کنید!</p>}
 
 
         <FormControl fullWidth>
@@ -261,6 +272,7 @@ console.log(row)
           value={categoryValue}
           label="دسته بندی"
           onChange={handleChangeCategory}
+          inputProps={{...register("category",{required:"دسته بندی  را وارد کنید"})}}
         >
           { category && category.map((item:any)=>  (
     <MenuItem key={item.id} defaultValue={item.name} value={item._id} sx={{paddingX:"50px"}} dir="rtl">{item.name}</MenuItem> 
@@ -268,6 +280,7 @@ console.log(row)
         }
 
         </Select>
+        {errors.category && <p className="text-red-500 text-xs pb-5">نام دسته بندی را وارد کنید!</p>}
         </FormControl>
 {/* /* **************************************************************************************** */}
 
@@ -279,6 +292,8 @@ console.log(row)
           value={subcategoryValue}
           label=" زیرمجموعه"
           onChange={handleChangesub}
+          inputProps={{...register("subCategory",{required:" نام زیرمجموعه  را وارد کنید"})}}
+
         >
           {subCategory && subCategory.map((item:any)=>  (
     <MenuItem key={item.id} defaultValue={item.name} value={item._id} sx={{paddingX:"50px"}} dir="rtl">{item.name}</MenuItem> 
@@ -287,11 +302,16 @@ console.log(row)
         }
 
         </Select>
+        {/* {errors.subcategory && <p className="text-red-500 text-xs pb-5">نام  زیرمجموعه را وارد کنید!</p>} */}
+
         </FormControl> 
 {/* ************************************************************* */}
-        <TextField name="quantity"  label="موجودی" sx={{width:1}} onChange={(value)=>handlePriceChange(value)}
-/>
-        <TextField name="price"  label="قیمت" sx={{width:1}} onChange={(e)=>handlequantityChange(e)}/>
+        <TextField name="inventor" inputProps={{...register("inventor",{required:" تعداد  را وارد کنید"})}}  label="موجودی" sx={{width:1}} onChange={(value)=>handlePriceChange(value)}
+/>     
+   {errors.inventory && <p className="text-red-500 text-xs pb-5">  تعداد را وارد کنید!</p>}
+
+        <TextField name="price" inputProps={{...register("price",{required:" قیمت  را وارد کنید"})}}  label="قیمت" sx={{width:1}} onChange={(e)=>handlequantityChange(e)}/>
+        {errors.price && <p className="text-red-500 text-xs pb-5">  قیمت را وارد کنید!</p>}
 
 
         <Box className="reletive w-full mt-10">
@@ -308,13 +328,14 @@ console.log(row)
         onchange
       }
     />
- editTables
+   {/* {errors.description && <p className="text-red-500 text-xs p-3"> توضیحات را به درستی وارد کنید!</p>} */}
+
         </Box>
     
 
         <DialogActions>
           <Button onClick={handleClose}>لغو</Button>
-          <Button onClick={handleSubmit}>ذخیره</Button>
+          <Button type="submit" >ذخیره</Button>
         </DialogActions>
     </Box>
 

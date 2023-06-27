@@ -17,11 +17,15 @@ reload: boolean
 setReload: (x: any) => void
 basket:any[]
 setBasket: (x: any) => void
+DeleteBasket: (x: any) => void
 deleteCart:(id:string)=> void
 counter:number,
 setCounter:(x:number)=> void
 increase: () => void;
 decrease: () => void;
+
+CartUser:any[]
+ChangeCartUser:(x:any)=>void
 }
 const getInitialLoggedIn = () => {
 if (typeof window !== 'undefined') {
@@ -50,12 +54,25 @@ setBasket:  (x) =>{
   localStorage.setItem('data', JSON.stringify([...basket, x]))
   set(() => ({ basket:[...basket, x]} ))
 },
+DeleteBasket:  (x) =>{
+  const basket = get().basket
+  const data = localStorage.getItem('data')
+  localStorage.setItem('lastCartUser', data)
+  localStorage.setItem('data', JSON.stringify([]))
+  set((x) => ({ basket:[x]} ))
+},
 deleteCart:(id)=>{
   const basket= get().basket
   const deleteone = basket.filter(item=>item._id!== id)
   localStorage.setItem('data', JSON.stringify(deleteone))
   set(() => ({ basket:deleteone} ))
 },
+
+CartUser:[],
+ChangeCartUser:(x) => set((state) => ({ CartUser: x })),
+
+
+
 isCategories: false,
 setIsCategories: () =>
 set((state) => ({ isCategories: !state.isCategories })),

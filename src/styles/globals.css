@@ -114,5 +114,11 @@ table,button,li,ul{
    input[type="radio"]:checked + label{
       color: #3490DC
    }
+   .textField label{
+    left: auto;
+    right: auto;
+    transform-origin: top right;
+    text-align:right;
+   }
    
    

@@ -17,8 +17,8 @@ import { TextField } from "@mui/material";
 import { useForm } from "react-hook-form";
 import { z } from "Zod";
 import Button from '@/component/kit/button';
-
-
+import GoShaparak from "./shaparak";
+import swal from 'sweetalert';
 
 export default function MaxWidthDialog() {
 
@@ -28,6 +28,7 @@ export default function MaxWidthDialog() {
   const [maxWidth, setMaxWidth] = useState<DialogProps["maxWidth"]>("sm");
   const [user, setUser] = useState();
 const [date,setDate]= useState()
+const DeleteBasket = usestore((state) => state.DeleteBasket)
 
 
   const cookies = new Cookies();
@@ -45,7 +46,12 @@ const [date,setDate]= useState()
     setOpen(false)
   }
 
-
+  const handlePay = () => {
+    router.push("/")
+  swal(" عملیات با موفقیت ثبت شد!","","success")
+  DeleteBasket([])
+  setOpen(false);
+};
 
   return (
     <>
@@ -77,7 +83,8 @@ const [date,setDate]= useState()
 
 
         <DialogActions className="flex gap-2">
-        <Button varients="pay" text=" پرداخت " type="submit"/>
+        {/* <GoShaparak /> */}
+          <Button varients="pay" text=" پرداخت " onClick={handlePay}/>
           <Button varients="pay" text=" لغو " onClick={handleClose}/>
         </DialogActions>
         {/* <input type="submit" value={"submit"}/> */}

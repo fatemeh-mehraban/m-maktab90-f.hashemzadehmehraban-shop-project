@@ -4,19 +4,26 @@ import CardCategoryPage from "@/component/card/cardCategoryPage"
 import SidbarCategoryPage from "@/component/sidbar/sidbarCategory"
 import FourOhFour from "@/component/404"
 import Layout from '@/layout/layout'
-
 import { useRouter } from "next/router"
 import { useEffect, useState } from "react"
-
+import Stack from '@mui/material/Stack';
+import Typography from '@mui/material/Typography';
+import Pagination from '@mui/material/Pagination';
 
 export default function Categorypage(){
     const [category, setCategory]=useState([])
     const [subCategory, setSubCategory]=useState([])
     const [issubCategory, setisSubCategory]=useState(false)
     const [products, setProducts]=useState([])
+    const [page, setPage]=useState(1)
+    const perPage = 6
     const [isSubCategoryMatched , setisSubCategoryMatched ]=useState([])
     const router= useRouter()
     const {slugname,asPath}= router.query
+
+
+
+
 
     useEffect(() => {
         getCategory().then(res => setCategory(res.data.data.categories.find(item => slugname && item.slugname === slugname)));
@@ -24,30 +31,49 @@ export default function Categorypage(){
             const value = res.data.data.subcategories.filter(subcat => category && subcat.category === category._id)
             setSubCategory(value)
         });
-        axios.get("http://localhost:8000/api/products?limit=1000").then(res =>setProducts(res.data.data.products));
+        axios.get("http://localhost:8000/api/products?limit=1000").then(res => {
+            const x= res.data.data.products.filter(item=>item.category._id === category._id)
+            setProducts(x)
+        });
       
         
     }, [slugname,category]);
     // console.log(subCategory)
     // console.log(products)
+    const handleChange=(event,value)=>{
+    setPage(value)
+}
+const getPaginatedData=()=>{
+    const startIndex=(page-1)*perPage
+    const endIndex=startIndex + perPage
+    return products.slice(startIndex,endIndex)
+}
     return(
         <Layout>
 
-        <div className="flex p-10">
+        <div className="flex p-10 relative">
         <SidbarCategoryPage />
-        <div className=" px-10 w-full">
+        <div className=" px-10 w-full ">
      {     category && <h1 className="text-right text-2xl pb-10 text-[#120052] font-bold">{category.name}</h1>}
 
-        <div className="grid grid-cols-3 gap-10">
+        <div className="grid grid-cols-3 gap-10 pb-40">
         {
-       products && category && products.map(product => (
-            product.category._id === category._id &&  <CardCategoryPage  name={product.name} price={product.price} id={product._id} img={product.images[0]}/>
+       products && category && getPaginatedData().map(product => (
+             <CardCategoryPage  name={product.name} price={product.price} id={product._id} img={product.images[0]}/>
         ))
         }
         </div>
         </div>
+<div className="absolute bottom-0 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
+<Stack spacing={2} dir="ltr">
+      <Typography>Page: {page}</Typography>
+      <Pagination count={Math.ceil(products.length / perPage)} page={page} onChange={handleChange} />
+    </Stack>
+</div>
+
  
-  
+
+
 
         </div>
         </Layout>
