@@ -74,8 +74,8 @@ const token =   cookie.get("accessToken")
 export default function Header() {
   const setIsCategories = usestore((state) => state.setIsCategories)
   const isCategories = usestore((state) => state.isCategories)
-
-
+  const cookies = new Cookies();
+  const rol = cookies.get("rol")
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
     const [mobileMoreAnchorEl, setMobileMoreAnchorEl] =
       useState<null | HTMLElement>(null);
@@ -108,6 +108,8 @@ export default function Header() {
     const handleLogout =()=>{
       cookie.remove('accessToken');
       cookie.remove('refreshToken');
+      cookie.remove('rol');
+      cookie.remove('id');
     }
   
     const menuId = 'primary-search-account-menu';
@@ -145,6 +147,7 @@ export default function Header() {
        
       </Menu>
     );
+    // console.log(rol)
   return (
     <header className=" w-full z-50">
 
@@ -226,7 +229,7 @@ export default function Header() {
 
 
  
-            <MaxWidthDialog /> 
+          { rol === "USER" ? <p className="curser-pointer" onClick={handleLogout}>خروج</p> :  <MaxWidthDialog />   }
 
 
 

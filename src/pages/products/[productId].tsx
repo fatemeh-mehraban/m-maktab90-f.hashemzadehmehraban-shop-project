@@ -17,6 +17,7 @@ const ProductPage = () => {
     const [productcategory, setProductcategory]= useState([])
     const [quantityProduct, setquantityProduct]= useState()
     const setBasket = usestore((state) => state.setBasket)
+    const setorder = usestore((state) => state.setorder)
     const basket = usestore((state) => state.basket)
     const cookies = new Cookies();
     const counter = usestore((state) => state.counter)
@@ -36,19 +37,31 @@ useEffect(()=>{
 },[category])
 
 
-const handleCardClick = (product) => {
+const handleCardClick = (product:any) => {
   // console.log("1")
   router.push(`/products/${product._id}`);
   setProducts(product)
 
 };
         // console.log(Allproducts)
-        const handleAddCart = (products) => {
+        const handleAddCart = (productss:any) => {
           const data={
-            ...products,
+            ...productss,
             quantityProduct:counter,
-            totalprice:products.price*counter
+            totalprice:productss.price*counter
           }
+          const product1={
+            products:[
+              {
+                product:productss,
+                id:products._id,
+
+              }
+            ] ,
+            counter:counter,
+            totalprice:productss.price*counter
+          }
+          setorder(product1)
           setBasket(data);
           router.push('/cart');
         }

@@ -3,6 +3,7 @@ import { getCategory } from '@/lib/services/axios';
 import axios from 'axios';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
+import { CategoryType,ProductType } from '@/lib/services/typs';
 const categoryName = [ 
     {
 
@@ -34,17 +35,21 @@ export default function BoxCategory() {
     .then(res => {
         setProducts(res.data.data.products);
     });
-    
-    
+  
 }, []);
 
+
 useEffect(() => {
-    categoryHome.map(category=>{
-        if(categoryName[0].name===category.name) setCategorySection(prev=>[category])
-        else if(categoryName[1].name===category.name) setCategorySection(prev=>[...prev,category])
-    })
-}, [])
-const handleCardClick = (productId) => {
+  categoryHome.map((category:CategoryType) => {
+    if (categoryName[0].name === category.name) {
+      setCategorySection([category]);
+    } else if (categoryName[1].name === category.name) {
+      setCategorySection((prev) => [...prev, category]);
+    }
+  });
+}, [categoryHome]);
+
+const handleCardClick = (productId:string) => {
     // console.log("1")
     router.push(`/products/${productId}`);
   };
@@ -53,13 +58,13 @@ const handleCardClick = (productId) => {
 return (
     <>
         {
-        categorysection.map(category=>(
-            <div key={category._id} className={`w-full flex flex-col gap-5 justify-center rounded-3xl py-7 ${category.name === categoryName[0].name ? `bg-blue-400 `:  `bg-red-900`} my-10`}>
+        categorysection.map((category:CategoryType)=>(
+            <div key={category._id} className={`w-full flex flex-col gap-5 justify-center rounded-3xl py-7 ${category.name === categoryName[0].name ? `bg-gradient-to-r from-[#438FDE] to-[#593BE9] `:  `bg-gradient-to-r from-[#250A05] to-[#FB141B]`} my-10`}>
             <h3 className="text-center text-xl font-bold text-white">{category.name}</h3>
             <div className="flex justify-center gap-5">
             {
                 products 
-                .filter(product => product.category._id === category._id)
+                .filter((product:ProductType) => product.category._id === category._id)
                 .slice(0, 5)
                 .map(product=> (
                         <div

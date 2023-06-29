@@ -12,6 +12,7 @@ import { useState, useEffect } from 'react';
 import axios from "axios"
 import usestore from '@/store';
 import Cookies from "universal-cookie";
+import { useRouter } from "next/router";
 
 export default function cart() {
 const[products,setProducts]=useState([])
@@ -19,6 +20,7 @@ const[totalPrice,setTotalPrice]=useState(0)
         const basket = usestore((state) => state.basket)
         const counter = usestore((state) => state.counter)
         const cookies = new Cookies();
+        const router = useRouter()
 
     useEffect(()=>{
     axios.get("http://localhost:8000/api/products").then(res =>{
@@ -52,6 +54,11 @@ const[totalPrice,setTotalPrice]=useState(0)
           }
 },[counter])
 
+const handleClickShaparak=()=>{
+    router.push("/cart/information")
+
+}
+
   return (
     <Layout>
     <div className="p-10">
@@ -82,8 +89,9 @@ const[totalPrice,setTotalPrice]=useState(0)
                     <p> {totalPrice} تومان </p>
                 </div>
 
+                <Button varients="pay" text=" پرداخت و خرید"  onClick={handleClickShaparak}/>
 
-                <MaxWidthDialog/>
+                {/* <MaxWidthDialog/> */}
                  </div>
                 <div className="w-72 h-96 border bg-[#120051] flex flex-col gap-6 text-white items-center rounded-xl py-3">
                     <Image src="/barishow-footer (1).png" width={150} height={150}/>

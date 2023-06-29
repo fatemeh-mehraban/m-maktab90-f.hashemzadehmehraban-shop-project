@@ -5,6 +5,15 @@ import Cookies from "universal-cookie";
 interface Iusestore {
 isCategories: boolean
 setIsCategories: (x: any) => void
+
+delivery: string
+setDelivery: (x: any) => void
+
+order:any[],
+setorder: (x: any) => void
+
+
+
 isPay: string
 setIsPay: (x: any) => void
 category: any[]
@@ -18,6 +27,7 @@ setReload: (x: any) => void
 basket:any[]
 setBasket: (x: any) => void
 DeleteBasket: (x: any) => void
+// deleteBasket:(x: any) => void
 deleteCart:(id:string)=> void
 counter:number,
 setCounter:(x:number)=> void
@@ -61,13 +71,18 @@ DeleteBasket:  (x) =>{
   localStorage.setItem('data', JSON.stringify([]))
   set((x) => ({ basket:[x]} ))
 },
+
 deleteCart:(id)=>{
   const basket= get().basket
   const deleteone = basket.filter(item=>item._id!== id)
   localStorage.setItem('data', JSON.stringify(deleteone))
   set(() => ({ basket:deleteone} ))
 },
-
+// deleteBasket:()=>{
+//   const basket= get().basket
+//   localStorage.setItem('data', JSON.stringify([]))
+//   set(() => ({ basket:[]} ))
+// },
 CartUser:[],
 ChangeCartUser:(x) => set((state) => ({ CartUser: x })),
 
@@ -92,5 +107,18 @@ setCategory: (x) => set((state) => ({ category: x })),
 
 subCategory: [],
 setSubCategory: (x) => set((state) => ({ subCategory: x })),
+
+
+delivery:"",
+setDelivery: (x) => set((state) => ({ delivery: x })),
+
+
+order:[],
+setorder:(x) =>{
+  const order = get().order
+  localStorage.setItem('order', JSON.stringify([...order, x]))
+  set(() => ({ order:[...order, x]} ))
+},
+
 }))
 export default usestore

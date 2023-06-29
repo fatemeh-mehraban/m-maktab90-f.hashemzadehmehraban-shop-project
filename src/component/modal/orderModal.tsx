@@ -9,8 +9,9 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import { Box } from '@mui/material';
+import axios from "axios";
 import CloseIcon from '@mui/icons-material/Close';
-export default function FormDialogOrdaer(row:any , userName:any) {
+export default function FormDialogOrdaer({row, setIsStatus, isStatus}) {
   const [open, setOpen] = React.useState(false);
 
   const handleClickOpen = () => {
@@ -21,12 +22,33 @@ export default function FormDialogOrdaer(row:any , userName:any) {
     setOpen(false);
   };
 // console.log(row)
+
 const formatDate = (dateString: string) => {
   const date = new Date(dateString);
   const formattedDate = date.toLocaleDateString('fa-IR');
   return formattedDate;
   };
-console.log(row.row)
+
+const handledeliveryStatus = (id:string)=>{
+  console.log(row)
+
+const deliveryStatus = "true"
+const data={
+  deliveryStatus:deliveryStatus,
+  products : row.products.map((item:any)=>{
+
+    return {
+      product:item.product._id,
+      // id:item._id,
+      count:item.count
+  }
+  })
+}
+// console.log(data)
+axios.patch(`http://localhost:8000/api/orders/${id}`,data)
+setIsStatus(!isStatus)
+console.log(data)
+}
   return (
     <div >
       <Button variant="outlined" onClick={handleClickOpen} sx={{borderColor:"green" , color:"green" }}>
@@ -41,16 +63,16 @@ console.log(row.row)
         </Box>
         <DialogContent sx={{display:"flex" , flexDirection: 'column', gap:4}}>
           <DialogContentText>
-                نام کاربری : {row.userName.length > 0 && row.row.user === row.userName[0]._id && row.userName[0].lastname}
+                نام کاربری : { row.user.lastname}
           </DialogContentText>
           <DialogContentText>
-                 آدرس : {row.userName.length > 0 && row.row.user === row.userName[0]._id && row.userName[0].address}
+                 آدرس : { row.user.address}
           </DialogContentText>
           <DialogContentText>
-                 تلفن : {row.userName.length > 0 && row.row.user === row.userName[0]._id && row.userName[0].phoneNumber}
+                 تلفن : {row.user.phoneNumber}
           </DialogContentText>
           <DialogContentText>
-                 زمان سفارش : { formatDate(row.row.createdAt)}
+                 زمان سفارش : { formatDate(row.createdAt)}
           </DialogContentText>
           <table className="w-full border-2 border-green-500 overflow-x-scroll mt-5" dir="rtl">
             <thead>
@@ -63,16 +85,16 @@ console.log(row.row)
             </thead>
             <tbody>
             <tr className="border-b hover:bg-gray-100 hover:border-red-500 hover:border">
-                <th className=" w-32 p-2">{row.row.products.length >0 && row.row.products[0].product && row.row.products[0].product.name}</th>
-                <th className="">{row.row.totalPrice}</th>
-                <th className="">{row.row.products.length >0 && row.row.products[0].count}</th>
+                <th className=" w-32 p-2">{row.products.length >0 && row.products[0].product && row.products[0].product.name}</th>
+                <th className="">{row.totalPrice}</th>
+                <th className="">{row.products.length >0 && row.products[0].count}</th>
             </tr>
             </tbody>
             </table>
 
 
-          <DialogContentText sx={{bgcolor:'success.main',width:"auto",padding:1 , color:"white",mx: 'auto' }}>
-                {row.row.deliveryStatus ? "تحویل داده شده": "در انتظار تحویل"}
+          <DialogContentText sx={{bgcolor:'success.main',width:"auto",padding:1 , color:"white",mx: 'auto' }} onClick={()=>handledeliveryStatus(row._id)}>
+                {row.deliveryStatus ? "تحویل داده شده": "در انتظار تحویل"}
           </DialogContentText>
 
         </DialogContent>

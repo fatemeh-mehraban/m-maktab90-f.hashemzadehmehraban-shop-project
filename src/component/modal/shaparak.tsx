@@ -19,35 +19,63 @@ import { Component } from 'react';
 import Button from '@/component/kit/button';
 import RtlProvider from '../kit/RtlProvider';
 import { useRouter } from "next/router";
+import { useState ,useEffect} from "react";
+
+import Cookies from "universal-cookie";
 
 export default function GoShaparak() {
-  const [open, setOpen] = React.useState(false);
+  const [open, setOpen] = useState(false);
+  const [productArray, setProductArrayn] = useState(false);
   const reload = usestore((state) => state.reload)
   const setReload = usestore((state) => state.setReload)
   const router = useRouter()
+  const delivery = usestore((state) => state.delivery)
+  const basket = usestore((state) => state.basket)
+  
+  const order = usestore((state) => state.order)
+  const DeleteBasket = usestore((state) => state.DeleteBasket)
 
   const handleClickOpen = () => {
     setOpen(true);
   };
-
+// console.log(basket)
   const handleClose = () => {
     swal(" عملیات پرداخت لغو شد!","","error")
     router.push("/cart")
     setOpen(false);
   };
+  const cookies = new Cookies();
+  
   const handlePay = () => {
+    const orderArr = basket.map((item) => {
+      return {
+        product: item._id,
+        count: item.quantityProduct,
+      };
+    });
+    // console.log(orderArr)
+
+    const Order={
+      user:cookies.get("id"),
+      products:orderArr,
+      deliveryStatus:"false",
+      deliveryDate:delivery
+    }
+    console.log(order)
+    axios.post(`http://localhost:8000/api/orders`,Order)
+    DeleteBasket([])
       router.push("/")
     swal(" عملیات با موفقیت ثبت شد!","","success")
     setOpen(false);
   };
-  const handledelete =(id:string)=>{
-    axios.delete(`http://localhost:8000/api/products/${id}`).then(res=>{
+  // const handledelete =(id:string)=>{
+  //   axios.delete(`http://localhost:8000/api/products/${id}`).then(res=>{
 
-      setReload(!reload)
-      return swal("حذف شد!","","error")
+  //     setReload(!reload)
+  //     return swal("حذف شد!","","error")
 
-    })
-  }
+  //   })
+  // }
   return (
     <div>
         <Button varients="pay" text=" پرداخت " type="submit" onClick={handleClickOpen}/>
