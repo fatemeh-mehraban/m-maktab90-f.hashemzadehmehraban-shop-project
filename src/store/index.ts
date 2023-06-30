@@ -49,6 +49,7 @@ return [];
 };
 export const usestore = create((set, get) => ({
 basket:getInitialLoggedIn(),
+
 counter:1,
 setCounter: (x) => set(() => ({ counter: x })),
 increase: () => {
@@ -137,4 +138,11 @@ setorder:(x) =>{
 },
 
 }))
+export const productqun = function(id){
+ const test= usestore((state) => state.basket)
+ const target = test.find(item=>{
+  return item._id == id
+ })
+ return target.quantitypProduct
+}
 export default usestore

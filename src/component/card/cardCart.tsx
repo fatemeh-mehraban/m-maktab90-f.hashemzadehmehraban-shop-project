@@ -13,6 +13,8 @@ export default function CardCart({product}) {
     const deleteCart = usestore((state) => state.deleteCart)
     const counter = usestore((state) => state.counter)
     const setCounter = usestore((state) => state.setCounter)
+    const [quantity , setQuantity] = useState(product.quantityProduct )
+
     const router = useRouter()
 
     useEffect(()=>{
@@ -39,9 +41,9 @@ export default function CardCart({product}) {
                        <div className="flex flex-col gap-5">
                         <div className="flex gap-5">
 {                       product && <DeleteOutlineIcon color="error" fontSize="large" onClick={()=>deleteCart(product._id)}/>
-}                        <Quantity counter={product.quantityProduct} />
+}                        <Quantity product={product} quantity={quantity} setQuantity={setQuantity}/>
                         </div>
-                        <span className=" text-left p-2 px-7  text-xl text-white bg-[#120051] rounded-xl  flex justify-between"><MoneyIcon/> {product.quantityProduct * product.price}  </span>
+                        <span className=" text-left p-2 px-7  text-xl text-white bg-[#120051] rounded-xl  flex justify-between"><MoneyIcon/> {quantity * product.price}  </span>
                         </div> 
      </div>
     )

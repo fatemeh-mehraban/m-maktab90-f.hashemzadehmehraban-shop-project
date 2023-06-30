@@ -14,6 +14,10 @@ const ProductPage = () => {
     const [saveProducts, setSaveProducts]= useState([])
     const [Allproducts, setAllProducts]= useState([])
     const [category, setCategory]= useState([])
+    const [value, setValue]= useState(1)
+
+
+    
     const [productcategory, setProductcategory]= useState([])
     const [quantityProduct, setquantityProduct]= useState()
     const setBasket = usestore((state) => state.setBasket)
@@ -132,11 +136,12 @@ setBasket(data);
           <input
             type="number"
             className="w-24 border px-2 text center"
-            // value="1"
+            value={value}
             min="1"
             max={products && products.quantity}
             onChange={(e) => {
               const value = parseInt(e.target.value);
+              setValue(e.target.value)
               setCounter(+value)
             }}
           />

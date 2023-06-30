@@ -6,6 +6,7 @@ import IconButton from '@mui/material/IconButton';
 import MenuIcon from '@mui/icons-material/Menu';
 import Image from 'next/image';
 import LogoutIcon from '@mui/icons-material/Logout';
+import { useRouter } from "next/router";
 
 import { styled, alpha } from '@mui/material/styles';
 import InputBase from '@mui/material/InputBase';
@@ -111,7 +112,12 @@ export default function Header() {
       cookie.remove('rol');
       cookie.remove('id');
     }
-  
+    const router = useRouter()
+
+  const goCart = ()=>{
+    router.push("/cart")
+
+  }
     const menuId = 'primary-search-account-menu';
     
     const mobileMenuId = 'primary-search-account-menu-mobile';
@@ -222,7 +228,7 @@ export default function Header() {
               sx={{mr:2}}
             >
               <Badge badgeContent={0} color="error">
-                  <ShoppingCartIcon />
+                  <ShoppingCartIcon onClick={goCart}/>
 
               </Badge>
             </IconButton>
