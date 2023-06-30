@@ -61,8 +61,24 @@ const handleCardClick = (product:any) => {
             counter:counter,
             totalprice:productss.price*counter
           }
-          setorder(product1)
-          setBasket(data);
+          // quantityProduct
+// const update= basket.find(item=>item._id === data._id)
+// if(update){
+//   const updatebasket = basket.for(item=>{
+//     if(item._id === productss._id){
+//       return{
+//         ...item,
+//         quantityProduct:item.quantityProduct+ counter
+//       }
+//     }
+//     return item
+//   })
+// }else{
+  
+// }
+console.log(productss)
+setorder(product1)
+setBasket(data);
           router.push('/cart');
         }
       useEffect(()=>{

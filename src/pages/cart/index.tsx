@@ -17,6 +17,7 @@ import { useRouter } from "next/router";
 export default function cart() {
 const[products,setProducts]=useState([])
 const[totalPrice,setTotalPrice]=useState(0)
+const[updateBasket,setupdateBasket]=useState([])
         const basket = usestore((state) => state.basket)
         const counter = usestore((state) => state.counter)
         const cookies = new Cookies();
@@ -26,9 +27,8 @@ const[totalPrice,setTotalPrice]=useState(0)
     axios.get("http://localhost:8000/api/products").then(res =>{
 
         setProducts(res.data.data.products.sort(() => Math.random() - 0.5).slice(0,5))
-        // const initialValue = 0;
-        // setTotalPrice(basket.reduce((accumulator,current) => accumulator + current.totalprice, initialValue)) 
     })
+
 },[basket])
 
     useEffect(()=>{
@@ -36,9 +36,12 @@ const[totalPrice,setTotalPrice]=useState(0)
         const initialValue = 0;
         setTotalPrice(basket.reduce((accumulator,current) => accumulator + current.price*counter, initialValue)) 
 
-        console.log(basket)
-        console.log(totalPrice)
+        // console.log(basket)
+        // console.log(totalPrice)
 },[counter])
+
+console.log(updateBasket)
+console.log(basket)
 
     useEffect(()=>{
         const id = cookies.get("id");
@@ -68,7 +71,7 @@ const handleClickShaparak=()=>{
         </div>
         <div className="flex gap-5 w-full mt-5">
             <div className="border-2 w-full min-h-[400px] border-[#120051] rounded-xl">
-           { basket && basket.length > 0 ? basket.map(item=>(
+           {basket && basket.length > 0 ? basket.map(item=>(
             <CardCart key={item._id} product={item}/>
            )):<p className="text-xl text-center mt-20">سبد شما خالی است</p>}
             </div>

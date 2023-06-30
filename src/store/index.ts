@@ -61,8 +61,24 @@ set(state => ({ counter: state.counter - 1}))
 
 setBasket:  (x) =>{
   const basket = get().basket
+
+
+  const update= basket.find(item=>item._id === x._id)
+if(update){
+  basket.forEach(item=>{
+    if(item._id === update._id){
+      item.quantityProduct = item.quantityProduct + x.quantityProduct
+      item.totalprice = item.quantityProduct*item.price
+    }
+  })
+  
+  set(() => ({basket:basket} ))
+  localStorage.setItem('data', JSON.stringify(basket))
+
+}else{
+  set(() => ({  basket:[...basket, x]} ))
   localStorage.setItem('data', JSON.stringify([...basket, x]))
-  set(() => ({ basket:[...basket, x]} ))
+}
 },
 DeleteBasket:  (x) =>{
   const basket = get().basket

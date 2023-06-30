@@ -1,6 +1,12 @@
 import Image from 'next/image'
+import { useRouter } from "next/router";
 
 export default function CardCategoryPage({name, price,img,id}) {
+  const router = useRouter()
+
+  const handleCardClick = (productId) => {
+    router.push(`/products/${productId}`);
+  };
   return (
     <div
     className=" bg-white rounded-xl flex flex-col justify-center items-center gap-8 border border-gray-200 shadow p-2"

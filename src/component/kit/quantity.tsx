@@ -3,12 +3,14 @@ import RemoveIcon from '@mui/icons-material/Remove';
 import { useState, useEffect } from 'react';
 import usestore from '@/store';
 
-export default function Quantity() {
+export default function Quantity({counter}) {
 
-const counter = usestore((state) => state.counter)
+// const counter = usestore((state) => state.counter)
 const increase = usestore((state) => state.increase)
 const decrease = usestore((state) => state.decrease)
+//  useEffect(()=>{
 
+//  },[counter])
 // const decrease=()=>{
 // 	counter>1 && decrease()
 // }
