@@ -56,11 +56,12 @@ export default function GoShaparak() {
     setOpen(false);
   };
   const cookies = new Cookies();
-  
+  console.log(basket)
   const handlePay = () => {
-    const orderArr = basket.map((item) => {
+    const orderArr = basket.map((item:any) => {
       return {
         product: item._id,
+        quantity: item.quantity - item.quantityProduct,
         count: item.quantityProduct,
       };
     });
@@ -79,8 +80,11 @@ export default function GoShaparak() {
       deliveryStatus:"false",
       deliveryDate:delivery
     }
-    console.log(order)
+    const quantity = orderArr.quantity
+    // console.log(Order.products[0].product)
     axios.post(`http://localhost:8000/api/orders`,Order)
+    axios.patch(`http://localhost:8000/api/products/${Order.products[0].product}`,quantity)
+
     DeleteBasket()
       router.push("/")
     swal(" عملیات با موفقیت ثبت شد!","","success")

@@ -13,7 +13,7 @@ export default function CardCategoryPage({name, price,img,id}) {
   >
     <div className="relative w-full h-52">
     <Image
-      src={`${img}`}
+      src={`http://localhost:8000/images/products/images/${img}`}
       alt={name}
       // width={150}
       // height={150}

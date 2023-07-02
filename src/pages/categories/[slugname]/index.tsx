@@ -31,7 +31,7 @@ export default function Categorypage(){
             const value = res.data.data.subcategories.filter(subcat => category && subcat.category === category._id)
             setSubCategory(value)
         });
-        axios.get("http://localhost:8000/api/products?limit=1000").then(res => {
+        axios.get("http://localhost:8000/api/products?limit=all").then(res => {
             const x= res.data.data.products.filter(item=>item.category._id === category._id)
             setProducts(x)
         });

@@ -59,8 +59,8 @@ return (
     <>
         {
         categorysection.map((category:CategoryType)=>(
-            <div key={category._id} className={`w-full flex flex-col gap-5 justify-center rounded-3xl py-7 ${category.name === categoryName[0].name ? `bg-gradient-to-r from-[#438FDE] to-[#593BE9] `:  `bg-gradient-to-r from-[#250A05] to-[#FB141B]`} my-10`}>
-            <h3 className="text-center text-xl font-bold text-white">{category.name}</h3>
+            <div key={category._id} className={`w-full flex flex-col gap-5 justify-center py-7 mt-10 ${category.name === categoryName[0].name ? `border-b-[rgb(42,20,83)] border-b-8 pb-14`:  ``} my-10`}>
+            <h3 className="text-center text-2xl font-bold text-[rgb(42,20,83)] ">{category.name}</h3>
             <div className="flex justify-center gap-5">
             {
                 products 
