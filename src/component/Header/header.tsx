@@ -80,7 +80,8 @@ export default function Header() {
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
     const [mobileMoreAnchorEl, setMobileMoreAnchorEl] =
       useState<null | HTMLElement>(null);
-  
+      const basket = usestore((state) => state.basket)
+
     const isMenuOpen = Boolean(anchorEl);
     const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
   
@@ -112,6 +113,8 @@ export default function Header() {
       cookie.remove('rol');
       cookie.remove('id');
     }
+
+    
     const router = useRouter()
 
   const goCart = ()=>{
@@ -228,7 +231,8 @@ export default function Header() {
               sx={{mr:2}}
             >
               <Badge badgeContent={0} color="error">
-                  <ShoppingCartIcon onClick={goCart}/>
+{               basket.length>0 && <span className="bg-red-500 text-lg px-2 rounded-full text-white absolute -top-2 left-5">{basket.length} </span>
+}                  <ShoppingCartIcon onClick={goCart}/>
 
               </Badge>
             </IconButton>

@@ -33,7 +33,8 @@ counter:number,
 setCounter:(x:number)=> void
 increase: () => void;
 decrease: () => void;
-
+quantityPrudact:Number
+changeQuantityPrudact:() => void
 CartUser:any[]
 ChangeCartUser:(x:any)=>void
 }
@@ -68,7 +69,7 @@ setBasket:  (x) =>{
 if(update){
   basket.forEach(item=>{
     if(item._id === update._id){
-      item.quantityProduct = item.quantityProduct + x.quantityProduct
+      item.quantityProduct = x.quantityProduct
       item.totalprice = item.quantityProduct*item.price
     }
   })
@@ -137,12 +138,20 @@ setorder:(x) =>{
   set(() => ({ order:[...order, x]} ))
 },
 
-}))
-export const productqun = function(id){
- const test= usestore((state) => state.basket)
- const target = test.find(item=>{
-  return item._id == id
- })
- return target.quantitypProduct
+
+quantityPrudact:1,
+changeQuantityPrudact:(id)=>{
+ const test=  get().basket
+ const target = test.find(item=>item._id === id && item)
+ set(() => ({ quantityPrudact:target.quantitypProduct} ))
 }
+}))
+
+// export const productqun = function(id){
+//  const test=  get().basket
+//  const target = test.find(item=>{
+//   return item._id == id
+//  })
+//  return target.quantitypProduct
+// }
 export default usestore

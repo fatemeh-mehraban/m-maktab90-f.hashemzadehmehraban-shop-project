@@ -214,7 +214,7 @@ setThumbnailSrc(Array[0]);
   return (
     <div >
        <Box >
-       <EditOutlinedIcon sx={{color:"green", ml:1  }} onClick={handleClickOpen}/>
+       <EditOutlinedIcon sx={{color:"green", ml:1  ,cursor:"pointer"}} onClick={handleClickOpen}/>
       </Box>
 
       <Dialog open={open} onClose={handleClose} dir="rtl"  >

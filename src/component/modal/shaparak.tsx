@@ -25,6 +25,8 @@ import Cookies from "universal-cookie";
 
 export default function GoShaparak() {
   const [open, setOpen] = useState(false);
+  const [products, setProducts] = useState([]);
+  const [changedbQuantity, setChangedbQuantity] = useState();
   const [productArray, setProductArrayn] = useState(false);
   const reload = usestore((state) => state.reload)
   const setReload = usestore((state) => state.setReload)
@@ -34,6 +36,15 @@ export default function GoShaparak() {
   
   const order = usestore((state) => state.order)
   const DeleteBasket = usestore((state) => state.DeleteBasket)
+  const counter = usestore((state) => state.counter)
+
+  useEffect(()=>{
+    axios.get(`http://localhost:8000/api/products`).then(res=>setProducts(res.data.data.products))
+  },[])
+
+
+
+
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -54,6 +65,13 @@ export default function GoShaparak() {
       };
     });
     // console.log(orderArr)
+    // basket.map((item) =>{
+      // const quantity = item.quantity - counter
+      // setChangedbQuantity(quantity)
+      // axios.patch(`http://localhost:8000/api/products/${item._id}`,quantity)
+
+    // })
+  
 
     const Order={
       user:cookies.get("id"),
@@ -63,7 +81,7 @@ export default function GoShaparak() {
     }
     console.log(order)
     axios.post(`http://localhost:8000/api/orders`,Order)
-    DeleteBasket([])
+    DeleteBasket()
       router.push("/")
     swal(" عملیات با موفقیت ثبت شد!","","success")
     setOpen(false);

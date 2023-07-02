@@ -31,7 +31,8 @@ const ProductTable = ({limit}:{limit:number}) => {
   const [data , setData] = useState([])
   const [page , setPage] = useState(1)
   const [category , setCategory] = useState([])
-  const [isCategory , setIsCategory] = useState(true)
+  const [isCategory , setIsCategory] = useState(false)
+  // const [sortName , setSortName] = useState(false)
   const [counter , setCounter] = useState(0)
   const [copyData , setCopyData] = useState(data)
   const [pageData , setPageData] = useState([])
@@ -48,7 +49,7 @@ const setReload = usestore((state) => state.setReload)
   }, [])
   // console.log(counter)
   useEffect(() => {
-    axios.get(`http://localhost:8000/api/products?page=${page}&limit=${limit}&sort=-createdAt`)
+    axios.get(`http://localhost:8000/api/products?page=${page}&limit=${limit}&sort=${isCategory ? "category" : "-createdAt"}`)
       .then((response) => {
             setData(response.data.data.products)
             setCopyData(data)
@@ -125,9 +126,14 @@ const setReload = usestore((state) => state.setReload)
                 <div className='rounded-md border border-1 border-green-400 w-32 flex justify-center items-center'>
 
 
-                    <FormDialogEdit data={row}/>          
-                    <ContentCopyOutlinedIcon sx={{color:"green",pr:1 , pl:1 , borderRight: 1, borderLeft: 1, fontSize:'40px',borderColor:'green'}}/>
-                    <AlertDialogDelete row={row} setPage={setPage} setCounter={setCounter} counter={counter} data={data}/>
+                    <FormDialogEdit data={row} />          
+                    <ContentCopyOutlinedIcon sx={{color:"green",pr:1 , pl:1 , borderRight: 1, borderLeft: 1, fontSize:'40px',borderColor:'green',cursor:"pointer"}} onClick={()=>{
+                      const copyUrl=row._id
+                      navigator.clipboard.writeText(`http://localhost:3000/products/${copyUrl}`).then(() => {
+                        alert("Copied to clipboard");
+                    });
+                    }}/>
+                    <AlertDialogDelete row={row} setPage={setPage} setCounter={setCounter} counter={counter} data={data} />
                     {/* <DeleteOutlineIcon sx={{color:"green", mr:1}} onClick={(e)=>handledelete(row._id)}/> */}
                 </div>
                 

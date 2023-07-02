@@ -192,13 +192,11 @@ setThumbnailSrc(Array[0]);
     newdata.append('category', categoryValue)
     newdata.append('subcategory', subcategoryValue)
     newdata.append('description', editor)
-
     newdata.append('brand', 'apple');
-    // newdata.append('thumbnail', thumbnailSrc);
     imgName.map((item: any) => {
     newdata.append('images', item);
     })
-    // if(Name!==null && price!==null && quantity!==null && categoryValue!==null && subcategoryValue!==null && editor!==null && imgName.length>0){
+    // if(!Name){
       axios.post(`http://localhost:8000/api/products`, newdata)
       swal(`${Name}`, ` !به محصولات اضافه شد`, "success")
     // }

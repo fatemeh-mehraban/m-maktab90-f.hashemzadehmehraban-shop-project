@@ -74,6 +74,9 @@ console.log(data)
           <DialogContentText>
                  زمان سفارش : { formatDate(row.createdAt)}
           </DialogContentText>
+          <DialogContentText>
+                 زمان تحویل : { formatDate(row.deliveryDate)}
+          </DialogContentText>
           <table className="w-full border-2 border-green-500 overflow-x-scroll mt-5" dir="rtl">
             <thead>
                 <tr className="border-b-2 border-green-500">

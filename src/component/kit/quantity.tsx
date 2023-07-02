@@ -9,7 +9,6 @@ export default function Quantity({product,quantity,setQuantity}) {
 const setcounter = usestore((state) => state.setCounter)
 const counter = usestore((state) => state.counter)
 const increase = usestore((state) => state.increase)
-// console.log(counter)
 const decrease = usestore((state) => state.decrease)
 const setBasket = usestore((state) => state.setBasket)
 const basket = usestore((state) => state.basket)
@@ -17,9 +16,9 @@ const basket = usestore((state) => state.basket)
 
 // })
 useEffect(()=>{
-	setcounter(counter)
+	setcounter(quantity)
 
- },[counter])
+ },[quantity])
 // const decrease=()=>{
 // 	counter>1 && decrease()
 // }
@@ -31,13 +30,15 @@ useEffect(()=>{
 		    <div className=" border rounded-full w-36 h-10 flex justify-between items-center overflow-hidden">
 		        <RemoveIcon className="px-4 text-5xl text-white bg-[#120051] rounded-r-full" onClick={()=>{
 					counter>1 && decrease()
-					setQuantity(quantity-1)
+					setQuantity(quantity>1 ? quantity-1 : 1)
+					setcounter(quantity)
+
 				}}/>
-		    	<span>{quantity}</span>
+		    	<span>{ quantity}</span>
 		        <AddIcon className="px-4 text-5xl text-white bg-[#120051] rounded-l-full" onClick={()=>{
 					increase()
-					setQuantity(quantity+1)
-
+					setQuantity(quantity + 1)
+					setcounter(quantity)
 					}}/>
 		    </div>
   )

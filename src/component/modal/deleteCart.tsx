@@ -12,10 +12,12 @@ import { renderToStaticMarkup } from 'react-dom/server';
 import swal from 'sweetalert';
 // import swal from '@sweetalert/with-react'
 import { Component } from 'react';
-export default function AlertDialogDelete({row , setCounter , setPage , counter,data}) {
+export default function AlertDialogDelete({product}) {
+    const deleteCart = usestore((state) => state.deleteCart)
   const [open, setOpen] = React.useState(false);
   const reload = usestore((state) => state.reload)
   const setReload = usestore((state) => state.setReload)
+
   const handleClickOpen = () => {
     setOpen(true);
   };
@@ -23,32 +25,23 @@ export default function AlertDialogDelete({row , setCounter , setPage , counter,
   const handleClose = () => {
     setOpen(false);
   };
-  const handledelete =(id:string)=>{
-    axios.delete(`http://localhost:8000/api/products/${id}`).then(res=>{
-
+  const handledelete =(id)=>{
+    deleteCart(id)
       setReload(!reload)
-      return swal("حذف شد!","","error")
-
-    })
-    setCounter(counter-1)
-    
-    if(data.length<= 1){
-      setPage(prev=>prev - 1)
-      
-    }
-  }
+       swal("حذف شد!","","error")
+        setOpen(false);
+}
+ 
   return (
     <div>
-        <DeleteOutlineIcon  sx={{color:"green", mr:1,cursor:"pointer"}} onClick={handleClickOpen} />
+        <DeleteOutlineIcon color="error" fontSize="large" onClick={handleClickOpen}/>
       <Dialog
         open={open}
         onClose={handleClose}
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
       >
-        <DialogTitle id="alert-dialog-title" align="center">
-          {row.name}
-        </DialogTitle>
+
         <DialogContent>
           <DialogContentText id="alert-dialog-description">
 از حذف کالا مطمئن هستید؟
@@ -57,8 +50,7 @@ export default function AlertDialogDelete({row , setCounter , setPage , counter,
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClose}>خیر</Button>
-          <Button onClick={()=>handledelete(row._id)} autoFocus>
-بله          </Button>
+          <Button onClick={()=>handledelete(product._id)} autoFocus>بله </Button>
         </DialogActions>
       </Dialog>
     </div>

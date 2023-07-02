@@ -1,10 +1,12 @@
 import Quantity from "@/component/kit/quantity"
+import AlertDialogDelete from "@/component/modal/deleteCart"
 import Image from 'next/image'
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import MoneyIcon from '@mui/icons-material/Money';
 import { useState, useEffect } from 'react';
 import usestore from '@/store';
 import { useRouter } from "next/router";
+import swal from 'sweetalert';
 
 export default function CardCart({product}) {
     // const[counter,setCounter]=useState(1)
@@ -13,18 +15,19 @@ export default function CardCart({product}) {
     const deleteCart = usestore((state) => state.deleteCart)
     const counter = usestore((state) => state.counter)
     const setCounter = usestore((state) => state.setCounter)
-    const [quantity , setQuantity] = useState(product.quantityProduct )
+    const [quantity , setQuantity] = useState(product.quantityProduct)
 
     const router = useRouter()
 
     useEffect(()=>{
-        basket.find(item=> item._id === product._id && setCounter(item.quantityProduct))
+        basket.find(item=> {item._id === product._id && setCounter(item.quantityProduct) })
       
       },[basket.quantityProduct])
 
       const handleCardClick = (productId) => {
         router.push(`/products/${productId}`);
       };
+      console.log(product.quantityProduct)
     return (
     <div className="container mt-5 pb-5  px-5 border-b border-[#120051] flex justify-between items-center">
             <div className="flex gap-7">
@@ -40,7 +43,8 @@ export default function CardCart({product}) {
         </div>
                        <div className="flex flex-col gap-5">
                         <div className="flex gap-5">
-{                       product && <DeleteOutlineIcon color="error" fontSize="large" onClick={()=>deleteCart(product._id)}/>
+{                       product &&<AlertDialogDelete product={product}/>
+                          
 }                        <Quantity product={product} quantity={quantity} setQuantity={setQuantity}/>
                         </div>
                         <span className=" text-left p-2 px-7  text-xl text-white bg-[#120051] rounded-xl  flex justify-between"><MoneyIcon/> {quantity * product.price}  </span>

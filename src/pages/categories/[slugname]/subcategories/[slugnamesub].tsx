@@ -65,8 +65,9 @@ console.log(products)
   return (    
     <Layout>
 
-      <div className="flex min-w-full	">
-      <div className="py-20 px-10 w-full">
+      <div className="flex min-w-full	p-10">
+        <SidbarCategoryPage AllsubCategory={AllsubCategory}/>
+      <div className="pb-20 px-10 w-full">
    {     category && <h1 className="text-right text-2xl pb-10">{category.name}</h1>}
 
       <div className="grid grid-cols-3 gap-10 ">
@@ -78,7 +79,6 @@ console.log(products)
       </div>
       </div>
 
-    <SidbarCategoryPage AllsubCategory={AllsubCategory}/>
 
       </div>
       </Layout>

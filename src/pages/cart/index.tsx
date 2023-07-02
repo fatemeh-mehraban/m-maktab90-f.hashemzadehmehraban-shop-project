@@ -38,7 +38,7 @@ const[updateBasket,setupdateBasket]=useState([])
 
         // console.log(basket)
         // console.log(totalPrice)
-},[counter])
+},[counter,basket])
 
 console.log(updateBasket)
 console.log(basket)

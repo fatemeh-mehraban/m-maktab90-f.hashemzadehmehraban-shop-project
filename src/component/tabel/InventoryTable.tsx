@@ -17,6 +17,7 @@ import  { Component } from 'react';
 import EasyEdit from 'react-easy-edit';
 import { searchInput } from './../../component/kit/searchInput';
 import YoutubeSearchedForIcon from '@mui/icons-material/YoutubeSearchedFor';
+import swal from 'sweetalert';
 
 export default function InventoryTable({limit ,search}:{limit:number,search:string}) {
     const [products , setProducts] = useState([])
@@ -26,9 +27,10 @@ export default function InventoryTable({limit ,search}:{limit:number,search:stri
     const [quantity,setQuantity] = useState(true)
     const [searchTxt,setSearchTxt] = useState("")
     const [sendArray , setSendArray] = useState([])
+    const [isChange , setIsChange] = useState(false)
 
     useEffect(()=>{    
-        const res = axios.get(`http://localhost:8000/api/products?page=${page}&limit=${limit}&fields=-rating,-createdAt,-updatedAt,-__v&sort=${price ? "price":"-price"}}`)
+        const res = axios.get(`http://localhost:8000/api/products?page=${page}&limit=${limit}&sort=${price?"price":"-price"}`)
         .then((res:any)=>{
             // newsearch=res.data.data.products.name.includes(search)
             // const c= res.data.data.products
@@ -65,8 +67,10 @@ useEffect(()=>{
 
 
 const nextpage=()=>{
-    if( counter>= limit  ){        
+    if(!isChange && counter>= limit  ){        
         setPage(page + 1)
+    }else if(isChange){
+        swal(``, ` لظفا ابتدا تغییرات اعمال شده را ذخیره کنید`, "error")
     }
     
 }
@@ -101,7 +105,8 @@ const handleSaveAll = ()=>{
 
         axios.patch(`http://localhost:8000/api/products/${item.id}`, item.change)
     })
-
+    setIsChange(false)
+    swal(``, ` تغییرات اعمال شد`, "success")
 }
 const cancel = () => {alert("Cancelled")}
 
@@ -125,7 +130,7 @@ const cancel = () => {alert("Cancelled")}
                     <th className="p-5">تصویر</th>
                     <th className="p-5 text-right px-5">عنوان</th>
                     <th className="py-5 curser-pointer text-right" onClick={sortPrice}>قیمت {price ?<ArrowDropUpIcon />:<ArrowDropDownIcon/> }</th>
-                    <th className="py-5 curser-pointer text-right" onClick={sortQuantity}>موجودی {quantity?<ArrowDropUpIcon/>:<ArrowDropDownIcon/> }</th>
+                    <th className="py-5 curser-pointer text-right" >موجودی</th>
 
                 </tr>
 
@@ -146,23 +151,30 @@ const cancel = () => {alert("Cancelled")}
                      type="text"
                      value={item.price}
                      attributes={{ name: "price", id: 1 , className:"w-20" }}
-                     onSave={(value)=>save(value,'price',item._id)}
+                     onSave={(value)=>{
+                        save(value,'price',item._id)
+                        setIsChange(true)
+                    }}
                      onCancel={cancel}
                      saveButtonLabel="ذخیره"
                      cancelButtonLabel="لغو"
-                     onKeyPress={(e)=>handleEsc(e)}
-                />
+                    onChange={()=>setIsChange(true)}
+                        />
                 </th>
                 <th className="text-right px-5">
                 <EasyEdit
                      type="text"
                      value={item.quantity}
-                     onSave={(value)=>save(value,'quantity',item._id)}
+                     onSave={(value)=>{
+                        save(value,'quantity',item._id)
+                        setIsChange(true)
+                    }}
                      onCancel={cancel}
                      saveButtonLabel="ذخیره"
                      cancelButtonLabel="لغو"
                      attributes={{ name: "quantity", id: 1, className:"w-20" }}
-                     
+                    //  onKeyup={()=>setIsChange(true)}
+
                  />
                 </th>
 
