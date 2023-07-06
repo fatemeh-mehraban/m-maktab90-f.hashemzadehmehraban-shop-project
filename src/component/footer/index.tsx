@@ -3,10 +3,32 @@ import InstagramIcon from '@mui/icons-material/Instagram';
 import WhatsAppIcon from '@mui/icons-material/WhatsApp';
 import MailOutlineIcon from '@mui/icons-material/MailOutline';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
-import { Input } from 'postcss';
+// import { Input } from 'postcss';
+import Image from 'next/image'
+
 export default function Footer() {
   return (
-    <div  className="bg-[rgb(42,20,83)] rounded-t-[8%] md:rounded-none reletive w-full ">
+
+   <div>
+    <div className="w-full bg-white py-5 mb-10 flex justify-center gap-60 items-center">
+        <div className="flex flex-col items-center gap-2">
+            <Image src="/info-send/ersal-sari.png" width={120} height={100}/>
+            <p>ارسال سریع</p>
+        </div>
+        <div className="flex flex-col items-center gap-3">
+            <Image src="/info-send/4.png" width={100} height={150}/>
+            <p> فعالیت از شنبه تا چهارشنبه</p>
+        </div>
+        <div className="flex flex-col items-center gap-2">
+            <Image src="/info-send/poshtibani-24.png" width={120} height={150}/>
+            <p>  پاسخگویی از ساعت 9 الی 17   </p>
+        </div>
+        <div className="flex flex-col items-center gap-3">
+            <Image src="/info-send/pardakht-sari.png" width={120} height={150}/>
+            <p>پرداخت امن </p>
+        </div>
+    </div>
+     <div  className="bg-[rgb(42,20,83)] rounded-t-[8%] md:rounded-none w-full ">
        <div className=' flex flex-col justify-around text-white p-20 w-full md:flex-row gap-5 md:items-center'>
        <div className='flex flex-col gap-10'>
             <img src="/barishow-footer (1).png" alt="logo"  className="w-40"/>
@@ -50,5 +72,6 @@ export default function Footer() {
         <p className="w-full p-10 border-t-4 border-[#eea37a] text-white">©.1399 استفاده از سایت به معنی پذیرش کلیه قوانین و مقررات سایت است و انتقال و استفاده ازمطالب سایت با ذکر منبع و لینک به منبع مجاز خواهد بود</p>
        </div>
     </div>
+   </div>
   )
 }

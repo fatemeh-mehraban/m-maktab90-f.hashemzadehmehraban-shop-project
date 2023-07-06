@@ -224,17 +224,12 @@ export default function Header() {
               </Badge>
             </IconButton>
 
-            {token ? (<> 
+
  
- <MenuItem onClick={handleLogout}> 
+            <MaxWidthDialog /> 
 
-   <LogoutIcon  /> 
 
-   <p className="font-sans">خروج</p> 
- </MenuItem> 
-</>) : (<> 
- <MaxWidthDialog /> 
-</>)} 
+
         </Box>
         </Toolbar>
       </AppBar>

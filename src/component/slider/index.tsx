@@ -12,7 +12,8 @@ const divStyle = {
   alignItems: 'center',
   justifyContent: 'center',
   backgroundSize: 'cover',
-  height: '500px'
+  height: '700px',
+  // objectFit: 'contain'
 }
 const slideImages = [
   {
@@ -31,7 +32,7 @@ const slideImages = [
 
 const Slideshow = () => {
     return (
-      <div className="slide-container px-2 py-10 ">
+      <div className="slide-container py-10 object-contain	">
         <Slide >
          {slideImages.map((slideImage, index)=> (
             <div key={index} className="">

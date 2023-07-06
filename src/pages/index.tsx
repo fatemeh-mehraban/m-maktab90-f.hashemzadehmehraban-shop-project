@@ -1,4 +1,6 @@
-import BoxCategory from '@/component/card/boxCard'
+import BoxCategory from '@/component/card/sectionSubCategiry'
+import MiniCategory from '@/component/categoryUiFirstPage';
+import MiniSlider from '@/component/categoryUiFirstPage/miniSlider';
 import Slideshow from '@/component/slider'
 import Layout from '@/layout/layout'
 
@@ -15,8 +17,10 @@ export default function Home() {
 
       <QueryClientProvider client={queryClient}>
     <Layout>
-      <main className="h-screen w-full overflow-x-hidden">
+      <main className="h-screen w-full overflow-x-hidden bg-[#f8f9fa] px-20 mb-20">
       <Slideshow/>
+      <MiniCategory/>
+      <MiniSlider/>
       <BoxCategory/>
     </main>
     </Layout>

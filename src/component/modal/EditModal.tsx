@@ -21,6 +21,7 @@ import InputLabel from '@mui/material/InputLabel';
 import usestore from "../../store"
 import Image from 'next/image'
 import UploadImages from '../UploadImages'
+import swal from 'sweetalert';
 
 // import {useDropzone}  from 'react-dropzone'
 // import Dropzone from 'react-dropzone'
@@ -183,6 +184,8 @@ setThumbnailSrc(Array[0]);
   // useEffect(()=>{
 
     axios.patch(`http://localhost:8000/api/products/${id}`, newdata)
+
+    swal(`${Name}`, ` !ویرایش شد`, "success")
   // },[newdata])
   };
   

@@ -76,19 +76,12 @@ const beforpage =()=>{
 }
 }
 const sortPrice =()=>{
-    // setQuantity(true)
     setPrice(!price)
 }
 const sortQuantity =()=>{
-    // setPrice(true)
     setQuantity(!quantity)
 }
-// const handleEsc =(e)=>{
-//     if(e.key === 'Esc'){
-//         console.log('enter press here! ')
-//       }
-    
-// }
+
 const save = (value,fieldName,item) => {
     // alert(value)
     console.log(fieldName)

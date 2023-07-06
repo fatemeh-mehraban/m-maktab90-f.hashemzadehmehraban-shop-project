@@ -27,7 +27,7 @@ export default function AlertDialogDelete({row , setCounter , setPage , counter,
     axios.delete(`http://localhost:8000/api/products/${id}`).then(res=>{
 
       setReload(!reload)
-return swal("حذف شد!", "error")
+      return swal("حذف شد!","","error")
 
     })
     setCounter(counter-1)
@@ -46,8 +46,8 @@ return swal("حذف شد!", "error")
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
       >
-        <DialogTitle id="alert-dialog-title">
-          {"Use Google's location service?"}
+        <DialogTitle id="alert-dialog-title" align="center">
+          {row.name}
         </DialogTitle>
         <DialogContent>
           <DialogContentText id="alert-dialog-description">

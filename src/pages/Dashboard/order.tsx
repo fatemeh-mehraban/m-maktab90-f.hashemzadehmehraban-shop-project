@@ -11,7 +11,7 @@ export function Order() {
   }
     return (
 
-      <PersistentDrawerRight>
+      <PersistentDrawerRight path="Dashboard/order">
       <div className="text-white h-screen px-5 w-full flex items-end justify-center items-center flex-col">   
 
        <BasicTable limit={4} search={search}/>
