@@ -6,6 +6,7 @@ import IconButton from '@mui/material/IconButton';
 import MenuIcon from '@mui/icons-material/Menu';
 import Image from 'next/image';
 import LogoutIcon from '@mui/icons-material/Logout';
+import { useRouter } from "next/router";
 
 import { styled, alpha } from '@mui/material/styles';
 import InputBase from '@mui/material/InputBase';
@@ -74,12 +75,13 @@ const token =   cookie.get("accessToken")
 export default function Header() {
   const setIsCategories = usestore((state) => state.setIsCategories)
   const isCategories = usestore((state) => state.isCategories)
-
-
+  const cookies = new Cookies();
+  const rol = cookies.get("rol")
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
     const [mobileMoreAnchorEl, setMobileMoreAnchorEl] =
       useState<null | HTMLElement>(null);
-  
+      const basket = usestore((state) => state.basket)
+
     const isMenuOpen = Boolean(anchorEl);
     const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
   
@@ -108,8 +110,17 @@ export default function Header() {
     const handleLogout =()=>{
       cookie.remove('accessToken');
       cookie.remove('refreshToken');
+      cookie.remove('rol');
+      cookie.remove('id');
     }
-  
+
+    
+    const router = useRouter()
+
+  const goCart = ()=>{
+    router.push("/cart")
+
+  }
     const menuId = 'primary-search-account-menu';
     
     const mobileMenuId = 'primary-search-account-menu-mobile';
@@ -145,6 +156,7 @@ export default function Header() {
        
       </Menu>
     );
+    // console.log(rol)
   return (
     <header className=" w-full z-50">
 
@@ -219,14 +231,15 @@ export default function Header() {
               sx={{mr:2}}
             >
               <Badge badgeContent={0} color="error">
-                  <ShoppingCartIcon />
+{               basket.length>0 && <span className="bg-red-500 text-lg px-2 rounded-full text-white absolute -top-2 left-5">{basket.length} </span>
+}                  <ShoppingCartIcon onClick={goCart}/>
 
               </Badge>
             </IconButton>
 
 
  
-            <MaxWidthDialog /> 
+          { rol === "USER" ? <p className="curser-pointer" onClick={handleLogout}>خروج</p> :  <MaxWidthDialog />   }
 
 
 

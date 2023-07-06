@@ -28,7 +28,8 @@ export default function BasicTable({limit ,search}:{limit:number,search:string})
   const [userName , setUserName] = useState([])
   const [date , setDate] = useState(false)
   const [page,setPage] = useState(1)
-  const isPay = usestore((state) => state.isPay)
+  const [isStatus, setIsStatus] = useState(false);
+    const isPay = usestore((state:unknown) => state.isPay)
 
 
 
@@ -41,18 +42,24 @@ export default function BasicTable({limit ,search}:{limit:number,search:string})
           setRows(res.data.data.orders) 
     })
 
-}, [page,limit,isPay,date])
-// isPay && console.log("yes")
+}, [page,limit,isPay,date,isStatus])
+isPay && console.log(rows)
       const handelSort =()=>{
         setDate(!date)
       }
-      useEffect(() => {
-        const getUser = request.get(`/users`).then(res=>setUserName(res.data.data.users))   
-      }, [])
+
+
+
+
+
+
+
+
       const nextpage=()=>{
         if( counter >= limit ){        
           setPage(page + 1)
         }  
+        // console.log(rows)
       }
       
       const beforpage =()=>{
@@ -66,9 +73,9 @@ export default function BasicTable({limit ,search}:{limit:number,search:string})
         const formattedDate = date.toLocaleDateString('fa-IR');
         return formattedDate;
         };
-
+console.log(rows)
   return (
-    <TableContainer Align="LEFT" component={Paper} sx={{ direction:"rtl" , width:"70%" } } >
+    <TableContainer  component={Paper} sx={{ direction:"rtl" , width:"70%",align:"LEFT"} } >
 
   
 
@@ -103,17 +110,15 @@ export default function BasicTable({limit ,search}:{limit:number,search:string})
               sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
             >
               <TableCell component="th" scope="row" align="right">
-                {
-                 userName.map(item=>{
-                  // console.log(item)
-                  return item._id === row.user && <span>{item.username}</span>
+                
+                  <span>{row.user.lastname}</span>
 
-                })
-                }
+              
+
               </TableCell>
               <TableCell align="right" className="py-7">{row.totalPrice}</TableCell>
               <TableCell align="right">{formatDate(row.createdAt)}</TableCell>
-              <TableCell align="right"> <FormDialogOrdaer row={row} userName={userName}/></TableCell>
+              <TableCell align="right"> <FormDialogOrdaer row={row} setIsStatus={setIsStatus} isStatus={isStatus} /></TableCell>
             </TableRow>
           ))}
         </TableBody>

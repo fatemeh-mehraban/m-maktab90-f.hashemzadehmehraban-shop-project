@@ -11,20 +11,24 @@ import MiniCardProduct2 from '@/component/card/cardHomePage';
 import { useState, useEffect } from 'react';
 import axios from "axios"
 import usestore from '@/store';
+import Cookies from "universal-cookie";
+import { useRouter } from "next/router";
 
 export default function cart() {
 const[products,setProducts]=useState([])
 const[totalPrice,setTotalPrice]=useState(0)
+const[updateBasket,setupdateBasket]=useState([])
         const basket = usestore((state) => state.basket)
         const counter = usestore((state) => state.counter)
+        const cookies = new Cookies();
+        const router = useRouter()
 
     useEffect(()=>{
     axios.get("http://localhost:8000/api/products").then(res =>{
 
         setProducts(res.data.data.products.sort(() => Math.random() - 0.5).slice(0,5))
-        // const initialValue = 0;
-        // setTotalPrice(basket.reduce((accumulator,current) => accumulator + current.totalprice, initialValue)) 
     })
+
 },[basket])
 
     useEffect(()=>{
@@ -32,9 +36,31 @@ const[totalPrice,setTotalPrice]=useState(0)
         const initialValue = 0;
         setTotalPrice(basket.reduce((accumulator,current) => accumulator + current.price*counter, initialValue)) 
 
-        console.log(basket)
-        console.log(totalPrice)
+        // console.log(basket)
+        // console.log(totalPrice)
+},[counter,basket])
+
+console.log(updateBasket)
+console.log(basket)
+
+    useEffect(()=>{
+        const id = cookies.get("id");
+        let data={
+            user: id,
+            products: [
+              {
+                product:products._id,
+                count:counter
+              }
+            ],
+            "deliveryStatus": false
+          }
 },[counter])
+
+const handleClickShaparak=()=>{
+    router.push("/cart/information")
+
+}
 
   return (
     <Layout>
@@ -45,7 +71,7 @@ const[totalPrice,setTotalPrice]=useState(0)
         </div>
         <div className="flex gap-5 w-full mt-5">
             <div className="border-2 w-full min-h-[400px] border-[#120051] rounded-xl">
-           { basket && basket.length > 0 ? basket.map(item=>(
+           {basket && basket.length > 0 ? basket.map(item=>(
             <CardCart key={item._id} product={item}/>
            )):<p className="text-xl text-center mt-20">سبد شما خالی است</p>}
             </div>
@@ -66,8 +92,9 @@ const[totalPrice,setTotalPrice]=useState(0)
                     <p> {totalPrice} تومان </p>
                 </div>
 
+                <Button varients="pay" text=" پرداخت و خرید"  onClick={handleClickShaparak}/>
 
-                <MaxWidthDialog/>
+                {/* <MaxWidthDialog/> */}
                  </div>
                 <div className="w-72 h-96 border bg-[#120051] flex flex-col gap-6 text-white items-center rounded-xl py-3">
                     <Image src="/barishow-footer (1).png" width={150} height={150}/>

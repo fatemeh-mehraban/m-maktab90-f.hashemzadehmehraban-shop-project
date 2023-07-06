@@ -65,9 +65,9 @@ export default function MiniCategory() {
   return (
     <div className="grid grid-cols-3 justify-items-center">
       {image.map(item => (
-        <div key={item.id} className="relative my-5">
-          <Image src={item.url} width={500} height={300} alt="category" />
-          <p className="bg-[rgb(42,20,83)] text-white w-max p-3 px-7 rounded-full absolute bottom-10 left-5" onClick={() => handleClick(item.name)}>{item.name}</p>
+        <div key={item.id} className="relative my-5 ">
+          <Image src={item.url} width={550} height={300} alt="category" />
+          <p className="bg-[rgb(42,20,83)] text-white w-max p-3 px-7 rounded-full absolute bottom-10 left-5 cursor-pointer" onClick={() => handleClick(item.name)}>{item.name}</p>
         </div>
       ))}
     </div>
