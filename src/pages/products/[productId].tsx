@@ -10,7 +10,7 @@ import { cloneDeep } from 'lodash';
 // {products.category.name}
 const ProductPage = () => {
     const router = useRouter();
-    const [products, setProducts]= useState([])
+    const [products, setProducts]= useState()
     const [saveProducts, setSaveProducts]= useState([])
     const [Allproducts, setAllProducts]= useState([])
     const [category, setCategory]= useState([])
@@ -28,20 +28,31 @@ const ProductPage = () => {
     const counter = usestore((state) => state.counter)
     const setCounter = usestore((state) => state.setCounter)
 
-    const [value, setValue]= useState()
+    const [value, setValue]= useState(1)
     
     const {productId} = router.query;
-useEffect(()=>{
-  axios.get("http://localhost:8000/api/products?limit=all").then(res=>{
-    const newProduct= res.data.data.products.find(item=> item._id === productId )
-    setAllProducts( res.data.data.products)
-    setProducts(newProduct)
-  })
-  getCategory().then(res =>{ 
-    setCategory(res.data.data.categories)
-    setProductcategory(res.data.data.categories.find(item=> products && products.category && item._id === products.category._id ))
-  })
-},[category])
+    
+    
+    
+    
+    
+    useEffect(()=>{
+      axios.get("http://localhost:8000/api/products/?limit=all").then(res=>{
+        const newProduct= res.data.data.products.find(item=> item._id === productId )
+        setAllProducts( res.data.data.products)
+        setProducts(newProduct)
+      })
+      getCategory().then(res =>{ 
+        setCategory(res.data.data.categories)
+        setProductcategory(res.data.data.categories.find(item=> products && products.category && item._id === products.category._id ))
+      })
+    },[category])
+
+    useEffect(()=>{
+  const inBasketProduct= basket.find((item)=>item._id === productId)
+  setValue(inBasketProduct ? inBasketProduct.quantityProduct : 0 )
+    },[])
+
 
 
 const handleCardClick = (product:any) => {
@@ -73,6 +84,7 @@ const handleCardClick = (product:any) => {
 console.log(productss)
 setorder(product1)
 setBasket(data);
+setCounter(value)
           // router.push('/cart');
         }
 
@@ -132,7 +144,7 @@ setBasket(data);
             </div>
           <div>
           <span className="font-semibold text-gray-700">
-                 موجودی محصول: {products.quantity - counter}
+                 موجودی محصول: {products.quantity - value}
               </span>
           </div>
             {/* { basket.map.(item=>( */}
@@ -143,9 +155,9 @@ setBasket(data);
             min="1"
             max={products && products.quantity}
             onChange={(e) => {
-              const value = parseInt(e.target.value);
-              setValue(e.target.value)
-              setCounter(+e.target.value)
+              // const value = parseInt(e.target.value);
+              setValue(+e.target.value < products.quantity ? +e.target.value : products.quantity  )
+              
             }}
           />
           {/* // ))

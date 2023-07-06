@@ -92,7 +92,7 @@ const setReload = usestore((state) => state.setReload)
           <TableRow >
             <TableCell align="center" sx={{color:"white"}}> تصویر</TableCell>
             <TableCell align="center" sx={{color:"white"}}> عنوان</TableCell>
-            <TableCell align="center" sx={{color:"white"}} onClick={handelSort}> دسته بندی {isCategory ?<ArrowDropUpIcon />:<ArrowDropDownIcon/> }</TableCell>
+            <TableCell align="center" sx={{color:"white"}} onClick={handelSort}> دسته بندی </TableCell>
             <TableCell align="center" sx={{color:"white"}}>امکانات</TableCell>
           </TableRow>
         </TableHead>

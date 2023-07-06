@@ -16,7 +16,8 @@ const basket = usestore((state) => state.basket)
 
 // })
 useEffect(()=>{
-	setcounter(quantity)
+	// setcounter(quantity)
+	setBasket({...product,quantityProduct:quantity})
 
  },[quantity])
 // const decrease=()=>{
@@ -31,14 +32,14 @@ useEffect(()=>{
 		        <RemoveIcon className="px-4 text-5xl text-white bg-[#120051] rounded-r-full" onClick={()=>{
 					counter>1 && decrease()
 					setQuantity(quantity>1 ? quantity-1 : 1)
-					setcounter(quantity)
+					// setcounter(quantity)
 
 				}}/>
 		    	<span>{ quantity}</span>
 		        <AddIcon className="px-4 text-5xl text-white bg-[#120051] rounded-l-full" onClick={()=>{
 					increase()
 					setQuantity(quantity + 1)
-					setcounter(quantity)
+					// setcounter(quantity)
 					}}/>
 		    </div>
   )
