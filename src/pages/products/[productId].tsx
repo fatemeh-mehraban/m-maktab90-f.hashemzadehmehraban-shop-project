@@ -10,56 +10,98 @@ import { cloneDeep } from 'lodash';
 // {products.category.name}
 const ProductPage = () => {
     const router = useRouter();
-    const [products, setProducts]= useState([])
+    const [products, setProducts]= useState()
     const [saveProducts, setSaveProducts]= useState([])
     const [Allproducts, setAllProducts]= useState([])
     const [category, setCategory]= useState([])
+    const quantityPrudact = usestore((state) => state.quantityPrudact)
+
+    
+    
     const [productcategory, setProductcategory]= useState([])
     const [quantityProduct, setquantityProduct]= useState()
     const setBasket = usestore((state) => state.setBasket)
+    const setorder = usestore((state) => state.setorder)
     const basket = usestore((state) => state.basket)
+    // const [defaultvalue, setdefaultvalue]= useState(1)
     const cookies = new Cookies();
     const counter = usestore((state) => state.counter)
     const setCounter = usestore((state) => state.setCounter)
 
+    const [value, setValue]= useState(1)
+    
     const {productId} = router.query;
-useEffect(()=>{
-  axios.get("http://localhost:8000/api/products?limit=all").then(res=>{
-    const newProduct= res.data.data.products.find(item=> item._id === productId )
-    setAllProducts( res.data.data.products)
-    setProducts(newProduct)
-  })
-  getCategory().then(res =>{ 
-    setCategory(res.data.data.categories)
-    setProductcategory(res.data.data.categories.find(item=> products && products.category && item._id === products.category._id ))
-  })
-},[category])
+    
+    
+    
+    
+    
+    useEffect(()=>{
+      axios.get("http://localhost:8000/api/products/?limit=all").then(res=>{
+        const newProduct= res.data.data.products.find(item=> item._id === productId )
+        setAllProducts( res.data.data.products)
+        setProducts(newProduct)
+      })
+      getCategory().then(res =>{ 
+        setCategory(res.data.data.categories)
+        setProductcategory(res.data.data.categories.find(item=> products && products.category && item._id === products.category._id ))
+      })
+    },[category])
+
+    useEffect(()=>{
+  const inBasketProduct= basket.find((item)=>item._id === productId)
+  setValue(inBasketProduct ? inBasketProduct.quantityProduct : 0 )
+    },[])
 
 
-const handleCardClick = (product) => {
+
+const handleCardClick = (product:any) => {
   // console.log("1")
   router.push(`/products/${product._id}`);
   setProducts(product)
+  // setCounter(product.quantityProduct)
 
 };
         // console.log(Allproducts)
-        const handleAddCart = (products) => {
+        const handleAddCart = (productss:any) => {
           const data={
-            ...products,
-            quantityProduct:counter,
-            totalprice:products.price*counter
+            ...productss,
+            quantityProduct: counter,
+            totalprice:productss.price*counter
           }
-          setBasket(data);
-          router.push('/cart');
+          const product1={
+            products:[
+              {
+                product:productss,
+                id:products._id,
+
+              }
+            ] ,
+            counter:counter,
+            totalprice:productss.price*counter
+          }
+
+console.log(productss)
+setorder(product1)
+setBasket(data);
+setCounter(value)
+          // router.push('/cart');
         }
+
+
       useEffect(()=>{
         localStorage.setItem('data', JSON.stringify(basket))
+        // x = basket.map(item=>item._id === product._id && item.quantityProduct)    
       },[basket])
+
+
+
+
         if (!products) {
           // Loading state
           return <div>Loading...</div>;
         }
-        
+        // console.log(defaultvalue)
     
   return (
     <>
@@ -94,23 +136,32 @@ const handleCardClick = (product) => {
             <div className="mb-6">
             { products &&  <p><span className="text-2xl text-[rgb(42,20,83)] font-bold">{products.price}</span> تومان</p>}
             </div>
-            <div className="mb-6">
+            <div className="mb-6 flex gap-5">
               <span className="font-semibold text-gray-700">
                 درباره ی محصول:
               </span>
              { products && <div className="mb-6" dangerouslySetInnerHTML={{ __html: products.description }}/>}
             </div>
-          <input
+          <div>
+          <span className="font-semibold text-gray-700">
+                 موجودی محصول: {products.quantity - value}
+              </span>
+          </div>
+            {/* { basket.map.(item=>( */}
+            <input
             type="number"
-            className="w-24 border px-2 text center"
-            // value="1"
+            className="w-24 border px-2 text center mt-5"
+            value={value}
             min="1"
             max={products && products.quantity}
             onChange={(e) => {
-              const value = parseInt(e.target.value);
-              setCounter(+value)
+              // const value = parseInt(e.target.value);
+              setValue(+e.target.value < products.quantity ? +e.target.value : products.quantity  )
+              
             }}
           />
+          {/* // ))
+          // } */}
           <button
             className="bg-[rgb(42,20,83)]  text-white rounded p-5 px-10 block mt-10"
             // onClick={incrementQuantity}

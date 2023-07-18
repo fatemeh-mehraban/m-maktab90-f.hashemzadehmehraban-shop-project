@@ -24,7 +24,8 @@ import swal from 'sweetalert';
 
 
 export default function MaxWidthDialog() {
-
+  const cookies = new Cookies();
+  const rol = cookies.get("rol")
  const personSchema = z.object({
   username: z.string().min(3, { message: "نام وارد شده صحیح نیست" }),
   password: z.string().min(4, { message: "پسورد وارد شده صحیح نیست" })
@@ -106,7 +107,9 @@ const login =(e:any)=>{
 
   return (
     <>
+     {/* { rol === "USER" ? */}
       <AccountCircle onClick={handleClickOpen} sx={{mt:1}}/>
+      {/* //  : "خروج"} */}
       <Dialog
         fullWidth={fullWidth}
         maxWidth={maxWidth}

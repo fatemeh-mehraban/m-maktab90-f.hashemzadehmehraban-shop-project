@@ -17,8 +17,8 @@ import { TextField } from "@mui/material";
 import { useForm } from "react-hook-form";
 import { z } from "Zod";
 import Button from '@/component/kit/button';
-import GoShaparak from "./shaparak";
 import swal from 'sweetalert';
+import GoShaparak from "@/component/modal/shaparak";
 
 export default function MaxWidthDialog() {
 
@@ -29,6 +29,8 @@ export default function MaxWidthDialog() {
   const [user, setUser] = useState();
 const [date,setDate]= useState()
 const DeleteBasket = usestore((state) => state.DeleteBasket)
+const setDelivery = usestore((state) => state.setDelivery)
+// const router = useRouter()
 
 
   const cookies = new Cookies();
@@ -46,23 +48,16 @@ const DeleteBasket = usestore((state) => state.DeleteBasket)
     setOpen(false)
   }
 
-  const handlePay = () => {
-    router.push("/")
-  swal(" عملیات با موفقیت ثبت شد!","","success")
-  DeleteBasket([])
-  setOpen(false);
-};
+//   const handlePay = () => {
+//     router.push("/")
+//   swal(" عملیات با موفقیت ثبت شد!","","success")
+//   DeleteBasket([])
+//   setOpen(false);
+// };
 
   return (
     <>
-    <Button varients="pay" text=" پرداخت و خرید"  onClick={handleClickOpen}/>
-      <Dialog
-        fullWidth={fullWidth}
-        maxWidth={maxWidth}
-        open={open}
-        onClose={handleClose}
-        className="flex flex-col"
-      >
+
         <Box dir="rtl">
             <Typography  className="p-5 border-b w-full"> تایید اطلاعات</Typography >
         </Box>
@@ -85,20 +80,19 @@ const DeleteBasket = usestore((state) => state.DeleteBasket)
                   type="date"
                   className="p-3 border border-gray-200 rounded"
                   min={new Date().toISOString().split('T')[0]}
+                  onChange={(e)=>setDelivery(e.target.value)}
                 />
               </label>
 
         <DialogActions className="flex gap-2">
-        {/* <GoShaparak /> */}
-          <Button varients="pay" text=" پرداخت " onClick={handlePay}/>
+        <GoShaparak />
+          {/* <Button varients="pay" text=" پرداخت " onClick={handlePay}/> */}
           <Button varients="pay" text=" لغو " onClick={handleClose}/>
         </DialogActions>
-        {/* <input type="submit" value={"submit"}/> */}
     </Box>
 
 
 
-      </Dialog>
       </>
   )
 }
